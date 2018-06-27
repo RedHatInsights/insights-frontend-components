@@ -21,5 +21,5 @@ class PageHeaderTitle extends React.Component {
 export default PageHeaderTitle;
 
 PageHeaderTitle.propTypes = {
-  title: propTypes.string
+  title: propTypes.string.isRequired
 };

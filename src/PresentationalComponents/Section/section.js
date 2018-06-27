@@ -30,5 +30,5 @@ export default Section;
 
 Section.propTypes = {
   type: propTypes.string,
-  children: propTypes.any
+  children: propTypes.any.isRequired
 };
