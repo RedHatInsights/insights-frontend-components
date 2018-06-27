@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/RedHatInsights/insights-chrome.svg?branch=master)](https://travis-ci.org/RedHatInsights/insights-chrome)
+[![Build Status](https://travis-ci.org/RedHatInsights/insights-frontend-components.svg?branch=master)](https://travis-ci.org/RedHatInsights/insights-chrome)
 [![npm version](https://badge.fury.io/js/%40red-hat-insights%2Finsights-frontend-components.svg)](https://badge.fury.io/js/%40red-hat-insights%2Finsights-frontend-components)
 
 # insights-frontend-components
