@@ -26,12 +26,12 @@ There is also a playground for any development
 `npm run playground`
 
 ## Documentation Links
-- * Utils
--   * [Redux](doc/utils/redux.md)
-- * Components
--   * [Sample Component] (doc/components/sample.md)
--   * [Page Header] (doc/components/page_header.md)
--   * [Section] (doc/components/section.md)
+* Utils
+    * [Redux](doc/utils/redux.md)
+* Components
+    * [Sample Component](doc/components/sample.md)
+    * [Page Header](doc/components/page_header.md)
+    * [Section](doc/components/section.md)
 
 ## Conbribution
 ### Commit format
