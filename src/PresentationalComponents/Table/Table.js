@@ -14,7 +14,6 @@ const Table = ({
   hasCheckbox = false,
   sortBy = {},
   className,
-  children,
   rows,
   header,
   footer,
@@ -27,10 +26,6 @@ const Table = ({
     rows.forEach((_oneRow, key) => onItemSelect(event, key, selected));
   }
 
-  const mappedChildren = React.Children.map(
-    children,
-    child => React.cloneElement(child, { hasCheckbox, onSort, onItemSelect, hasIcon })
-  );
   return (
     <table {...props} className={classnames('ins-simple-table', className)}>
       {header &&
@@ -44,7 +39,6 @@ const Table = ({
         />
       }
       {rows && <TBody hasCheckbox={hasCheckbox} rows={rows} onItemSelect={onItemSelect}/>}
-      {mappedChildren}
       {footer && <TFooter hasCheckbox={hasCheckbox} hasIcon={hasIcon} children={footer} colspan={header.length}/>}
     </table>
   )
@@ -58,7 +52,6 @@ Table.propTypes = {
     direction: PropTypes.oneOf(Object.keys(SortDirection))
   }),
   className: PropTypes.string,
-  children: PropTypes.node,
   rows: PropTypes.arrayOf(PropTypes.shape({cells: PropTypes.node})),
   header: PropTypes.arrayOf(PropTypes.node),
   footer: PropTypes.node,

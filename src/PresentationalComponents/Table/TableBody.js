@@ -34,21 +34,15 @@ class TableBody extends Component {
 
   render() {
     const {
-      children,
       className,
       rows,
       hasCheckbox,
       onItemSelect,
       ...props
     } = this.props;
-    const onClickChildren = React.Children.map(
-      children,
-      child => React.cloneElement(child, { onclick: onColClick })
-    );
     return (
       <tbody {...props}>
         {rows && rows.map(this.createRow)}
-        {onClickChildren}
       </tbody>
     )
   }
@@ -60,7 +54,6 @@ TableBody.propTypes = {
   onItemSelect: PropTypes.func,
   onColClick: PropTypes.func,
   onRowClick: PropTypes.func,
-  children: PropTypes.node,
   className: PropTypes.string
 }
 

@@ -74,7 +74,6 @@ class TableHeader extends Component {
 
   render() {
     const {
-      children,
       className,
       onSort,
       sortBy,
@@ -85,18 +84,12 @@ class TableHeader extends Component {
       ...props
     } = this.props;
 
-    const onClickChildren = React.Children.map(
-      children,
-      child => React.cloneElement(child, { onclick: onSort, sortBy })
-    );
-
     return (
       <thead {...props} className={classnames(className)}>
         <tr>
           {hasCheckbox && this.createCheckbox()}
           {hasIcon && <th className='ins-empty-col'/>}
           {cols && cols.map(this.createHeader)}
-          {onClickChildren}
         </tr>
       </thead>
     );
@@ -110,7 +103,6 @@ TableHeader.propTypes = {
     index: PropTypes.number,
     direction: PropTypes.oneOf(['up', 'down'])
   }),
-  children: PropTypes.node,
   className: PropTypes.string,
   cols: PropTypes.arrayOf(PropTypes.node),
   onSelectAll: PropTypes.func,
