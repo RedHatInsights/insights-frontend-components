@@ -48,7 +48,7 @@ class Pagination extends Component {
     const perPageOptions = this.props.perPageOptions || pager;
     const lastPage = Math.ceil(this.props.numberOfItems / perPage);
     const lastIndex = page === lastPage ? this.props.numberOfItems : page * perPage;
-    const firstIndex = page === 1 ? 1 : lastIndex - perPage + 1;
+    const firstIndex = page === 1 ? 1 : page * perPage - perPage;
     return (
       <div className="special-patternfly">
         <PaginationRow

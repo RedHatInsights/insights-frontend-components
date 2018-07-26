@@ -9,20 +9,20 @@ class TableBody extends Component {
   }
   createCol(col, rowKey, key) {
     return (
-      <td key={key} onClick={(event) => this.props.onColClick(event, rowKey, key)}>{col}</td>
+      <td key={key} onClick={(event) => this.props.onColClick && this.props.onColClick(event, rowKey, key)}>{col}</td>
     )
   }
 
   createRow(oneRow, key) {
     return (
-      <tr key={key} onClick={(event) => this.props.onRowClick(event, key)}>
+      <tr key={key} onClick={(event) => this.props.onRowClick && this.props.onRowClick(event, key)}>
         {this.props.hasCheckbox &&
           <td
             className="ins-empty-col"
             onClick={event => this.props.onItemSelect && this.props.onItemSelect(event, key, !!!oneRow.selected)}
           >
             <input
-              checked={!!oneRow.selected}
+              defaultChecked={!!oneRow.selected}
               type="checkbox"
               className="pf-c-check"/>
           </td>
