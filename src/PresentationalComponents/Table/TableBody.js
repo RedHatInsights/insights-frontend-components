@@ -22,7 +22,8 @@ class TableBody extends Component {
             onClick={event => this.props.onItemSelect && this.props.onItemSelect(event, key, !!!oneRow.selected)}
           >
             <input
-              defaultChecked={!!oneRow.selected}
+              checked={!!oneRow.selected}
+              onChange={event => this.props.onItemSelect && this.props.onItemSelect(event, key, event.target.checked)}
               type="checkbox"
               className="pf-c-check"/>
           </td>

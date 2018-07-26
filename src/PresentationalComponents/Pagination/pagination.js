@@ -61,6 +61,7 @@ class Pagination extends Component {
           itemsStart={firstIndex}
           pageSizeDropUp={this.props.direction === 'up'}
           itemsEnd={lastIndex}
+          onPerPageSelect={this.props.onPerPageSelect}
           onFirstPage={this.props.onFirstPage || this.defaultFirstPage}
           onLastPage={this.props.onLastPage || this.defaultLastPage}
           onPreviousPage={this.props.onPreviousPage || this.defaultPreviousPage}
@@ -77,7 +78,8 @@ Pagination.propTypes = {
   itemsPerPage: PropTypes.number,
   perPageOptions: PropTypes.arrayOf(PropTypes.number),
   numberOfItems: PropTypes.number.isRequired,
-  setPage: PropTypes.func
+  setPage: PropTypes.func,
+  onPerPageSelect: PropTypes.func
 }
 
 export default Pagination;
