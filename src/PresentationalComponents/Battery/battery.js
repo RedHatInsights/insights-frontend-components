@@ -1,0 +1,37 @@
+import React from 'react';
+import propTypes from 'prop-types';
+
+import classNames from 'classnames';
+
+import './battery.scss';
+
+/**
+ * This is a dumb component that only recieves properties from a smart component.
+ * Dumb components are usually functions and not classes.
+ *
+ * @param props the props given by the smart component.
+ */
+
+class Battery extends React.Component {
+    render () {
+        let severityClass = classNames(
+            { [`ins-battery-${this.props.severity}`]: this.props.severity !== undefined }
+        );
+        return (
+            <span className='ins-battery-icon'>
+                <i className= { severityClass } />
+                <span> { this.props.label } </span>
+            </span>
+        );
+    }
+};
+
+export default Battery;
+
+Battery.propTypes = {
+    severity: propTypes.oneOfType([
+        propTypes.string.isRequired,
+        propTypes.number.isRequired
+    ]),
+    label: propTypes.string.isRequired
+  };
