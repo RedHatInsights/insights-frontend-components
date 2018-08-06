@@ -18,9 +18,9 @@ class Battery extends React.Component {
             { [`ins-battery-${this.props.severity}`]: this.props.severity !== undefined }
         );
         return (
-            <span className='ins-battery-icon'>
+            <span className='ins-battery'>
                 <i className= { severityClass } />
-                <span> { this.props.label } </span>
+                <span className='label'> { this.props.label } </span>
             </span>
         );
     }
