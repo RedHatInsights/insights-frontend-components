@@ -28,6 +28,9 @@ class YourCmp extends React.Component {
             { /* Critical/4 Severity */ }
             <Battery label='test' severity='critical'/>
             <Battery label='test' severity='4'/>
+
+            { /* Hidden Label */ }
+            <Battery label='test' labelHidden severity='critical'/>
         </Section>
     )
   }
