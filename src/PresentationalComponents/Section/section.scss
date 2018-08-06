@@ -11,5 +11,17 @@ section.ins-l-button-group {
 }
 
 section.ins-l-icon-group {
-  * + * { @include rem('margin-left', 5px); }
+  * + * { margin-left: 7.5px; }
+}
+
+section.ins-l-icon-group__with-major {
+  * + * { margin-left: 7.5px; }
+  .ins-battery:last-of-type {
+    padding-left: 15px;
+    border-left: 2px solid #eaeaea;
+    span.label{
+      font-weight: 500;
+      margin: 0 10px;
+    }
+  }
 }
