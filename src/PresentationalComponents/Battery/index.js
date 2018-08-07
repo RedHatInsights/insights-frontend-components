@@ -1,1 +1,1 @@
-export {default as Battery } from './battery';
+export { default as Battery } from './battery';
