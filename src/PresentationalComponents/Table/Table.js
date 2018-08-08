@@ -62,7 +62,7 @@ Table.propTypes = {
     direction: PropTypes.oneOf(Object.keys(SortDirection))
   }),
   className: PropTypes.string,
-  rows: PropTypes.arrayOf(PropTypes.shape({cells: PropTypes.node})),
+  rows: PropTypes.any,
   header: PropTypes.arrayOf(PropTypes.node),
   footer: PropTypes.node,
   onSort: PropTypes.func,
