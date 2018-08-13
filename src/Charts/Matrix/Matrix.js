@@ -75,14 +75,16 @@ class Matrix extends Component {
     const {
       config: {
         size = 540,
-        gridSize = size - 110
+        gridSize = size - 110,
+        pad,
+        shift
       },
       labels
     } = this.props;
     return (
       <div>
         <svg width={size} height={size} ref={ref => this.ref = ref}>
-          <Axis size={gridSize} pad={10} shift={10}>
+          <Axis size={gridSize} pad={pad} shift={shift}>
            {Object.values(data).map((oneSegment, key) => (
              <Segment key={key} size={gridSize/2} coords={oneSegment.coords}>
               {callOnSegmentData(

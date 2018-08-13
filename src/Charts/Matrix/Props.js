@@ -14,6 +14,8 @@ export const ConfigProp = PropTypes.shape({
   min: PropTypes.number,
   size: PropTypes.number,
   gridSize: PropTypes.number,
+  pad: PropTypes.number,
+  shift: PropTypes.number,
   colors: PropTypes.arrayOf(PropTypes.string)
 });
 
@@ -30,6 +32,8 @@ export const ConfigDefaults = {
   max: 10,
   min: 0,
   size: 540,
+  pad: 10,
+  shift: 10,
   gridSize: 430,
   colors: ['#f0ab00', '#c00', '#d1d1d1', '#bee1f4']
 };

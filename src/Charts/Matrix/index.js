@@ -1,2 +1,2 @@
-export { default as Martix } from './Matrix';
+export { default as Matrix } from './Matrix';
 import './styles.scss';
