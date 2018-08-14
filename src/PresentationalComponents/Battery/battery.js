@@ -26,9 +26,14 @@ const Battery = ({ severity, label, labelHidden, className, ...props }) => {
         { [`ins-battery-${severity}`]: severity !== undefined }
     );
 
-    function generateBattery (severity, batteryClasses) {
+    let ariaLabels = {};
+    if (labelHidden) {
+        ariaLabels = { ['aria-label']: severity + ' ' + label };
+    }
+
+    function generateBattery (severity, batteryClasses, ariaLabels) {
         return (
-            <i className= { batteryClasses }>
+            <i className= { batteryClasses } {...ariaLabels}>
                 <svg
                     version="1.1"
                     id="battery_svg"
@@ -80,7 +85,7 @@ const Battery = ({ severity, label, labelHidden, className, ...props }) => {
     } else {
         return (
             <span className= { batteryWrapperClasses }  { ...props }>
-                { generateBattery(severity, batteryClasses) }
+                { generateBattery(severity, batteryClasses, ariaLabels) }
             </span>
         );
     }
