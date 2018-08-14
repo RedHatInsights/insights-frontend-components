@@ -3,6 +3,11 @@ import propTypes from 'prop-types';
 
 import classNames from 'classnames';
 
+import CriticalBattery from './criticalBattery';
+import HighBattery from './highBattery';
+import MediumBattery from './mediumBattery';
+import LowBattery from './lowBattery';
+
 import './battery.scss';
 
 /**
@@ -51,25 +56,19 @@ const Battery = ({ severity, label, labelHidden, className, ...props }) => {
         switch (severity) {
             case 'critical':
             case 4:
-                return <path d="M16,212h416c8.8,0,16-7.2,16-16v-40c0-8.8-7.2-16-16-16H16c-8.8,0-16,7.2-16,16v40C0,204.8,7.2,212,16,212z M16,372h416
-                c8.8,0,16-7.2,16-16v-40c0-8.8-7.2-16-16-16H16c-8.8,0-16,7.2-16,16v40C0,364.8,7.2,372,16,372z M16,512h416c8.8,0,16-7.2,16-16v-40
-                c0-8.8-7.2-16-16-16H16c-8.8,0-16,7.2-16,16v40C0,504.8,7.2,512,16,512z M16,72h416c8.8,0,16-7.2,16-16V16c0-8.8-7.2-16-16-16H16
-                C7.2,0,0,7.2,0,16v40C0,64.8,7.2,72,16,72z"/>;
+                return <CriticalBattery/>;
             case 'high':
             case 'error':
             case 3:
-                return <path d="M16,212h416c8.8,0,16-7.2,16-16v-40c0-8.8-7.2-16-16-16H16c-8.8,0-16,7.2-16,16v40C0,204.8,7.2,212,16,212z M16,372h416
-                c8.8,0,16-7.2,16-16v-40c0-8.8-7.2-16-16-16H16c-8.8,0-16,7.2-16,16v40C0,364.8,7.2,372,16,372z M16,512h416c8.8,0,16-7.2,16-16v-40
-                c0-8.8-7.2-16-16-16H16c-8.8,0-16,7.2-16,16v40C0,504.8,7.2,512,16,512z"/>;
+                return <HighBattery/>;
             case 'medium':
             case 'warn':
             case 2:
-                return <path d="M16,372h416c8.8,0,16-7.2,16-16v-40c0-8.8-7.2-16-16-16H16c-8.8,0-16,7.2-16,16v40C0,364.8,7.2,372,16,372z M16,512h416
-                c8.8,0,16-7.2,16-16v-40c0-8.8-7.2-16-16-16H16c-8.8,0-16,7.2-16,16v40C0,504.8,7.2,512,16,512z"/>;
+                return <MediumBattery/>;
             case 'low':
             case 'info':
             case 1:
-                return <path d="M16,512h416c8.8,0,16-7.2,16-16v-40c0-8.8-7.2-16-16-16H16c-8.8,0-16,7.2-16,16v40C0,504.8,7.2,512,16,512z"/>;
+                return <LowBattery/>;
             default:
                 return null;
         }
