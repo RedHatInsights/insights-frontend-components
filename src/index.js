@@ -25,4 +25,5 @@ export * from './Charts/Matrix';
 export * from './Charts/Donut';
 export * from './Charts/Pie';
 export * from './PresentationalComponents/TabLayout';
+export * from './SmartComponents/Inventory';
 export { ACTION_TYPES as ASYNC_ACTIONS } from './redux/action-types.js';

@@ -1,0 +1,17 @@
+table.entity-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+
+    td {
+        padding: 5px;
+    }
+
+    td.loading {
+        text-align: center;
+    }
+
+    th.checkbox, th.actions {
+        width: 50px;
+    }
+}
