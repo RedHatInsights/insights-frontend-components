@@ -2,10 +2,21 @@ import React from 'react';
 import { connect } from 'react-redux';
 import InventoryEntityTable from './EntityTable';
 import { Button } from '@patternfly/react-core';
-import { loadEntities } from '../../redux/actions/inventory';
-import './EntityTable.scss';
+import { loadEntities, filterEntities } from '../../redux/actions/inventory';
+import { SimpleTableFilter } from '../../PresentationalComponents/SimpleTableFilter';
+import { Grid, GridItem } from '@patternfly/react-core';
+import './InventoryList.scss';
 
 class InventoryList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.filterEntities = this.filterEntities.bind(this);
+  }
+
+  filterEntities(filterBy) {
+    this.props.filterEntities && this.props.filterEntities('display_name', filterBy)
+  }
+
   componentDidMount() {
     this.props.loadEntities();
   }
@@ -13,10 +24,19 @@ class InventoryList extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <InventoryEntityTable />
-        <div className='buttons'>
-          <Button variant='primary' onClick={this.props.entites}>Refresh</Button>
-        </div>
+        <Grid guttter="sm" className="ins-inventory-list">
+          <GridItem span={4}>
+            <SimpleTableFilter onButtonClick={this.filterEntities}/>
+          </GridItem>
+          <GridItem span={12}>
+            <InventoryEntityTable />
+          </GridItem>
+          <GridItem span={1}>
+            <div className='buttons'>
+              <Button variant='primary' onClick={this.props.entites}>Refresh</Button>
+            </div>
+          </GridItem>
+        </Grid>
       </React.Fragment>
     )
   }
@@ -24,7 +44,8 @@ class InventoryList extends React.Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    loadEntities: () => dispatch(loadEntities())
+    loadEntities: () => dispatch(loadEntities()),
+    filterEntities: (key = 'display_name', filterBy) => dispatch(filterEntities(key, filterBy))
   }
 }
 

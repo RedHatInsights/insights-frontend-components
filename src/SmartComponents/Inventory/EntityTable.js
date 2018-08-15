@@ -1,69 +1,95 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { SyncAltIcon, EllipsisVIcon } from '@patternfly/react-icons';
+import { withRouter } from 'react-router-dom';
+import { selectEntity, setSort } from '../../redux/actions/inventory';
 import { connect } from 'react-redux'
 import { Table } from '../../PresentationalComponents/Table';
+import keyBy from 'lodash/keyBy';
+import mapValues from 'lodash/mapValues';
+import TableActions from './Actions';
 
 class EntityTable extends React.Component {
-    static getDerivedStateFromProps(props, state) {
-        const { loaded, entities, columns } = props;
-        if (entities, columns, loaded) {
-            return {
-                ...state,
-                header: columns.map(oneCell => oneCell.title),
-                rows: entities.map(oneItem => ({
-                    id: oneItem.id,
-                    cells: columns.map(oneCell => oneItem[oneCell.key])
-                }))
-            }
-        }
-        return {
-            ...state,
-            rows: []
-        }
-    }
     constructor(props) {
         super(props);
         this.onRowClick = this.onRowClick.bind(this);
         this.onItemSelect = this.onItemSelect.bind(this);
+        this.onSort = this.onSort.bind(this);
         this.state = {
-            header: [],
-            rows: []
-        };
+            sortBy: {}
+        }
     }
 
-    onRowClick() {
-        console.log('fff');
+    onRowClick(_event, key) {
+        const { match: {path}, history } = this.props;
+        history.push(`${path}/${key}`);
     }
 
     onItemSelect(event, key, checked) {
-        const { rows } = this.state;
-        rows.find(item => item.id === key).selected = checked;
-        this.setState({
-            rows
-        });
+        this.props.selectEntity && this.props.selectEntity(key, checked);
+    }
+
+    onSort(event, key, direction) {
+        if (key !== 'action') {
+            this.props.setSort && this.props.setSort(key, direction);
+            this.setState({
+                sortBy: {
+                    index: key,
+                    direction
+                }
+            })
+        }
     }
 
     render() {
-        const { header, rows } = this.state;
-        return <Table 
-            header={header}
+        const { columns, entities } = this.props;
+        return <Table
+            sortBy={this.state.sortBy}
+            header={columns && {
+                ...mapValues(keyBy(columns, item => item.key), item => item.title),
+                action: ''
+            }}
+            onSort={this.onSort}
             onRowClick={this.onRowClick}
             onItemSelect={this.onItemSelect}
             hasCheckbox
-            rows={rows}
+            rows={entities && entities.map(oneItem => ({
+                id: oneItem.id,
+                selected: oneItem.selected,
+                cells: [
+                    ...columns.map(oneCell => oneItem[oneCell.key]),
+                    <TableActions item={{id: oneItem.id}} />
+                ]
+            }))}
         />
     }
 }
 
 EntityTable.propTypes = {
     loaded: PropTypes.bool,
-    entities: PropTypes.array
+    entities: PropTypes.array,
+    selectEntity: PropTypes.func
 };
 
 EntityTable.defaultProps = {
-    loaded: false
+    loaded: false,
+    columns: [],
+    entities: [],
+    selectEntity: () => undefined
 }
 
-export default connect(({ entities }) => ({ ...entities }))(EntityTable);
+function mapDispatchToProps(dispatch) {
+    return {
+        selectEntity: (id, isSelected) => dispatch(selectEntity(id, isSelected)),
+        setSort: (id, isSelected) => dispatch(setSort(id, isSelected))
+    }
+}
+
+function mapStateToProps({entities: {columns, entities, loaded}}) {
+    return {
+        entities,
+        columns,
+        loaded
+    }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EntityTable));
