@@ -1,0 +1,26 @@
+.ins-tab-layout {
+  > .ins-tabs {
+    display: flex;
+
+    div {
+      border: var(--pf-global--BorderWidth--sm) solid var(--pf-global--BorderColor);
+      border-top-left-radius: var(--pf-global--BorderRadius--lg);
+      border-top-right-radius: var(--pf-global--BorderRadius--lg);
+      flex: 1;
+      text-align: center;
+      cursor: pointer;
+
+      &.active {
+        background: var(--pf-global--warning-color--100);
+      }
+
+      &:hover {
+        background: var(--pf-global--info-color--100);
+      }
+    }
+  }
+
+  .ins-tab-content {
+    min-height: 150px
+  }
+}
