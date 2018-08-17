@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
+import { AngleRightIcon } from '@patternfly/react-icons';
 
 function upperCaseFirst(item) 
 {
@@ -9,18 +10,25 @@ function upperCaseFirst(item)
 
 const Breadcrumbs = ({items, current, className, onNavigate, ...props}) => (
   <React.Fragment>
-    {items.length > 0 && <div {...props} className={classnames(className, 'ins-breadcrumbs')}>
+    {
+      items.length > 0 && <ol {...props} className={classnames(className, 'ins-breadcrumbs')}>
       {items.map((oneLink, key) => (
-        <React.Fragment>
+        <li key={oneLink.navigate}>
           <a key={oneLink.navigate}
             onClick={event => onNavigate(event, oneLink.navigate, items.length - key)}>
             {upperCaseFirst(oneLink.title)}
           </a>
-          <span>&nbsp;&gt;&nbsp;</span>
-        </React.Fragment>
+          <AngleRightIcon />
+        </li>
       )) }
-      {current && <span>{upperCaseFirst(current)}</span>}
-    </div> }
+      
+      {current && 
+        <li className="ins-active">
+          <span>{upperCaseFirst(current)}</span>
+        </li>
+      }
+    </ol>
+  }
   </React.Fragment>
 );
 
