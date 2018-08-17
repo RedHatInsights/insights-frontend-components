@@ -7,8 +7,10 @@ import Entitydetail from './EntityDetail';
 
 class InventoryDetail extends React.Component {
   componentDidMount() {
-    const { match: {params: {id}} } = this.props;
-    this.props.loadEntity(parseInt(id, 10));
+    const { match: {params: {id}}, entity, loaded } = this.props;
+    if(!entity || entity.id !== parseInt(id, 10) || !loaded) {
+      this.props.loadEntity(parseInt(id, 10));
+    }
   }
 
   render() {
@@ -30,4 +32,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default withRouter(connect(() => ({}), mapDispatchToProps)(InventoryDetail))
+export default withRouter(connect(({ entityDetails: { entity, loaded } }) => ({entity, loaded}), mapDispatchToProps)(InventoryDetail))

@@ -24,9 +24,17 @@ export const setSort = (key, direction) => ({
 export const filterEntities = (key, filterString) => ({
     type: FILTER_ENTITIES,
     payload: { key, filterString }
+<<<<<<< HEAD
 });
+=======
+})
+>>>>>>> Add tabs to entity detail
 
 export const detailSelect = (appName) => ({
     type: APPLICATION_SELECTED,
     payload: { appName }
+<<<<<<< HEAD
 });
+=======
+})
+>>>>>>> Add tabs to entity detail

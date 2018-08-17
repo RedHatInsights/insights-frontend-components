@@ -4,6 +4,7 @@ import { Title } from '@patternfly/react-core';
 import { SyncAltIcon } from '@patternfly/react-icons';
 import get from 'lodash/get';
 import { connect } from 'react-redux';
+import ApplicationDetails from './ApplicationDetails';
 
 // MARK: maybe implement this in components??
 const EntityDetails = ({ loaded, entity }) => {
@@ -32,6 +33,7 @@ const EntityDetails = ({ loaded, entity }) => {
                 <dt>Timezone</dt>
                 <dd>{getFact('facts.timezone_information.timezone')}</dd>
             </dl>
+            <ApplicationDetails />
         </React.Fragment>
     );
 };

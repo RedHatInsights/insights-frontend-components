@@ -25,8 +25,12 @@ class InventoryList extends React.Component {
     return (
       <React.Fragment>
         <Grid guttter="sm" className="ins-inventory-list">
-          <GridItem span={4}>
-            <SimpleTableFilter onButtonClick={this.filterEntities}/>
+          <GridItem span={4} className="ins-inventory-filter">
+            <SimpleTableFilter
+              onButtonClick={this.filterEntities}
+              placeholder="Find system by hostname or UUID"
+              buttonTitle=""
+            />
           </GridItem>
           <GridItem span={12}>
             <InventoryEntityTable />

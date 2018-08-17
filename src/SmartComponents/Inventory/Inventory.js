@@ -2,7 +2,6 @@ import React from 'react';
 import { Route, withRouter, Switch, Link } from 'react-router-dom';
 import InventoryList from './InventoryList';
 import InventoryDetail from './InventoryDetail';
-import { entitiesReducer, entityDetailsReducer } from '../../redux/reducers/inventory';
 
 const Inventory = ({ match }) => (
   <Switch>
