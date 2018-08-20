@@ -6,7 +6,14 @@ You can change size of chart and it's axis scales (0 - 6 instead of 0 - 10 for i
 import React from 'react'
 import { Matrix } from '@red-hat-isnights/insights-frontend-components';
 
-export default () => <Matrix data={yourData} />;
+export default () => <Matrix data={
+  {
+    topRight: [{position: [1, 2], label: 'First'}],
+    topLeft: [{position: [0, 3], label: 'Second'}],
+    bottomRight: [{position: [4, 2], label: 'Third'}],
+    bottomLeft: [{position: [3, 4], label: 'Fourth'}]
+  }
+} />;
 ```
 ## Props
 ```JS

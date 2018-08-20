@@ -35,7 +35,7 @@ export const ConfigDefaults = {
   pad: 10,
   shift: 10,
   gridSize: 430,
-  colors: ['#f0ab00', '#c00', '#d1d1d1', '#bee1f4']
+  colors: ['#f0ab00', '#FF6666', '#d1d1d1', '#bee1f4']
 };
 
 export const LabelsDefaults = {
