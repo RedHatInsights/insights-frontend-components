@@ -19,7 +19,6 @@ class Actions extends React.Component {
 
   onSelect(event) {
     event.stopPropagation();
-    console.log('something');
     this.setState({isCollapsed: true});
   }
 

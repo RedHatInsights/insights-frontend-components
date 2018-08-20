@@ -4,6 +4,7 @@ import { Button } from '@patternfly/react-core';
 import { loadEntity } from '../../redux/actions/inventory';
 import { withRouter, Link } from 'react-router-dom';
 import Entitydetail from './EntityDetail';
+import './InventoryDetail.scss';
 
 class InventoryDetail extends React.Component {
   componentDidMount() {

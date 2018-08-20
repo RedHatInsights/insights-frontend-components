@@ -1,42 +1,118 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Title } from '@patternfly/react-core';
+import { Title, Grid, GridItem, Badge } from '@patternfly/react-core';
 import { SyncAltIcon } from '@patternfly/react-icons';
+import { Dropdown, DropdownItem, DropdownPosition } from '../../PresentationalComponents/Dropdown';
 import get from 'lodash/get';
 import { connect } from 'react-redux';
 import ApplicationDetails from './ApplicationDetails';
 
-// MARK: maybe implement this in components??
-const EntityDetails = ({ loaded, entity }) => {
-    if (!loaded) {
-        return (
-            <div>
-                <SyncAltIcon/>
-            </div>
-        );
+class EntityDetails extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            actionCollapsed: true
+        }
+        this.getFact = this.getFact.bind(this);
+        this.toggleActions = this.toggleActions.bind(this);
     }
 
-    const getFact = path => get(entity, path, 'unknown');
+    getFact(path) {
+        const { entity } = this.props;
+        return get(entity, path, 'unknown');
+    }
 
-    return (
-        <React.Fragment>
-            <Title size='2xl'>{entity.display_name}</Title>
-            <dl>
-                <dt>Hostname</dt>
-                <dd>{getFact('display_name')}</dd>
-                <dt>System ID</dt>
-                <dd>{entity.id}</dd>
-                <dt>Canonical System ID</dt>
-                <dd>{getFact(`canonical_facts['machine-id']`)}</dd>
-                <dt>System</dt>
-                <dd>{getFact('facts.release')}</dd>
-                <dt>Timezone</dt>
-                <dd>{getFact('facts.timezone_information.timezone')}</dd>
-            </dl>
-            <ApplicationDetails />
-        </React.Fragment>
-    );
-};
+    toggleActions(event, collapsed) {
+        event.stopPropagation();
+        this.setState({
+            actionCollapsed: collapsed
+        })
+    }
+    render() {
+        const { loaded, entity } = this.props;
+        const { actionCollapsed } = this.state;
+        if (!loaded) {
+            return (
+                <div>
+                    <SyncAltIcon/>
+                </div>
+            );
+        }
+        return (
+            <div className="ins-entity-detail">
+                <Grid className="ins-entity-header">
+                    <GridItem md={6}>
+                        <Title size='2xl'>{entity.display_name}</Title>
+                    </GridItem>
+                    <GridItem md={6}>
+                        <Dropdown title="Actions"
+                            isCollapsed={actionCollapsed}
+                            onToggle={this.toggleActions}
+                            position={DropdownPosition.right}>
+                            <DropdownItem>Some action</DropdownItem>
+                        </Dropdown>
+                    </GridItem>
+                </Grid>
+                <Grid className="ins-entity-facts">
+                    <GridItem md={6}>
+                        <div>
+                            <span>
+                                Hostname:
+                            </span>
+                            <span>
+                                {this.getFact('display_name')}
+                            </span>
+                        </div>
+                        <div>
+                            <span>
+                                UUID:
+                            </span>
+                            <span>
+                                {this.getFact(`canonical_facts['machine-id']`)}
+                            </span>
+                        </div>
+                        <div>
+                            <span>
+                                System:
+                            </span>
+                            <span>
+                                {this.getFact('facts.release')}
+                            </span>
+                        </div>
+                    </GridItem>
+                    <GridItem md={6}>    
+                        <div>
+                            <span>
+                                Last Check-in:
+                            </span>
+                            <span>
+                                {this.getFact('facts.check_in')}
+                            </span>
+                        </div>
+                        <div>
+                            <span>
+                                Registered:
+                            </span>
+                            <span>
+                                {this.getFact('facts.registered')}
+                            </span>
+                        </div>
+                    </GridItem>
+                </Grid>
+                <Grid className="ins-entity-tags">
+                    {Object.values(this.getFact('tags')).map(oneTag => (
+                        <GridItem span={1}>
+                            <Badge>
+                                {oneTag}
+                            </Badge>
+                        </GridItem>
+                    ))}
+                </Grid>
+                <ApplicationDetails />
+            </div>
+        )
+    }
+}
 
 EntityDetails.propTypes = {
     loaded: PropTypes.bool.isRequired,
