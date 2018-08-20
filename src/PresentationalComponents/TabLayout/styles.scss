@@ -1,21 +1,20 @@
 .ins-tab-layout {
   > .ins-tabs {
-    display: flex;
 
     div {
-      border: var(--pf-global--BorderWidth--sm) solid var(--pf-global--BorderColor);
-      border-top-left-radius: var(--pf-global--BorderRadius--lg);
-      border-top-right-radius: var(--pf-global--BorderRadius--lg);
-      flex: 1;
+      display: inline-block;
+      margin-right: 30px;
       text-align: center;
       cursor: pointer;
+      color: var(--pf-global--link--Color);
 
       &.active {
-        background: var(--pf-global--warning-color--100);
+        border-bottom: 3px var(--pf-global--BorderColor--active) solid;
       }
 
       &:hover {
-        background: var(--pf-global--info-color--100);
+        color: var(--pf-global--link--Color--hover);
+        border-bottom: 3px var(--pf-global--link--Color--hover) solid;
       }
     }
   }
