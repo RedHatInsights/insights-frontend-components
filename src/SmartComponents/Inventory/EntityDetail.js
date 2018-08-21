@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Title, Grid, GridItem, Badge } from '@patternfly/react-core';
+import { TimesIcon } from '@patternfly/react-icons';
 import { SyncAltIcon } from '@patternfly/react-icons';
 import { Dropdown, DropdownItem, DropdownPosition } from '../../PresentationalComponents/Dropdown';
 import get from 'lodash/get';
@@ -29,7 +30,7 @@ class EntityDetails extends Component {
         })
     }
     render() {
-        const { loaded, entity } = this.props;
+        const { loaded, entity, tags, health } = this.props;
         const { actionCollapsed } = this.state;
         if (!loaded) {
             return (
@@ -100,10 +101,10 @@ class EntityDetails extends Component {
                     </GridItem>
                 </Grid>
                 <Grid className="ins-entity-tags">
-                    {Object.values(this.getFact('tags')).map(oneTag => (
-                        <GridItem span={1}>
+                    {tags && Object.values(tags).map((oneTag, key) => (
+                        <GridItem span={1} key={key}>
                             <Badge>
-                                {oneTag}
+                                <TimesIcon />{oneTag[0]}
                             </Badge>
                         </GridItem>
                     ))}

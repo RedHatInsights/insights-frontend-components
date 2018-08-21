@@ -41,7 +41,8 @@ class EntityTable extends React.Component {
     }
 
     render() {
-        const { columns, entities } = this.props;
+        const { columns, entities, rows } = this.props;
+        const filteredData = entities || rows;
         return <Table
             sortBy={this.state.sortBy}
             header={columns && {
@@ -52,7 +53,7 @@ class EntityTable extends React.Component {
             onRowClick={this.onRowClick}
             onItemSelect={this.onItemSelect}
             hasCheckbox
-            rows={entities && entities.map(oneItem => ({
+            rows={filteredData && filteredData.map(oneItem => ({
                 id: oneItem.id,
                 selected: oneItem.selected,
                 cells: [
@@ -73,7 +74,7 @@ EntityTable.propTypes = {
 EntityTable.defaultProps = {
     loaded: false,
     columns: [],
-    entities: [],
+    entities: null,
     selectEntity: () => undefined
 }
 
@@ -84,11 +85,12 @@ function mapDispatchToProps(dispatch) {
     }
 }
 
-function mapStateToProps({entities: {columns, entities, loaded}}) {
+function mapStateToProps({entities: {columns, entities, rows, loaded}}) {
     return {
         entities,
         columns,
-        loaded
+        loaded,
+        rows
     }
 }
 
