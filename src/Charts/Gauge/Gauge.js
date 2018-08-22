@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import * as c3 from 'c3';
+import classNames from 'classnames';
+
+import './gauge.scss';
 
 /**
  * Gauge used for displaying statuses
@@ -50,8 +53,13 @@ class Gauge extends Component {
     }
 
     render () {
+        const gaugeClasses = classNames(
+            this.props.className,
+            'donut-chart-pf'
+        );
+
         return (
-            <div id={this.props.identifier} className='donut-chart-pf'></div>
+            <div id={this.props.identifier} className={gaugeClasses}></div>
         );
     }
 }
@@ -73,11 +81,12 @@ function generateId () {
 }
 
 Gauge.propTypes = {
+    className: propTypes.string,
+    height: propTypes.number,
+    identifier: propTypes.string,
     label: propTypes.string,
     value: propTypes.number,
-    identifier: propTypes.string,
-    width: propTypes.number,
-    height: propTypes.number
+    width: propTypes.number
 };
 
 Gauge.defaultProps = {
