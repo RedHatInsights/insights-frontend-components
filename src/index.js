@@ -11,7 +11,6 @@ export {
     reduxRegistery
 } from './Utilities/ReducerRegistry';
 export { default as MiddlewareListener } from './Utilities/MiddlewareListener';
-export * from './PresentationalComponents/Gauge';
 export * from './PresentationalComponents/Pagination';
 export * from './PresentationalComponents/SimpleTableFilter';
 export * from './PresentationalComponents/Input';
@@ -19,5 +18,6 @@ export * from './PresentationalComponents/Table';
 export * from './PresentationalComponents/Dropdown';
 export * from './PresentationalComponents/Battery';
 export * from './PresentationalComponents/Breadcrumbs';
+export * from './Charts/Gauge';
 export * from './Charts/Matrix';
 export * from './PresentationalComponents/TabLayout';
