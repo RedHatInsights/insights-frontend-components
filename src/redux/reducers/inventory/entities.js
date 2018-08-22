@@ -8,9 +8,9 @@ import orderBy from 'lodash/orderBy';
 export const defaultState = { loaded: false };
 
 const defaultColumns = [
-    {key: 'display_name', title: 'Name', composed: ['facts.release', 'display_name']},
-    {key: 'facts.last_seen', title: 'Last Seen'}
-]
+    { key: 'display_name', title: 'Name', composed: [ 'facts.release', 'display_name' ]},
+    { key: 'facts.last_seen', title: 'Last Seen' }
+];
 
 function entitiesPending(state) {
     return {
@@ -41,7 +41,7 @@ function entitiesLoaded(state, { payload }) {
 }
 
 function selectEntity(state, { payload: { id, selected }}) {
-    const ents = [ ...state.rows ];
+    const ents = [ ...state.entities ];
     ents.find(entity => entity.id === id).selected = selected;
     return {
         ...state,
@@ -49,25 +49,16 @@ function selectEntity(state, { payload: { id, selected }}) {
     };
 }
 
-<<<<<<< HEAD
 function changeSort(state, { payload: { key, direction }}) {
-    const sortedRows = sortBy(state.entities, [ e => e[key] ]);
-    return {
-        ...state,
-        entities: SortDirection.up === direction ? sortedRows : sortedRows.reverse()
-    };
-=======
-function changeSort(state, {payload: {key, direction}}) {
     const sortedRows = orderBy(
         state.entities,
-        [e => get(e, key)],
-        [SortDirection.up === direction ? 'asc' : 'desc']
+        [ e => get(e, key) ],
+        [ SortDirection.up === direction ? 'asc' : 'desc' ]
     );
     return {
         ...state,
-        entities: sortedRows,
-    }
->>>>>>> Allow cols without sort in table
+        entities: sortedRows
+    };
 }
 
 export default {

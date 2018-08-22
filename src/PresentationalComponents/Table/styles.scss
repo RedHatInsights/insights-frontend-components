@@ -2,6 +2,7 @@
 @import './Table/styles.scss';
 
 .pf-c-table {
+<<<<<<< HEAD
   border: 1px solid #ccc;
   background-color: var(--pf-c-table--BackgroundColor);
   box-shadow: var(--pf-global--BoxShadow);
@@ -31,6 +32,14 @@
     svg {
       fill: var(--pf-global--primary-color--light-100);
     }
+=======
+  tr:nth-child(2n) {
+    background: #f1f1f1;
+  }
+
+  .pf-c-table__sort svg {
+    transition: var(--pf-c-table__sort--Transition);
+>>>>>>> Enable custom styling of table
   }
 
   tfoot.ins-table-footer {

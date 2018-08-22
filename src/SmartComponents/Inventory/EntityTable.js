@@ -44,11 +44,12 @@ class EntityTable extends React.Component {
 
     renderCol(col, key, composed) {
         if(composed) {
+            console.log(col);
             return (
                 <div className="ins-composed-col">
                     {composed.map(path => (
                         <div key={path}>
-                            {get(col, path, 'unknown')}
+                            {get(col, path, 'unknown') || '\u00A0'}
                         </div>
                     ))}
                 </div>
@@ -61,6 +62,7 @@ class EntityTable extends React.Component {
         const { columns, entities, rows } = this.props;
         const filteredData = entities || rows;
         return <Table
+            className="pf-m-compact ins-entity-table"
             sortBy={this.state.sortBy}
             header={columns && {
                 ...mapValues(keyBy(columns, item => item.key), item => item.title),
@@ -79,8 +81,14 @@ class EntityTable extends React.Component {
                 selected: oneItem.selected,
                 cells: [
                     ...columns.map(oneCell => this.renderCol(oneItem, oneCell.key, oneCell.composed)),
-                    <HealthStatus items={oneItem.health} className="ins-health-status"/>,
-                    <TableActions item={{id: oneItem.id}} />
+                    {
+                        title: <HealthStatus items={oneItem.health} className="ins-health-status"/>,
+                        className: 'pf-m-fit-content'
+                    },
+                    {
+                        title: <TableActions item={{id: oneItem.id}} />,
+                        className: 'pf-c-table__action pf-m-shrink'
+                    }
                 ]
             }))}
         />
