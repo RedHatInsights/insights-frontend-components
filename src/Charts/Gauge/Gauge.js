@@ -24,7 +24,8 @@ class Gauge extends Component {
             bindto: '#' + this.props.identifier,
             data: data,
             size: {
-                width: 250
+                width: this.props.width,
+                height: this.props.height
             },
             legend: {
                 show: false
@@ -34,7 +35,14 @@ class Gauge extends Component {
                 label: {
                     show: false
                 },
-                width: 10
+                width: 8,
+                startingAngle: 2*Math.PI
+            },
+            color: {
+                pattern: ['#FF0000', '#F97600', '#F6C600', '#4AC956'],
+                threshold: {
+                    values: [25, 50, 75, 100]
+                }
             }
         };
 
@@ -67,9 +75,13 @@ function generateId () {
 Gauge.propTypes = {
     label: propTypes.string,
     value: propTypes.number,
-    identifier: propTypes.string
+    identifier: propTypes.string,
+    width: propTypes.number,
+    height: propTypes.number
 };
 
 Gauge.defaultProps = {
-    identifier: generateId()
+    height: 200,
+    identifier: generateId(),
+    width: 200
 }
