@@ -1,3 +1,4 @@
+
 export { default as PageHeader } from './PresentationalComponents/PageHeader/page-header.js';
 export { default as PageHeaderTitle } from './PresentationalComponents/PageHeader/page-header-title.js';
 export { default as Section } from './PresentationalComponents/Section/section.js';
@@ -10,6 +11,7 @@ export {
     reduxRegistery
 } from './Utilities/ReducerRegistry';
 export { default as MiddlewareListener } from './Utilities/MiddlewareListener';
+export * from './PresentationalComponents/Gauge';
 export * from './PresentationalComponents/Pagination';
 export * from './PresentationalComponents/SimpleTableFilter';
 export * from './PresentationalComponents/Input';
