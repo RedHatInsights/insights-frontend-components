@@ -1,68 +1,12 @@
-table.ins-simple-table {
-  width: 100%;
-  table-layout: fixed;
+@import './Table/styles.scss';
 
-  thead {
-    background: var(--pf-global--BackgroundColor--dark-200);
-    color: var(--pf-global--Color--light-100);
-
-    span.ins-sort-icons {
-      float: right;
-      svg {
-        color: var(--pf-global--Color--light-100);
-        &:hover {
-          color: var(--pf-global--Color--active);
-        }
-        &:nth-child(1) {
-          position: relative;
-          top: -2px;
-        }
-        &:nth-child(2) {
-          position: relative;
-          right: 16px;
-          top: 8px;
-        }
-        &:only-child {
-          position: relative;
-          top: 3px;
-          right: 16px;
-        }
-      }
-    }
-
-    th {
-      cursor: pointer;
-      &:hover {
-        color: var(--pf-global--Color--active);
-      }
-      border-color: var(--pf-global--BackgroundColor--dark-200);
-    }
+.pf-c-table {
+  tr:nth-child(2n) {
+    background: #f1f1f1;
   }
 
-  tbody {
-    tr {
-      &:nth-child(odd) {
-        background: var(--pf-global--Color--light-200);
-      }
-
-      &:nth-child(even) {
-        background: var(--pf-global--Color--light-100);
-      }
-
-      &:hover td {
-        cursor: pointer;
-        background: var(--pf-global--BackgroundColor--active);
-        border-color: var(--pf-global--BorderColor--active);
-      }
-    }
-  }
-  td, th {
-    border: solid var(--pf-global--BorderWidth--sm);
-    padding: var(--pf-global--BorderWidth--lg);
-    &.ins-empty-col {
-      width: 20px;
-      padding-top: 6px;
-    }
+  .pf-c-table__sort svg {
+    transition: var(--pf-c-table__sort--Transition);
   }
 
   tfoot {

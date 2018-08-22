@@ -29,7 +29,7 @@ const Table = ({
   }
 
   return (
-    <table {...props} className={classnames('ins-simple-table', className)}>
+    <table {...props} className={classnames('pf-c-table', className)}>
       {header &&
         <THead
           onSelectAll={onAllRowsSelect}
