@@ -30,7 +30,7 @@ class EntityDetails extends Component {
         })
     }
     render() {
-        const { loaded, entity, tags, health } = this.props;
+        const { loaded, entity, tags } = this.props;
         const { actionCollapsed } = this.state;
         if (!loaded) {
             return (

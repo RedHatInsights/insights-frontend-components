@@ -2,13 +2,15 @@ import { ACTION_TYPES, SELECT_ENTITY, CHANGE_SORT, FILTER_ENTITIES } from '../..
 import { mergeArraysByKey } from '../../../Utilities/helpers';
 import { SortDirection } from '../../../PresentationalComponents/Table';
 import sortBy from 'lodash/sortBy';
+import get from 'lodash/get';
+import orderBy from 'lodash/orderBy';
 
 export const defaultState = { loaded: false };
 
 const defaultColumns = [
-    { key: 'display_name', title: 'System Name' },
-    { key: 'account', title: 'Account' }
-];
+    {key: 'display_name', title: 'Name', composed: ['facts.release', 'display_name']},
+    {key: 'facts.last_seen', title: 'Last Seen'}
+]
 
 function entitiesPending(state) {
     return {
@@ -47,12 +49,25 @@ function selectEntity(state, { payload: { id, selected }}) {
     };
 }
 
+<<<<<<< HEAD
 function changeSort(state, { payload: { key, direction }}) {
     const sortedRows = sortBy(state.entities, [ e => e[key] ]);
     return {
         ...state,
         entities: SortDirection.up === direction ? sortedRows : sortedRows.reverse()
     };
+=======
+function changeSort(state, {payload: {key, direction}}) {
+    const sortedRows = orderBy(
+        state.entities,
+        [e => get(e, key)],
+        [SortDirection.up === direction ? 'asc' : 'desc']
+    );
+    return {
+        ...state,
+        entities: sortedRows,
+    }
+>>>>>>> Allow cols without sort in table
 }
 
 export default {

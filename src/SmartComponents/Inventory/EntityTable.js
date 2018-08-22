@@ -7,6 +7,8 @@ import { Table } from '../../PresentationalComponents/Table';
 import keyBy from 'lodash/keyBy';
 import mapValues from 'lodash/mapValues';
 import TableActions from './Actions';
+import HealthStatus from './HealthStatus';
+import get from 'lodash/get';
 
 class EntityTable extends React.Component {
     constructor(props) {
@@ -29,7 +31,7 @@ class EntityTable extends React.Component {
     }
 
     onSort(event, key, direction) {
-        if (key !== 'action') {
+        if (key !== 'action' && key !== 'health') {
             this.props.setSort && this.props.setSort(key, direction);
             this.setState({
                 sortBy: {
@@ -40,6 +42,21 @@ class EntityTable extends React.Component {
         }
     }
 
+    renderCol(col, key, composed) {
+        if(composed) {
+            return (
+                <div className="ins-composed-col">
+                    {composed.map(path => (
+                        <div key={path}>
+                            {get(col, path, 'unknown')}
+                        </div>
+                    ))}
+                </div>
+            )
+        }
+        return get(col, key, 'unknown');
+    }
+
     render() {
         const { columns, entities, rows } = this.props;
         const filteredData = entities || rows;
@@ -47,6 +64,10 @@ class EntityTable extends React.Component {
             sortBy={this.state.sortBy}
             header={columns && {
                 ...mapValues(keyBy(columns, item => item.key), item => item.title),
+                health: {
+                    title: 'Health',
+                    hasSort: false
+                },
                 action: ''
             }}
             onSort={this.onSort}
@@ -57,7 +78,8 @@ class EntityTable extends React.Component {
                 id: oneItem.id,
                 selected: oneItem.selected,
                 cells: [
-                    ...columns.map(oneCell => oneItem[oneCell.key]),
+                    ...columns.map(oneCell => this.renderCol(oneItem, oneCell.key, oneCell.composed)),
+                    <HealthStatus items={oneItem.health} className="ins-health-status"/>,
                     <TableActions item={{id: oneItem.id}} />
                 ]
             }))}

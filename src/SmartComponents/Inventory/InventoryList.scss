@@ -1,3 +1,28 @@
 .ins-inventory-filter {
   padding-bottom: 10px;
 }
+
+.ins-simple-table {
+  .ins-health-status div {
+    display: inline-block;
+    padding-right: 20px;
+
+    svg {
+      position: relative;
+      top: 2px;
+      left: -2px;
+    }
+  }
+
+  .ins-composed-col {
+    :first-child {
+      color: var(--pf-c-button--m-disabled--Color);
+      font-size: var(--pf-global--FontSize--sm);
+    }
+
+    * {
+      color: var(--pf-global--info-color--100);
+      font-size: var(	--pf-global--FontSize--lg);
+    }
+  }
+}
