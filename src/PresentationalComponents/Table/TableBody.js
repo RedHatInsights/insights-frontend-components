@@ -8,6 +8,12 @@ class TableBody extends Component {
     this.createCol = this.createCol.bind(this);
   }
   createCol(col, rowKey, key) {
+    const { cols } = this.props;
+    const current = Object.values(cols)[key];
+    let colData;
+    if (current) {
+      colData = current.hasOwnProperty('title') ? current.title : current;
+    }
     let className = '';
     if (col.hasOwnProperty('title')) {
       className = col.className || className;
@@ -15,6 +21,7 @@ class TableBody extends Component {
     }
     return (
       <td key={key}
+        data-label={colData}
         className={className}
         onClick={(event) => {
             this.props.onColClick && this.props.onColClick(event, rowKey, key);

@@ -1,12 +1,28 @@
 @import './Table/styles.scss';
 
 .pf-c-table {
-  tr:nth-child(2n) {
-    background: #f1f1f1;
-  }
+  border: 1px solid #ccc;
+  background-color: var(--pf-c-table--BackgroundColor);
+  box-shadow: var(--pf-global--BoxShadow);
 
   .pf-c-table__sort svg {
     transition: var(--pf-c-table__sort--Transition);
+    position: relative;
+    top: 3px;
+  }
+
+  &, td, th, tr {
+    padding: .5em;
+    vertical-align: middle;
+    border-bottom: 1px solid #ccc;
+  }
+
+  th.pf-m-ascending, th.pf-m-descending {
+    border-bottom: 3px var(--pf-global--primary-color--light-100) solid;
+
+    svg {
+      fill: var(--pf-global--primary-color--light-100);
+    }
   }
 
   tfoot {
@@ -33,6 +49,19 @@
           }
         }
       }
+    }
+  }
+}
+
+
+@media screen and (max-width: 992px) {
+  .pf-c-table {
+    &, tr {
+      border: 1px solid #ccc;
+    }
+
+    td, th {
+      border: none
     }
   }
 }
