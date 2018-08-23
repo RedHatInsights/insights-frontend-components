@@ -3,9 +3,9 @@ import { Route, withRouter, Switch } from 'react-router-dom';
 import InventoryList from './InventoryList';
 import InventoryDetail from './InventoryDetail';
 
-const Inventory = ({ match }) => (
+const Inventory = ({ match, noTable = false }) => (
   <Switch>
-    <Route exact path={match.path} component={InventoryList} />
+    {!noTable && <Route exact path={match.path} component={InventoryList} />}
     <Route path={`${match.path}/:id`} render={props => <InventoryDetail {...props} root={match.path} />} />
   </Switch>
 );
