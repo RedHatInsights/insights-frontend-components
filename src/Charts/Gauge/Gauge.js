@@ -40,12 +40,6 @@ class Gauge extends Component {
                 },
                 width: 8,
                 startingAngle: 2*Math.PI
-            },
-            color: {
-                pattern: ['#'],
-                threshold: {
-                    values: [25, 50, 75, 100]
-                }
             }
         };
 
