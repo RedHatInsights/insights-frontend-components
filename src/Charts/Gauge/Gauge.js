@@ -75,7 +75,7 @@ class Gauge extends Component {
     }
 }
 
-export default Gauge
+export default Gauge;
 
 /**
  * generate random ID if one is not supplied
@@ -104,4 +104,4 @@ Gauge.defaultProps = {
     height: 200,
     identifier: generateId(),
     width: 200
-}
+};
