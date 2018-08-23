@@ -1,3 +1,35 @@
+@import '../../Utilities';
+
 .c3-chart-arcs-background {
     fill: #666666
+}
+
+.ins-c-gauge {
+    .ins-c-arc, .c3-arc {
+        stroke: white;
+    }
+}
+
+.ins-c-arc__critical {
+    .c3-arc {
+        fill: $ins-color--critical;
+    }
+}
+
+.ins-c-arc__high {
+    .c3-arc {
+        fill: $ins-color--high;
+    }
+}
+
+.ins-c-arc__medium {
+    .c3-arc {
+        fill: $ins-color--medium;
+    }
+}
+
+.ins-c-arc__low {
+    .c3-arc {
+        fill: $ins-color--low;
+    }
 }

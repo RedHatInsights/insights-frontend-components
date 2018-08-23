@@ -42,7 +42,7 @@ class Gauge extends Component {
                 startingAngle: 2*Math.PI
             },
             color: {
-                pattern: ['#FF0000', '#F97600', '#F6C600', '#4AC956'],
+                pattern: ['#'],
                 threshold: {
                     values: [25, 50, 75, 100]
                 }
@@ -53,9 +53,19 @@ class Gauge extends Component {
     }
 
     render () {
+        const threshold = 25;
+        let colors = {
+            0: 'ins-c-arc__critical', 
+            1: 'ins-c-arc__high',
+            2: 'ins-c-arc__medium',
+            3: 'ins-c-arc__low',
+            4: 'ins-c-arc__low'
+        };
+
         const gaugeClasses = classNames(
             this.props.className,
-            'donut-chart-pf'
+            'ins-c-gauge',
+            colors[Math.floor(this.props.value / threshold)]
         );
 
         return (
