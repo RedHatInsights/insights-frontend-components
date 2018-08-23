@@ -40,6 +40,13 @@ class Gauge extends Component {
                 },
                 width: 8,
                 startingAngle: 2*Math.PI
+            },
+            // this just makes it so that we can add custom threshold colors. It does not
+            // actually control the thresholds or the colors. It's more of a flag for us
+            color: {
+                threshold: {
+                    values: [25, 50, 75, 100]
+                }
             }
         };
 
