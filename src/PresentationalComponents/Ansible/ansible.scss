@@ -9,7 +9,7 @@ i.Ansible {
     svg {
         height: var(--pf-global--FontSize--xl);
         position: relative;
-        @include rem('top', 3px);
+        @include rem('top', 4px);
     }
 }
 
