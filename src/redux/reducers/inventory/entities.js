@@ -1,7 +1,6 @@
 import { ACTION_TYPES, SELECT_ENTITY, CHANGE_SORT, FILTER_ENTITIES } from '../../action-types';
 import { mergeArraysByKey } from '../../../Utilities/helpers';
 import { SortDirection } from '../../../PresentationalComponents/Table';
-import sortBy from 'lodash/sortBy';
 import get from 'lodash/get';
 import orderBy from 'lodash/orderBy';
 
@@ -15,6 +14,7 @@ const defaultColumns = [
 function entitiesPending(state) {
     return {
         ...state,
+        columns: mergeArraysByKey([state.columns, defaultColumns], 'key'),
         loaded: false
     };
 }
@@ -34,7 +34,6 @@ function entitiesLoaded(state, { payload }) {
     return {
         ...state,
         loaded: true,
-        columns: mergeArraysByKey([ state.columns, defaultColumns ], 'key'),
         rows: entities,
         entities
     };

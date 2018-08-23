@@ -16,14 +16,15 @@ class EntityTable extends React.Component {
         this.onRowClick = this.onRowClick.bind(this);
         this.onItemSelect = this.onItemSelect.bind(this);
         this.onSort = this.onSort.bind(this);
+        this.healthColumn = this.healthColumn.bind(this);
         this.state = {
             sortBy: {}
         }
     }
 
-    onRowClick(_event, key) {
+    onRowClick(_event, key, application) {
         const { match: {path}, history } = this.props;
-        history.push(`${path}/${key}`);
+        history.push(`${path}/${key}/${application ? application : ''}`);
     }
 
     onItemSelect(event, key, checked) {
@@ -44,7 +45,6 @@ class EntityTable extends React.Component {
 
     renderCol(col, key, composed) {
         if(composed) {
-            console.log(col);
             return (
                 <div className="ins-composed-col">
                     {composed.map(path => (
@@ -58,9 +58,42 @@ class EntityTable extends React.Component {
         return get(col, key, 'unknown');
     }
 
+    onHealthClicked(event, _clickedOn, health, item) {
+        this.onRowClick(event, item.id, health.redirect);
+    }
+
+    healthColumn(oneItem) {
+        return {
+            title: <HealthStatus
+                items={oneItem.health}
+                className="ins-health-status"
+                onHealthClicked={
+                        (event, clickedOn, health) => this.onHealthClicked(event, clickedOn, health, oneItem)
+                }
+            />,
+            className: 'pf-m-fit-content'
+        }
+    }
+
+    actionsColumn(oneItem) {
+        return {
+            title: <TableActions item={{id: oneItem.id}} />,
+            className: 'pf-c-table__action pf-m-shrink'
+        }
+    }
+
     render() {
         const { columns, entities, rows } = this.props;
         const filteredData = entities || rows;
+        const data = filteredData.map(oneItem => ({
+            id: oneItem.id,
+            selected: oneItem.selected,
+            cells: [
+                ...columns.map(oneCell => this.renderCol(oneItem, oneCell.key, oneCell.composed)),
+                this.healthColumn(oneItem),
+                this.actionsColumn(oneItem)
+            ]
+        }));
         return <Table
             className="pf-m-compact ins-entity-table"
             sortBy={this.state.sortBy}
@@ -76,21 +109,7 @@ class EntityTable extends React.Component {
             onRowClick={this.onRowClick}
             onItemSelect={this.onItemSelect}
             hasCheckbox
-            rows={filteredData && filteredData.map(oneItem => ({
-                id: oneItem.id,
-                selected: oneItem.selected,
-                cells: [
-                    ...columns.map(oneCell => this.renderCol(oneItem, oneCell.key, oneCell.composed)),
-                    {
-                        title: <HealthStatus items={oneItem.health} className="ins-health-status"/>,
-                        className: 'pf-m-fit-content'
-                    },
-                    {
-                        title: <TableActions item={{id: oneItem.id}} />,
-                        className: 'pf-c-table__action pf-m-shrink'
-                    }
-                ]
-            }))}
+            rows={data}
         />
     }
 }
@@ -104,7 +123,7 @@ EntityTable.propTypes = {
 EntityTable.defaultProps = {
     loaded: false,
     columns: [],
-    entities: null,
+    entities: [],
     selectEntity: () => undefined
 }
 

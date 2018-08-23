@@ -3,10 +3,22 @@ import PropTypes from 'prop-types';
 import { ShieldAltIcon, DollarSignIcon, WrenchIcon, CertificateIcon } from '@patternfly/react-icons';
 
 const HealthToIcon = {
-  cost: <DollarSignIcon />,
-  configuration: <WrenchIcon />,
-  compliance: <CertificateIcon />,
-  vulnerabilities: <ShieldAltIcon />
+  cost: {
+    component: <DollarSignIcon />,
+    redirect: 'cost_management'
+  },
+  configuration: {
+    component: <WrenchIcon />,
+    redirect: 'configuration_assessment'
+  },
+  compliance: {
+    component: <CertificateIcon />,
+    redirect: 'compliance'
+  },
+  vulnerabilities: {
+    component: <ShieldAltIcon />,
+    redirect: 'vulnerabilities'
+  }
 }
 
 class HealthStatus extends React.Component {
@@ -14,9 +26,9 @@ class HealthStatus extends React.Component {
     super(props)
   }
 
-  onStatusClicked(event, clickedOn) {
+  onStatusClicked(event, clickedOn, health) {
     event.stopPropagation();
-    console.log(event, clickedOn);
+    this.props.onHealthClicked && this.props.onHealthClicked(event, clickedOn, health);
   }
 
   render() {
@@ -24,8 +36,8 @@ class HealthStatus extends React.Component {
     return (
       <div className={className}>
         {items && Object.keys(items).map(oneKey => (
-          <div key={oneKey} onClick={(event) => this.onStatusClicked(event, items[oneKey])}>
-            <span>{HealthToIcon[oneKey]}</span>
+          <div key={oneKey} onClick={(event) => this.onStatusClicked(event, items[oneKey], HealthToIcon[oneKey])}>
+            <span>{HealthToIcon[oneKey].component}</span>
             <span>{items[oneKey].title}</span>
           </div>
         ))}
@@ -35,7 +47,8 @@ class HealthStatus extends React.Component {
 }
 
 HealthStatus.propTypes = {
-  items: PropTypes.any
+  items: PropTypes.any,
+  onHealthClicked: PropTypes.func
 }
 
 export default HealthStatus;
