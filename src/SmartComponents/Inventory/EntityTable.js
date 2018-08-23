@@ -27,11 +27,11 @@ class EntityTable extends React.Component {
         history.push(`${path}/${key}/${application ? application : ''}`);
     }
 
-    onItemSelect(event, key, checked) {
+    onItemSelect(_event, key, checked) {
         this.props.selectEntity && this.props.selectEntity(key, checked);
     }
 
-    onSort(event, key, direction) {
+    onSort(_event, key, direction) {
         if (key !== 'action' && key !== 'health') {
             this.props.setSort && this.props.setSort(key, direction);
             this.setState({

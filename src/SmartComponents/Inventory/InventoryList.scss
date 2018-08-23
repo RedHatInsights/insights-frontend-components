@@ -3,16 +3,7 @@
 }
 
 .ins-entity-table.pf-c-table {
-  &, td, th, tr {
-    vertical-align: middle;
-    border-bottom: 1px solid #ccc;
-    border-top: 1px solid #ccc;
-  }
-
-  th.pf-m-ascending, th.pf-m-descending {
-    border-bottom: 3px var(--pf-global--primary-color--light-100) solid;
-  }
-
+  margin-bottom: 15px;
   tr {
     cursor: pointer;
   }
