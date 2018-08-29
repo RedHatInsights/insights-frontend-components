@@ -57,6 +57,12 @@
         &:nth-of-type(odd) { @include rem('margin-right', 15px); }
         cursor: pointer;
     }
+
+    .badge-wrapper {
+        display: flex;
+        align-items: center;
+    }
+
     .badge {
         @include rem('height', 15px);
         @include rem('width', 15px);

@@ -56,7 +56,7 @@ class Donut extends Component {
                 d3.select('.ins-l-donut__legend').insert('div', '.donut').attr('class', 'ins-l-donut__legend--item').selectAll('div')
                     .data([id[i]])
                     .enter().append('div')
-                    .attr('data-id', function(id) { return id; })
+                    .attr('data-id', function(id) { return id; }).attr('class', 'badge-wrapper')
                     .html(function(id) { return '<span class=\'badge\'></span>'+id; })
                     .each(function(id) {
                         d3.select(this).select('span').style('background-color', donut.color(id));
