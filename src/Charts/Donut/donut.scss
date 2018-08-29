@@ -1,4 +1,9 @@
-@import '../../Utilities';
+// @import '../../Utilities';
+@import '~@red-hat-insights/insights-frontend-components/Utilities/_variables';
+@import '~@red-hat-insights/insights-frontend-components/Utilities/_mixins';
+.c3-chart-arcs-background {
+    fill: #e0e0e0;
+}
 
 .ins-c-donut{
     display: inline-flex;
@@ -38,4 +43,24 @@
     }
     td + td { padding-left: 20px; }
     z-index: 2;
+}
+
+// with-legend
+.ins-l-donut__legend {
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+    justify-content: center;
+    @include rem('margin-top', 15px);
+    &--item {
+        &:nth-of-type(even) { @include rem('margin-left', 15px); }
+        &:nth-of-type(odd) { @include rem('margin-right', 15px); }
+        cursor: pointer;
+    }
+    .badge {
+        @include rem('height', 15px);
+        @include rem('width', 15px);
+        display: inline-block;
+        @include rem('margin-right', 10px);
+    }
 }

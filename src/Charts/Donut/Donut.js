@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import * as c3 from 'c3';
+import * as d3 from 'd3';
 import classNames from 'classnames';
 
 import './donut.scss';
 
 /**
- * Donut used for comparing values
+ * Donut used for displaying statuses
  */
 
 class Donut extends Component {
@@ -42,7 +43,33 @@ class Donut extends Component {
             }
         };
 
-        let donut = c3.generate(donutConfig); // eslint-disable-line
+        let donut = c3.generate(donutConfig);
+
+        /* eslint-disable */
+        if (this.props.withLegend) {
+            let id = [];
+            for (let i = 0; i < this.props.values.length; i++) { 
+                id.push(this.props.values[i][0]);
+            }
+
+            for (let i = 0; i < id.length; i++) { 
+                d3.select('.ins-l-donut__legend').insert('div', '.donut').attr('class', 'ins-l-donut__legend--item').selectAll('div')
+                    .data([id[i]])
+                    .enter().append('div')
+                    .attr('data-id', function(id) { return id; })
+                    .html(function(id) { return '<span class=\'badge\'></span>'+id; })
+                    .each(function(id) {
+                        d3.select(this).select('span').style('background-color', donut.color(id));
+                    })
+                    .on('mouseover', function (id) {
+                        donut.focus(id);
+                    })
+                    .on('mouseout', function (id) {
+                        donut.revert();
+                    })
+            }
+        }
+        /* eslint-enable */
     }
 
     render () {
@@ -53,13 +80,16 @@ class Donut extends Component {
         );
 
         return (
-            <div className='ins-l-donut'>
-                <div id={this.props.identifier} className={donutClasses}></div>
-                <div className='ins-c-donut-hole'>
-                    <span className='ins-c-donut-hole--total__number'>{this.props.total}</span>
-                    <span className='ins-c-donut-hole--total__label'>{this.props.totalLabel}</span>
+            <React.Fragment>
+                <div className='ins-l-donut'>
+                    <div id={this.props.identifier} className={donutClasses}></div>
+                    <div className='ins-c-donut-hole'>
+                        <span className='ins-c-donut-hole--total__number'>{this.props.total}</span>
+                        <span className='ins-c-donut-hole--total__label'>{this.props.totalLabel}</span>
+                    </div>
                 </div>
-            </div>
+                <div className='ins-l-donut__legend'></div>
+            </React.Fragment>
         );
     }
 }
@@ -87,10 +117,12 @@ Donut.propTypes = {
     values: propTypes.array,
     width: propTypes.number,
     total: propTypes.number,
-    totalLabel: propTypes.string
+    totalLabel: propTypes.string,
+    withLegend: propTypes.bool
 };
 
 Donut.defaultProps = {
+    withLegend: false,
     height: 200,
     identifier: generateId(),
     width: 200
