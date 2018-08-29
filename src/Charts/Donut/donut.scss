@@ -62,5 +62,6 @@
         @include rem('width', 15px);
         display: inline-block;
         @include rem('margin-right', 10px);
+        &__number { @include rem(margin-left, 5px); }
     }
 }
