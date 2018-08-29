@@ -1,0 +1,41 @@
+@import '../../Utilities';
+
+.ins-c-donut{
+    display: inline-flex;
+    justify-content: center;
+}
+
+.ins-l-donut{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .ins-c-donut-hole {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        &--total__number {
+            @include rem('font-size', 24px);
+            font-weight: 500;
+        }
+        &--total__label {
+            @include rem('font-size', 20px);
+            font-weight: 300;
+            text-transform: capitalize;
+        }
+    }
+}
+
+.ins-c-donut .c3-tooltip {
+    display: block;
+    background-color:#545454;
+    padding: 10px 15px;
+    .name { font-weight: 700; }
+    td {
+        flex-direction: row;
+        font-size:13px;
+        color: #fff;
+    }
+    td + td { padding-left: 20px; }
+    z-index: 2;
+}
