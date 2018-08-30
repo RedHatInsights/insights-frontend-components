@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import * as c3 from 'c3';
+import { select } from 'd3';
 import classNames from 'classnames';
 
 import './gauge.scss';
@@ -36,6 +37,9 @@ class Gauge extends Component {
             gauge: {
                 fullCircle: true,
                 label: {
+                    format: function () {
+                        return;
+                    },
                     show: false
                 },
                 width: 8,
@@ -54,6 +58,7 @@ class Gauge extends Component {
     }
 
     render () {
+        // this sets the color of the arc based on the value of props.value
         const threshold = 25;
         let colors = {
             0: 'ins-c-arc__critical', 
@@ -80,15 +85,12 @@ export default Gauge;
 /**
  * generate random ID if one is not supplied
  */
+/**
+ * generate random ID if one is not supplied
+ */
 function generateId () {
-    let text = '';
-    let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-    for (var i = 0; i < 5; i++) {
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-
-    return text;
+     let text = new Date().getTime() + Math.random().toString(36).slice(2);
+     return text;
 }
 
 Gauge.propTypes = {
