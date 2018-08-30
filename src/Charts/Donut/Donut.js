@@ -55,22 +55,18 @@ class Donut extends Component {
                 num.push(this.props.values[i][1]);
             }
 
-            for (let i = 0; i < id.length; i++) {
-                select(this.legend)
-                .data([id[i]])
+            select(this.legend)
                 .selectAll('div.ins-l-donut__legend--item')
                 .each(function() {
                     select(this)
                     .select('span').style('background-color', donut.color(this.getAttribute('data-id')));
                 })
-                .on('mouseover', function (id) {
+                .on('mouseover', function () {
                     donut.focus(this.getAttribute('data-id'));
                 })
-                .on('mouseout', function (id) {
+                .on('mouseout', function () {
                     donut.revert();
                 })
-                
-            }
         }
         /* eslint-enable */
     }
