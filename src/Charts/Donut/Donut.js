@@ -48,18 +48,19 @@ class Donut extends Component {
 
         /* eslint-disable */
         if (this.props.withLegend) {
+
             select(this.legend)
                 .selectAll('div.ins-l-donut__legend--item')
                 .each(function() {
                     select(this)
-                    .select('span').style('background-color', donut.color(this.getAttribute('data-id')));
-                })
-                .on('mouseover', function () {
-                    donut.focus(this.getAttribute('data-id'));
-                })
-                .on('mouseout', function () {
-                    donut.revert();
-                })
+                        .select('span').style('background-color', donut.color(this.getAttribute('data-id')));
+                    })
+                    .on('mouseover', function () {
+                        donut.focus(this.getAttribute('data-id'));
+                    })
+                    .on('mouseout', function () {
+                        donut.revert();
+                    })
         }
         /* eslint-enable */
     }
@@ -76,6 +77,22 @@ class Donut extends Component {
             total += this.props.values[i][1];
         }
 
+        let donutLegend;
+        if (this.props.withLegend) {
+            donutLegend =
+            <div className='ins-l-donut__legend' ref={ref => {this.legend = ref;}}>
+                {this.props.values && this.props.values.map(oneItem => (
+                    <div key={oneItem}  data-id={oneItem[0]} className="donut ins-l-donut__legend--item">
+                        <div className="badge-wrapper">
+                            <span className="badge"></span>
+                            <span className="badge__label">{oneItem[0]}</span>
+                            <span className="badge__number">({oneItem[1]})</span>
+                        </div>
+                    </div>
+                ))}
+            </div>;
+        }
+
         return (
             <React.Fragment>
                 <div className='ins-l-donut'>
@@ -85,17 +102,7 @@ class Donut extends Component {
                         <span className='ins-c-donut-hole--total__label'>{this.props.totalLabel}</span>
                     </div>
                 </div>
-                <div className='ins-l-donut__legend' ref={ref => {this.legend = ref;}}>
-                    {this.props.values && this.props.values.map(oneItem => (
-                        <div key={oneItem}  data-id={oneItem[0]} className="donut ins-l-donut__legend--item">
-                            <div className="badge-wrapper">
-                                <span className="badge"></span>
-                                <span className="badge__label">{oneItem[0]}</span>
-                                <span className="badge__number">({oneItem[1]})</span>
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                {donutLegend}
             </React.Fragment>
         );
     }
