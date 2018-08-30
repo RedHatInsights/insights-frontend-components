@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import * as c3 from 'c3';
+// import * as d3 from 'd3';
 import { select } from 'd3';
 import classNames from 'classnames';
 
@@ -54,18 +55,21 @@ class Donut extends Component {
                 num.push(this.props.values[i][1]);
             }
 
-            for (let i = 0; i < id.length; i++) { 
+            for (let i = 0; i < id.length; i++) {
                 select(this.legend)
-                    .data([id[i]])
-                    .each(function(id) {
-                        select(this).select('span').style('background-color', donut.color(id));
-                    })
-                    .on('mouseover', function (id) {
-                        donut.focus(id);
-                    })
-                    .on('mouseout', function (id) {
-                        donut.revert();
-                    })
+                .data([id[i]])
+                .selectAll('div.ins-l-donut__legend--item')
+                .each(function() {
+                    select(this)
+                    .select('span').style('background-color', donut.color(this.getAttribute('data-id')));
+                })
+                .on('mouseover', function (id) {
+                    donut.focus(this.getAttribute('data-id'));
+                })
+                .on('mouseout', function (id) {
+                    donut.revert();
+                })
+                
             }
         }
         /* eslint-enable */
@@ -78,12 +82,17 @@ class Donut extends Component {
             'ins-c-donut'
         );
 
+        let total = 0;
+        for (let i = 0; i < this.props.values.length; i++) {
+            total += this.props.values[i][1];
+        }
+
         return (
             <React.Fragment>
                 <div className='ins-l-donut'>
                     <div id={this.props.identifier} className={donutClasses}></div>
                     <div className='ins-c-donut-hole'>
-                        <span className='ins-c-donut-hole--total__number'>{this.props.total}</span>
+                        <span className='ins-c-donut-hole--total__number'>{total}</span>
                         <span className='ins-c-donut-hole--total__label'>{this.props.totalLabel}</span>
                     </div>
                 </div>
@@ -121,7 +130,6 @@ Donut.propTypes = {
     identifier: propTypes.string,
     values: propTypes.array,
     width: propTypes.number,
-    total: propTypes.number,
     totalLabel: propTypes.string,
     withLegend: propTypes.bool
 };
