@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import * as c3 from 'c3';
-import * as d3 from 'd3';
+import { select } from 'd3';
 import classNames from 'classnames';
 
 import './donut.scss';
@@ -55,15 +55,10 @@ class Donut extends Component {
             }
 
             for (let i = 0; i < id.length; i++) { 
-                d3.select('.ins-l-donut__legend').insert('div', '.donut').attr('class', 'ins-l-donut__legend--item').selectAll('div')
+                select(this.legend)
                     .data([id[i]])
-                    .enter().append('div')
-                    .attr('data-id', function(id) { return id; }).attr('class', 'badge-wrapper')
-                    .html(function(id) {
-                        return '<span class=\'badge\'></span>' + '<span class=\'badge__label\'>' + id + '</span>' + '<span class=\'badge__number\'> (' + num[i] + ') </span>'
-                    })
                     .each(function(id) {
-                        d3.select(this).select('span').style('background-color', donut.color(id));
+                        select(this).select('span').style('background-color', donut.color(id));
                     })
                     .on('mouseover', function (id) {
                         donut.focus(id);
@@ -92,7 +87,17 @@ class Donut extends Component {
                         <span className='ins-c-donut-hole--total__label'>{this.props.totalLabel}</span>
                     </div>
                 </div>
-                <div className='ins-l-donut__legend'></div>
+                <div className='ins-l-donut__legend' ref={ref => {this.legend = ref;}}>
+                    {this.props.values && this.props.values.map(oneItem => (
+                        <div key={oneItem}  data-id={oneItem[0]} className="donut ins-l-donut__legend--item">
+                            <div className="badge-wrapper">
+                                <span className="badge"></span>
+                                <span className="badge__label">{oneItem[0]}</span>
+                                <span className="badge__number">({oneItem[1]})</span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </React.Fragment>
         );
     }
@@ -104,12 +109,8 @@ export default Donut;
  * generate random ID if one is not supplied
  */
 function generateId () {
-    let text = '';
-    let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-    for (let i = 0; i < 5; i++) {
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
+    let text = new Date().getTime() + Math.random().toString(36).slice(2);
 
     return text;
 }
