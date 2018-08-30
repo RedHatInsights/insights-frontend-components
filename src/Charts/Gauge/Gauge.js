@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
 import * as c3 from 'c3';
-import { select } from 'd3';
 import classNames from 'classnames';
 
 import './gauge.scss';
@@ -82,9 +81,6 @@ class Gauge extends Component {
 
 export default Gauge;
 
-/**
- * generate random ID if one is not supplied
- */
 /**
  * generate random ID if one is not supplied
  */
