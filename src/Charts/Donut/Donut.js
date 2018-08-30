@@ -48,13 +48,6 @@ class Donut extends Component {
 
         /* eslint-disable */
         if (this.props.withLegend) {
-            let id = [];
-            let num = [];
-            for (let i = 0; i < this.props.values.length; i++) { 
-                id.push(this.props.values[i][0]);
-                num.push(this.props.values[i][1]);
-            }
-
             select(this.legend)
                 .selectAll('div.ins-l-donut__legend--item')
                 .each(function() {
