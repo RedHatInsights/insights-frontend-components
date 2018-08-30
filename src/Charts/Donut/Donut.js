@@ -37,7 +37,7 @@ class Donut extends Component {
                 show: false
             },
             donut: {
-                width: 10,
+                width: 8,
                 label: {
                     show: false
                 }
