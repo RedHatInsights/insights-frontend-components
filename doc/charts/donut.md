@@ -7,8 +7,6 @@ This component is usefull to display x number of values to compare them to an ov
 import React from 'react'
 import { Donut } from '@red-hat-isnights/insights-frontend-components';
 
-let DonutTotal = 75;
-
 let DonutValues = [
     ['value1', 5],
     ['value2', 10],
@@ -16,7 +14,7 @@ let DonutValues = [
     ['value4', 40]
 ];
 
-<Donut values={DonutValues} total={DonutTotal} totalLabel='label for donut-hole' id='donut-identifier'/>;
+<Donut values={DonutValues} totalLabel='label for donut-hole' identifier='donut-identifier'/>;
 
 ```
 
@@ -24,7 +22,7 @@ let DonutValues = [
 
 ```jsx
 
-<Donut values={DonutValues} total={DonutTotal} totalLabel='label for donut-hole' id='donut-identifier' withLegend/>;
+<Donut values={DonutValues} totalLabel='label for donut-hole' identifier='donut-identifier' withLegend/>;
 
 ```
 
@@ -37,7 +35,6 @@ let DonutValues = [
     identifier: propTypes.string,
     values: propTypes.array,
     width: propTypes.number,
-    total: propTypes.number,
     totalLabel: propTypes.string,
     withLabel: propTypes.bool,
 }
