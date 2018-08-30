@@ -29,6 +29,7 @@
 .ins-c-donut .c3-tooltip {
     display: block;
     background-color:#545454;
+    z-index: 3;
     @include rem('padding', 10px 15px);
     .name { font-weight: 700; }
     td {
