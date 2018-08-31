@@ -60,7 +60,7 @@ class Gauge extends Component {
             // actually control the thresholds or the colors. It's more of a flag for us
             color: {
                 threshold: {
-                    values: [25, 50, 75, 100]
+                    values: [26, 51, 76, 100]
                 }
             }
         };
@@ -69,18 +69,18 @@ class Gauge extends Component {
     }
 
     render () {
-        // this sets the color of the arc based on the value of props.value
-        const threshold = 25;
+        const threshold = 26;
         let colors = {
-            0: 'ins-c-arc__critical', 
-            1: 'ins-c-arc__high',
-            2: 'ins-c-arc__medium',
-            3: 'ins-c-arc__low',
-            4: 'ins-c-arc__low'
+            0: 'ins-m-fill-level-4',
+            1: 'ins-m-fill-level-3',
+            2: 'ins-m-fill-level-2',
+            3: 'ins-m-fill-level-1',
+            4: 'ins-m-fill-level-1'
         };
 
         const gaugeClasses = classNames(
             this.props.className,
+            'ins-m-' + this.props.gaugeFullCondition,
             'ins-c-gauge',
             colors[Math.floor(this.props.value / threshold)]
         );
@@ -108,6 +108,7 @@ Gauge.propTypes = {
     label: propTypes.string.isRequired,
     value: propTypes.number.isRequired,
     width: propTypes.number
+    gaugeFullCondition: propTypes.string
 };
 
 Gauge.defaultProps = {
