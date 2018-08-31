@@ -36,9 +36,11 @@ class Gauge extends Component {
             gauge: {
                 fullCircle: true,
                 label: {
+                    // hides value in center of gauge
                     format: function () {
                         return;
                     },
+                    // hides min/max values of gauge
                     show: false
                 },
                 width: 8,
