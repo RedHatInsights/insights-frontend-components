@@ -7,7 +7,7 @@ import './page-header.scss';
  * This is a page header that mimics the patternfly layout for a header section
  */
 
-const PageHeader = ({unsupported, className, ...props}) => {
+const PageHeader = ({className, ...props}) => {
 
     let pageHeaderClasses = classNames(
         className,
