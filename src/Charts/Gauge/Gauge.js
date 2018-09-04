@@ -60,7 +60,7 @@ class Gauge extends Component {
             // actually control the thresholds or the colors. It's more of a flag for us
             color: {
                 threshold: {
-                    values: [26, 51, 76, 100]
+                    values: [25, 50, 75, 100]
                 }
             }
         };
@@ -69,7 +69,7 @@ class Gauge extends Component {
     }
 
     render () {
-        const threshold = 26;
+        const threshold = 25;
         let colors = {
             0: 'ins-m-fill-level-4',
             1: 'ins-m-fill-level-3',
@@ -80,7 +80,7 @@ class Gauge extends Component {
 
         const gaugeClasses = classNames(
             this.props.className,
-            'ins-m-' + this.props.gaugeFullCondition,
+            this.props.flipFullColors ? 'ins-m-negative' : '',
             'ins-c-gauge',
             colors[Math.floor(this.props.value / threshold)]
         );
@@ -107,12 +107,13 @@ Gauge.propTypes = {
     identifier: propTypes.string,
     label: propTypes.string.isRequired,
     value: propTypes.number.isRequired,
-    width: propTypes.number
-    gaugeFullCondition: propTypes.string
+    width: propTypes.number,
+    flipFullColors: propTypes.bool
 };
 
 Gauge.defaultProps = {
     height: 200,
     identifier: generateId(),
-    width: 200
+    width: 200,
+    flipFullColors: false
 };
