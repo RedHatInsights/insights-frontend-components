@@ -13,7 +13,11 @@ import './page-header.scss';
 class PageHeader extends React.Component {
   render () {
     return (
-        <header className='ins-p-page-header'> {this.props.children} </header>
+        <section className='pf-l-page__main-section pf-m-light'>
+          <div className='pf-c-content'>
+            {this.props.children}
+          </div>
+        </section>
     );
   }
 };
