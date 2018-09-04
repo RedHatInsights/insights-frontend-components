@@ -1,39 +1,37 @@
 @import '../../Utilities';
-
-.c3-chart-arcs-background {
-    fill: #e0e0e0;
-}
+@import '~@patternfly/patternfly-next/sass-utilities/_all';
 
 .ins-c-gauge {
+
     .c3-chart-arcs-background, .c3-arc {
-        stroke: white;
+        fill: #{$pf-color-black-500};
+        stroke: none;
     }
 
     .c3-target text {
-        font-weight: 700;
+        display: none;
+        // font-size: 25px !important;
+        // font-weight: 400 !important;
+        // font-weight: 700;
+    }
+
+    .ins-c-gauge__percentage {
+
     }
 }
 
-.ins-c-arc__critical {
-    .c3-arc {
-        fill: $ins-color--critical;
-    }
+.ins-c-arc__critical .c3-arc {
+    fill: $ins-color--critical;
 }
 
-.ins-c-arc__high {
-    .c3-arc {
-        fill: $ins-color--high;
-    }
+.ins-c-arc__high .c3-arc {
+    fill: $ins-color--high;
 }
 
-.ins-c-arc__medium {
-    .c3-arc {
-        fill: $ins-color--medium;
-    }
+.ins-c-arc__medium .c3-arc {
+    fill: $ins-color--medium;
 }
 
-.ins-c-arc__low {
-    .c3-arc {
-        fill: $ins-color--low;
-    }
+.ins-c-arc__low .c3-arc {
+    fill: $ins-color--low;
 }

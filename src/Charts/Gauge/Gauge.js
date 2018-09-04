@@ -53,7 +53,7 @@ class Gauge extends Component {
                     // hides min/max values of gauge
                     show: false
                 },
-                width: 8,
+                width: 4,
                 startingAngle: 2*Math.PI
             },
             // this just makes it so that we can add custom threshold colors. It does not
