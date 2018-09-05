@@ -1,5 +1,6 @@
 import React from 'react';
 import propTypes from 'prop-types';
+import classNames from 'classnames';
 
 /**
  * This is a component that wraps the page
