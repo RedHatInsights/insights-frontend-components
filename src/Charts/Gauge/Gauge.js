@@ -69,6 +69,7 @@ class Gauge extends Component {
     }
 
     render () {
+        // this sets the color of the arc based on the value of props.value
         const threshold = 25;
         let colors = {
             0: 'ins-m-fill-level-4',
