@@ -72,7 +72,7 @@ const Table = ({
           onColClick={onColClick}
         />
       }
-      {footer && <TFooter hasCheckbox={hasCheckbox} hasIcon={hasIcon} children={footer} colspan={header.length}/>}
+      {footer && <TFooter hasCheckbox={hasCheckbox} expandable={expandable} hasIcon={hasIcon} children={footer} colspan={header.length}/>}
     </table>
   )
 }

@@ -5,9 +5,15 @@ import { Button, ButtonVariant } from '@patternfly/react-core';
 import classnames from 'classnames';
 
 class TableBody extends Component {
-  createCol(col, rowKey, key) {
+  createCol(col, rowKey, key, isOpen) {
     const { cols } = this.props;
     const current = Object.values(cols)[key];
+    let renderCol;
+    if(isOpen) {
+      renderCol = <div className="pf-c-table__expandable-row-content">{col.title || col}</div>;
+    } else {
+      renderCol = col.title || col;
+    }
     return (
       <td key={key}
         data-label={current.hasOwnProperty('title') ? current.title : current}
@@ -19,27 +25,25 @@ class TableBody extends Component {
           }
         }
       >
-        {col.title || col}
+        {renderCol}
       </td>
     )
   }
 
   createArrow(row, key) {
     return (
-      <td className={classnames({
-        'pf-c-table__toggle': true,
-        'pf-m-shrink': true,
-        'pf-m-expanded': row.active
-        })
-      }
+      <td className="pf-c-table__toggle pf-m-shrink"
       role="gridcell">
-        <Button
+        {row.hasOwnProperty('children') && <Button
           variant={ButtonVariant.plain}
-          className="pf-m-toggle"
+          className={classnames({
+            'pf-m-toggle': true,
+            'pf-m-expanded': row.active
+          })}
           onClick={event => this.props.onExpandClick && this.props.onExpandClick(event, row, key)}
         >
-          {row.hasOwnProperty('children') && <AngleDownIcon />}
-        </Button>
+          <AngleDownIcon />
+        </Button>}
       </td>
     )
   }
@@ -76,7 +80,7 @@ class TableBody extends Component {
         }
         {oneRow &&
           oneRow.cells &&
-          Object.keys(oneRow.cells).map((cellKey) => this.createCol(oneRow.cells[cellKey], key, cellKey))
+          Object.keys(oneRow.cells).map((cellKey) => this.createCol(oneRow.cells[cellKey], key, cellKey, oneRow.isOpen))
         }
       </tr>
     )
