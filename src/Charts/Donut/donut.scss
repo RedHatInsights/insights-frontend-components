@@ -51,7 +51,7 @@
 }
 
 // When larger than 992px, align the legend in a 2 column list
-@media only screen and (min-width: 992px) {
+@media only screen and (min-width: $ins-break--lg) {
     .ins-l-donut__legend { grid-template-columns: auto auto; }
 }
 
