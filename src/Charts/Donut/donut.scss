@@ -43,15 +43,18 @@
     }
 }
 
+// with-legend
+
+// When larger than 0px, align the legend in a 1 column list
 @media only screen and (min-width: 0px) {
     .ins-l-donut__legend { grid-template-columns: auto; }
 }
 
+// When larger than 992px, align the legend in a 2 column list
 @media only screen and (min-width: 992px) {
     .ins-l-donut__legend { grid-template-columns: auto auto; }
 }
 
-// with-legend
 .ins-l-donut__legend {
     display: grid;
     grid-column-gap: 15px;
