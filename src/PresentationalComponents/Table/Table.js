@@ -80,6 +80,7 @@ const Table = ({
 Table.propTypes = {
   expandable: PropTypes.bool,
   hasCheckbox: PropTypes.bool,
+  variant: PropTypes.oneOf(Object.keys(TableVariant)),
   hasIcon: PropTypes.bool,
   sortBy: PropTypes.shape({
     index: PropTypes.string,
