@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
-import * as c3 from 'c3';
+import { generate } from 'c3';
 import { select } from 'd3';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
+import isEqual from 'lodash/isEqual';
 
 import './donut.scss';
 
@@ -17,6 +18,32 @@ class Donut extends Component {
 
     componentDidMount () {
         this._updateChart();
+    }
+
+    componentDidUpdate(prevProps) {
+        if(!isEqual(this.props.values, prevProps.values)) {
+            this.donut.load({
+                columns: this.props.values
+            });
+            this.updateLabels(this.donut);
+        }
+    }
+
+    updateLabels(donut) {
+        if (this.props.withLegend) {
+            select(this.legend)
+            .selectAll('div.ins-l-donut__legend--item')
+            .each(function() {
+                select(this)
+                .select('span').style('background-color', donut.color(this.getAttribute('data-id')));
+            })
+            .on('mouseover', function () {
+                donut.focus(this.getAttribute('data-id'));
+            })
+            .on('mouseout', function () {
+                donut.revert();
+            })
+        }
     }
 
     _updateChart () {
@@ -46,25 +73,9 @@ class Donut extends Component {
             }
         };
 
-        let donut = c3.generate(donutConfig);
+        this.donut = generate(donutConfig);
 
-        /* eslint-disable */
-        if (this.props.withLegend) {
-
-            select(this.legend)
-                .selectAll('div.ins-l-donut__legend--item')
-                .each(function() {
-                    select(this)
-                        .select('span').style('background-color', donut.color(this.getAttribute('data-id')));
-                    })
-                    .on('mouseover', function () {
-                        donut.focus(this.getAttribute('data-id'));
-                    })
-                    .on('mouseout', function () {
-                        donut.revert();
-                    })
-        }
-        /* eslint-enable */
+        this.updateLabels(this.donut);
     }
 
     render () {
@@ -127,7 +138,7 @@ export default Donut;
  */
 function generateId () {
 
-    let text = new Date().getTime() + Math.random().toString(36).slice(2);
+    let text = 'ins-donut-' + new Date().getTime() + Math.random().toString(36).slice(2);
 
     return text;
 }
@@ -136,7 +147,7 @@ Donut.propTypes = {
     className: propTypes.string,
     height: propTypes.number,
     identifier: propTypes.string,
-    values: propTypes.array,
+    values: propTypes.array.isRequired,
     width: propTypes.number,
     totalLabel: propTypes.string,
     withLegend: propTypes.bool,

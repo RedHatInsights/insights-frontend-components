@@ -1,5 +1,5 @@
 const { lstatSync, readdirSync } = require('fs')
-const { join, resolve, extname } = require('path')
+const { join } = require('path')
 
 const react = {
     commonjs: 'react',
@@ -71,6 +71,7 @@ const getDirectories = (source, dest) =>
     .reduce((acc, curr) => ({...acc, ...curr}), {})
 const entries = {
     'Utilities/ReducerRegistry': './src/Utilities/ReducerRegistry.js',
+    'Utilities/helpers': './src/Utilities/helpers.js',
     'Utilities/MiddlewareListener': './src/Utilities/MiddlewareListener.js',
     ...getDirectories('./src/PresentationalComponents', 'components'),
     ...getDirectories('./src/SmartComponents', 'components'),
@@ -89,6 +90,7 @@ module.exports = {
         classnames: 'classnames',
         '@patternfly/react-core': pfReactCore,
         '@patternfly/react-icons': pfReactIcons,
-        d3: 'd3'
+        d3: 'd3',
+        c3: 'c3'
     },
 };
