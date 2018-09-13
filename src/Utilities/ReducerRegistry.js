@@ -56,6 +56,6 @@ class ReducerRegistry {
     }
 }
 
-export const reduxRegistery = new ReducerRegistry();
+export const reduxRegistry = new ReducerRegistry();
 
 export default ReducerRegistry;

@@ -1,6 +1,6 @@
 {
   "name": "@red-hat-insights/insights-frontend-components",
-  "version": "3.7.2",
+  "version": "3.14.2",
   "main": "dist/index.js",
   "private": false,
   "publishConfig": {
@@ -13,7 +13,7 @@
     "Utilities/"
   ],
   "dependencies": {
-    "@patternfly/react-core": "^1.5.0",
+    "@patternfly/react-core": "^1.11.1",
     "@patternfly/react-icons": "^2.3.0",
     "c3": "^0.6.7",
     "classnames": "^2.2.5",
@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "@khala/commit-analyzer-wildcard": "^1.0.2",
-    "@patternfly/patternfly-next": "^1.0.4",
+    "@patternfly/patternfly-next": "^1.0.42",
     "@semantic-release/git": "^6.0.1",
     "@semantic-release/npm": "^3.3.4",
     "babel-core": "^6.26.3",
