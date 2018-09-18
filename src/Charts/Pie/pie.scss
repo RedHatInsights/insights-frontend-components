@@ -1,5 +1,4 @@
 @import '../../Utilities';
-@import '../../Utilities/variables';
 
 .ins-c-pie{
     display: inline-flex;
@@ -73,7 +72,6 @@
     align-items: center;
     justify-content: center;
     grid-column-gap: 15px;
-    //grid-template: 'pie' 'legend';
 
     @media only screen and (min-width: $ins-break--xs) {
         &.legend-right {

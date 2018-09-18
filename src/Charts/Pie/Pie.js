@@ -118,14 +118,12 @@ class Pie extends Component {
         }
 
         return (
-            <React.Fragment>
-                <div className={wrapperClasses}>
-                    <div className='ins-l-pie'>
-                        <div id={this.props.identifier} className={pieClasses}></div>
-                    </div>
-                    {pieLegend}
+            <div className={wrapperClasses}>
+                <div className='ins-l-pie'>
+                    <div id={this.props.identifier} className={pieClasses}></div>
                 </div>
-            </React.Fragment>
+                {pieLegend}
+            </div>
         );
     }
 }

@@ -129,18 +129,16 @@ class Donut extends Component {
         }
 
         return (
-            <React.Fragment>
-                <div className={wrapperClasses}>
-                    <div className='ins-l-donut'>
-                        <div id={this.props.identifier} className={donutClasses}></div>
-                        <div className='ins-c-donut-hole'>
-                            <span className='ins-c-donut-hole--total__number'>{total}</span>
-                            <span className='ins-c-donut-hole--total__label'>{this.props.totalLabel}</span>
-                        </div>
+            <div className={wrapperClasses}>
+                <div className='ins-l-donut'>
+                    <div id={this.props.identifier} className={donutClasses}></div>
+                    <div className='ins-c-donut-hole'>
+                        <span className='ins-c-donut-hole--total__number'>{total}</span>
+                        <span className='ins-c-donut-hole--total__label'>{this.props.totalLabel}</span>
                     </div>
-                    {donutLegend}
                 </div>
-            </React.Fragment>
+                {donutLegend}
+            </div>
         );
     }
 }
