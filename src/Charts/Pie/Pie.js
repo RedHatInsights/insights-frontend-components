@@ -7,13 +7,7 @@ import { Link } from 'react-router-dom';
 import isEqual from 'lodash/isEqual';
 
 import './pie.scss';
-
-export const LegendPosition = {
-    right: 'right',
-    left: 'left',
-    top: 'top',
-    bottom: 'bottom'
-};
+import { LegendPosition } from '../Donut/Donut.js'
 
 /**
  * Pie used for displaying statuses
