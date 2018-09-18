@@ -57,9 +57,6 @@ class Donut extends Component {
         let data = {
             type: 'donut',
             columns: this.props.values,
-            donut: {
-                title: 'Donut'
-            }
         };
 
         let donutConfig = {

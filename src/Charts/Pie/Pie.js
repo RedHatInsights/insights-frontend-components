@@ -51,9 +51,6 @@ class Pie extends Component {
         let data = {
             type: 'pie',
             columns: this.props.values,
-            pie: {
-                title: 'Pie'
-            }
         };
 
         let pieConfig = {
