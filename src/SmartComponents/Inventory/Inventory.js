@@ -13,6 +13,6 @@ const Inventory = ({ match, noTable = false }) => (
 
 export default withRouter((Inventory));
 
-export function inventoryConnector(registerReducers) {
+export function inventoryConnector() {
   return withRouter(Inventory)
 }
