@@ -1,7 +1,16 @@
 {
-    "presets": ["./.babelrc.js"],
+    presets: ["env", "react", "es2017", "es2015"],
     "ignore": [
         "./index.js"
+    ],
+    "plugins": [
+        ["transform-runtime", {
+            "polyfill": false,
+            "regenerator": true
+        }],
+        "syntax-dynamic-import",
+        "lodash",
+        "babel-plugin-transform-object-rest-spread"
     ]
 }
   
