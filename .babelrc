@@ -1,5 +1,5 @@
 {
-    presets: ["env", "react", "es2017", "es2015", "./.babelrc.js"],
+    "presets": ["env", "react", "es2017", "es2015", "./.babelrc.js"],
     "ignore": [
         "./index.js"
     ],
