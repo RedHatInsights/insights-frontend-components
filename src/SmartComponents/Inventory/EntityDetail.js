@@ -23,8 +23,7 @@ class EntityDetails extends Component {
         return get(entity, path, 'unknown');
     }
 
-    toggleActions(event, collapsed) {
-        event.stopPropagation();
+    toggleActions(_event, collapsed) {
         this.setState({
             actionCollapsed: collapsed
         })

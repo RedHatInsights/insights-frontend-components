@@ -71,14 +71,16 @@ class EntityTable extends React.Component {
                         (event, clickedOn, health) => this.onHealthClicked(event, clickedOn, health, oneItem)
                 }
             />,
-            className: 'pf-m-fit-content'
+            className: 'pf-m-fit-content',
+            stopPropagation: true
         }
     }
 
     actionsColumn(oneItem) {
         return {
             title: <TableActions item={{id: oneItem.id}} />,
-            className: 'pf-c-table__action pf-m-shrink'
+            className: 'pf-c-table__action pf-m-shrink',
+            stopPropagation: true
         }
     }
 

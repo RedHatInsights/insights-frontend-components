@@ -12,8 +12,7 @@ class Actions extends React.Component {
     }
   }
 
-  onToggle(event, collapsed) {
-    event.stopPropagation();
+  onToggle(_event, collapsed) {
     this.setState({isCollapsed: collapsed});
   }
 

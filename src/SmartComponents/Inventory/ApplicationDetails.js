@@ -17,18 +17,31 @@ class ApplicationDetails extends Component {
   }
 
   render() {
-    const { match, activeApp } = this.props;
+    const { match, activeApp, items } = this.props;
     return (
       <React.Fragment>
-        <TabLayout items={this.props.items} onTabClick={this.onTabClick} active={activeApp && activeApp.appName}>
-          <Switch>
-            <Route exact path={`${match.path}/:detail`} component={AppInfo} />
-            <Redirect to={`${match.path}/overview`} />
-          </Switch>            
-        </TabLayout>
+        {
+          items &&
+          <TabLayout items={items} onTabClick={this.onTabClick} active={activeApp && activeApp.appName}>
+            <Switch>
+              <Route exact path={`${match.path}/:detail`} component={AppInfo} />
+              <Redirect to={`${match.path}/overview`} />
+            </Switch>            
+          </TabLayout>
+        }
       </React.Fragment>
     )
   }
+}
+
+ApplicationDetails.propTypes = {
+  items: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    title: PropTypes.string
+  })),
+  activeApp: PropTypes.shape({
+    name: PropTypes.string
+  })
 }
 
 function stateToProps({entityDetails: {activeApps, activeApp}}) {
