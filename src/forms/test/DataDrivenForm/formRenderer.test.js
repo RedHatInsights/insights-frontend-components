@@ -1,13 +1,13 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import toJson from 'enzyme-to-json';
-import { lauraSchema1, lauraSchema2, lauraUiSchema } from '../../demoData/formSchemas';
+import { lauraSchema2, lauraUiSchema, simple, uiSchemaSimple } from '../../demoData/formSchemas';
 import FormRenderer from '../../DataDrivenForm/formRenderer';
 
 describe('Form renderer', () => {
   it('should render simple form with input and switch', () => {
     const submit = jest.fn();
-    const wrapper = mount(<FormRenderer schema={lauraSchema1} onSubmit={submit} />);
+    const wrapper = mount(<FormRenderer schema={simple} uiSchema={uiSchemaSimple} onSubmit={submit} />);
     expect(toJson(wrapper)).toMatchSnapshot();
   });
 

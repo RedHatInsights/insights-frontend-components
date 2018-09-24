@@ -1,7 +1,6 @@
 import { required, minLength } from '../Validators/validators';
 
-
 export default validationType => ({
-  required,
-  minLength,
+    required,
+    minLength
 })[validationType];
