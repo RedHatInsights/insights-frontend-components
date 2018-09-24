@@ -1,7 +1,3 @@
-export { default as Section } from './PresentationalComponents/Section/Section.js';
-export { default as SampleComponent } from './PresentationalComponents/SampleComponent/SampleComponent.js';
-export { default as Ansible } from './PresentationalComponents/Ansible/Ansible.js';
-export { default as Main } from './PresentationalComponents/Main/Main.js';
 export {
     default as ReducerRegistry,
     applyReducerHash,
@@ -10,6 +6,10 @@ export {
 } from './Utilities/ReducerRegistry';
 export { default as MiddlewareListener } from './Utilities/MiddlewareListener';
 export { default as registry, getStoreFromRegistry } from './Utilities/Registry';
+export * from './PresentationalComponents/Section';
+export * from './PresentationalComponents/SampleComponent';
+export * from './PresentationalComponents/Ansible';
+export * from './PresentationalComponents/Main';
 export * from './PresentationalComponents/PageHeader';
 export * from './PresentationalComponents/Pagination';
 export * from './PresentationalComponents/SimpleTableFilter';
