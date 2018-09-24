@@ -1,9 +1,9 @@
 
-export { default as PageHeader } from './PresentationalComponents/PageHeader/PageHeader.js';
-export { default as PageHeaderTitle } from './PresentationalComponents/PageHeader/PageHeaderTitle.js';
-export { default as Section } from './PresentationalComponents/Section/Section.js';
-export { default as SampleComponent } from './PresentationalComponents/SampleComponent/SampleComponent.js';
-export { default as Ansible } from './PresentationalComponents/Ansible/Ansible.js';
+export { default as PageHeader } from './PresentationalComponents/PageHeader/page-header.js';
+export { default as PageHeaderTitle } from './PresentationalComponents/PageHeader/page-header-title.js';
+export { default as Section } from './PresentationalComponents/Section/section.js';
+export { default as SampleComponent } from './PresentationalComponents/SampleComponent/sample-component.js';
+export { default as Ansible } from './PresentationalComponents/Ansible/ansible.js';
 export { default as Main } from './PresentationalComponents/Main/Main.js';
 export {
     default as ReducerRegistry,
