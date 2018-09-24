@@ -82,7 +82,7 @@ render() {
                   })}
                 </GridItem>
                 <GridItem>
-                  <Button variant="primary" onClick={handleSubmit} >Submit</Button>
+                  <Button id="form-renderer-submit" variant="primary" onClick={handleSubmit} >Submit</Button>
                 </GridItem>
               </Grid>
             </form>

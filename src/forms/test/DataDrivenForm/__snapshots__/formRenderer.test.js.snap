@@ -1,0 +1,412 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Form renderer should render simple form with input and switch 1`] = `
+<FormRenderer
+  onSubmit={[MockFunction]}
+  schema={
+    Object {
+      "properties": Object {
+        "done": Object {
+          "default": false,
+          "title": "Done?",
+          "type": "boolean",
+        },
+        "title": Object {
+          "default": "A new provider",
+          "title": "Title",
+          "type": "string",
+        },
+      },
+      "required": Array [
+        "title",
+      ],
+      "type": "object",
+    }
+  }
+  uiSchema={Object {}}
+>
+  <ReactFinalForm
+    initialValues={
+      Object {
+        "title": "A new provider",
+      }
+    }
+    onSubmit={[MockFunction]}
+    render={[Function]}
+  >
+    <form
+      className=".pf-c-form"
+    >
+      <Grid
+        className=""
+        gutter={null}
+        lg={null}
+        md={null}
+        sm={null}
+        span={null}
+        xl={null}
+      >
+        <div
+          className="pf-l-grid"
+        >
+          <GridItem
+            className=""
+            lg={null}
+            lgOffset={null}
+            lgRowSpan={null}
+            md={null}
+            mdOffset={null}
+            mdRowSpan={null}
+            offset={null}
+            rowSpan={null}
+            sm={null}
+            smOffset={null}
+            smRowSpan={null}
+            span={null}
+            xl={null}
+            xlOffset={null}
+            xlRowSpan={null}
+          >
+            <div
+              className="pf-l-grid__item"
+            >
+              <GridItem
+                className=""
+                key="title"
+                lg={null}
+                lgOffset={null}
+                lgRowSpan={null}
+                md={null}
+                mdOffset={null}
+                mdRowSpan={null}
+                offset={null}
+                rowSpan={null}
+                sm={12}
+                smOffset={null}
+                smRowSpan={null}
+                span={null}
+                xl={null}
+                xlOffset={null}
+                xlRowSpan={null}
+              >
+                <div
+                  className="pf-l-grid__item pf-m-12-col-on-sm"
+                >
+                  <Field
+                    autoFocus={false}
+                    component={[Function]}
+                    format={[Function]}
+                    isRequired={false}
+                    label="Title"
+                    name="title"
+                    parse={[Function]}
+                    type="text"
+                    validate={[Function]}
+                  >
+                    <TextField
+                      autoFocus={false}
+                      input={
+                        Object {
+                          "name": "title",
+                          "onBlur": [Function],
+                          "onChange": [Function],
+                          "onFocus": [Function],
+                          "value": "A new provider",
+                        }
+                      }
+                      isRequired={false}
+                      label="Title"
+                      meta={
+                        Object {
+                          "active": false,
+                          "data": Object {},
+                          "dirty": false,
+                          "dirtySinceLastSubmit": false,
+                          "error": undefined,
+                          "initial": "A new provider",
+                          "invalid": false,
+                          "pristine": true,
+                          "submitError": undefined,
+                          "submitFailed": false,
+                          "submitSucceeded": false,
+                          "touched": false,
+                          "valid": true,
+                          "visited": false,
+                        }
+                      }
+                      type="text"
+                    >
+                      <FinalFormField
+                        autoFocus={false}
+                        componentType="textField"
+                        input={
+                          Object {
+                            "name": "title",
+                            "onBlur": [Function],
+                            "onChange": [Function],
+                            "onFocus": [Function],
+                            "value": "A new provider",
+                          }
+                        }
+                        isRequired={false}
+                        label="Title"
+                        meta={
+                          Object {
+                            "active": false,
+                            "data": Object {},
+                            "dirty": false,
+                            "dirtySinceLastSubmit": false,
+                            "error": undefined,
+                            "initial": "A new provider",
+                            "invalid": false,
+                            "pristine": true,
+                            "submitError": undefined,
+                            "submitFailed": false,
+                            "submitSucceeded": false,
+                            "touched": false,
+                            "valid": true,
+                            "visited": false,
+                          }
+                        }
+                        type="text"
+                      >
+                        <div
+                          className="pf-c-form__group"
+                        >
+                          <label
+                            className="pf-c-form__label "
+                          >
+                            Title
+                          </label>
+                          <TextInput
+                            aria-label={null}
+                            autoFocus={false}
+                            className=""
+                            id="title"
+                            isAlt={false}
+                            isDisabled={false}
+                            isReadOnly={false}
+                            isRequired={false}
+                            isValid={true}
+                            name="title"
+                            onBlur={[Function]}
+                            onChange={[Function]}
+                            onFocus={[Function]}
+                            type="text"
+                            value="A new provider"
+                          >
+                            <input
+                              aria-invalid={false}
+                              aria-label={null}
+                              autoFocus={false}
+                              className="pf-c-form-control"
+                              disabled={false}
+                              id="title"
+                              name="title"
+                              onBlur={[Function]}
+                              onChange={[Function]}
+                              onFocus={[Function]}
+                              readOnly={false}
+                              required={false}
+                              type="text"
+                              value="A new provider"
+                            />
+                          </TextInput>
+                        </div>
+                      </FinalFormField>
+                    </TextField>
+                  </Field>
+                </div>
+              </GridItem>
+              <GridItem
+                className=""
+                key="done"
+                lg={null}
+                lgOffset={null}
+                lgRowSpan={null}
+                md={null}
+                mdOffset={null}
+                mdRowSpan={null}
+                offset={null}
+                rowSpan={null}
+                sm={12}
+                smOffset={null}
+                smRowSpan={null}
+                span={null}
+                xl={null}
+                xlOffset={null}
+                xlRowSpan={null}
+              >
+                <div
+                  className="pf-l-grid__item pf-m-12-col-on-sm"
+                >
+                  <Field
+                    autoFocus={false}
+                    component={[Function]}
+                    format={[Function]}
+                    label="Done?"
+                    name="done"
+                    parse={[Function]}
+                    validate={[Function]}
+                  >
+                    <SwitchField
+                      autoFocus={false}
+                      input={
+                        Object {
+                          "name": "done",
+                          "onBlur": [Function],
+                          "onChange": [Function],
+                          "onFocus": [Function],
+                          "value": "",
+                        }
+                      }
+                      label="Done?"
+                      meta={
+                        Object {
+                          "active": false,
+                          "data": Object {},
+                          "dirty": false,
+                          "dirtySinceLastSubmit": false,
+                          "error": undefined,
+                          "initial": undefined,
+                          "invalid": false,
+                          "pristine": true,
+                          "submitError": undefined,
+                          "submitFailed": false,
+                          "submitSucceeded": false,
+                          "touched": false,
+                          "valid": true,
+                          "visited": false,
+                        }
+                      }
+                    >
+                      <FinalFormField
+                        autoFocus={false}
+                        componentType="switch"
+                        input={
+                          Object {
+                            "name": "done",
+                            "onBlur": [Function],
+                            "onChange": [Function],
+                            "onFocus": [Function],
+                            "value": "",
+                          }
+                        }
+                        label="Done?"
+                        meta={
+                          Object {
+                            "active": false,
+                            "data": Object {},
+                            "dirty": false,
+                            "dirtySinceLastSubmit": false,
+                            "error": undefined,
+                            "initial": undefined,
+                            "invalid": false,
+                            "pristine": true,
+                            "submitError": undefined,
+                            "submitFailed": false,
+                            "submitSucceeded": false,
+                            "touched": false,
+                            "valid": true,
+                            "visited": false,
+                          }
+                        }
+                      >
+                        <div
+                          className="pf-c-form__group"
+                        >
+                          <label
+                            className="pf-c-form__label "
+                          >
+                            Done?
+                          </label>
+                          <Checkbox
+                            autoFocus={false}
+                            className=""
+                            id="done"
+                            isDisabled={false}
+                            isValid={true}
+                            name="done"
+                            onBlur={[Function]}
+                            onChange={[Function]}
+                            onFocus={[Function]}
+                            value={false}
+                          >
+                            <input
+                              aria-invalid={false}
+                              autoFocus={false}
+                              className="pf-c-check"
+                              disabled={false}
+                              id="done"
+                              name="done"
+                              onBlur={[Function]}
+                              onChange={[Function]}
+                              onFocus={[Function]}
+                              type="checkbox"
+                              value={false}
+                            />
+                          </Checkbox>
+                        </div>
+                      </FinalFormField>
+                    </SwitchField>
+                  </Field>
+                </div>
+              </GridItem>
+            </div>
+          </GridItem>
+          <GridItem
+            className=""
+            lg={null}
+            lgOffset={null}
+            lgRowSpan={null}
+            md={null}
+            mdOffset={null}
+            mdRowSpan={null}
+            offset={null}
+            rowSpan={null}
+            sm={null}
+            smOffset={null}
+            smRowSpan={null}
+            span={null}
+            xl={null}
+            xlOffset={null}
+            xlRowSpan={null}
+          >
+            <div
+              className="pf-l-grid__item"
+            >
+              <Button
+                aria-label={null}
+                className=""
+                component="button"
+                id="form-renderer-submit"
+                isActive={false}
+                isBlock={false}
+                isDisabled={false}
+                isFocus={false}
+                isHover={false}
+                onClick={[Function]}
+                type="button"
+                variant="primary"
+              >
+                <button
+                  aria-disabled={null}
+                  aria-label={null}
+                  className="pf-c-button pf-m-primary"
+                  disabled={false}
+                  id="form-renderer-submit"
+                  onClick={[Function]}
+                  tabIndex={null}
+                  type="button"
+                >
+                  Submit
+                </button>
+              </Button>
+            </div>
+          </GridItem>
+        </div>
+      </Grid>
+    </form>
+  </ReactFinalForm>
+</FormRenderer>
+`;
