@@ -17,14 +17,9 @@ const PageHeader = ({ className, children, ...props }) => {
 
     return (
         <ThemeContext.Consumer>
-            { darkTheme => {
-                let themeClasses = classNames(
-                    { [`pf-m-${ darkTheme }-200`]: darkTheme  === 'dark' },
-                    { [`pf-m-${ darkTheme }`]: darkTheme  === 'light' }
-                );
-
+            { theme => {
                 return (
-                    <section className={ `${ pageHeaderClasses } ${ themeClasses }` }>
+                    <section className={ `${ pageHeaderClasses } pf-m-${ theme }` }>
                         <div className='pf-c-content'>
                             { children }
                         </div>

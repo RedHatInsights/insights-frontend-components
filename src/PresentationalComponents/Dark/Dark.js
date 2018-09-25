@@ -3,15 +3,11 @@ import propTypes from 'prop-types';
 
 import ThemeContext from './configContext';
 
-class Dark extends React.Component {
-    render() {
-        return (
-            <ThemeContext.Provider value='dark'>
-                { this.props.children }
-            </ThemeContext.Provider>
-        );
-    }
-}
+const Dark = ({ children, ...props }) => (
+    <ThemeContext.Provider { ...props } value='dark'>
+        { children }
+    </ThemeContext.Provider>
+);
 
 export default Dark;
 

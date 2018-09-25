@@ -17,9 +17,10 @@ const Main = ({ className, children, ...props }) => {
 
     return (
         <ThemeContext.Consumer>
-            { darkTheme => {
+            { theme => {
+
                 let themeClasses = classNames(
-                    { [`pf-m-${ darkTheme }-100`]: darkTheme  === 'dark' }
+                    { [`pf-m-${ theme }`]: theme  === 'dark' }
                 );
 
                 return (
