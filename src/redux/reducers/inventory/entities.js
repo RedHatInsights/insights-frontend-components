@@ -14,7 +14,7 @@ const defaultColumns = [
 function entitiesPending(state) {
     return {
         ...state,
-        columns: mergeArraysByKey([state.columns, defaultColumns], 'key'),
+        columns: mergeArraysByKey([ state.columns, defaultColumns ], 'key'),
         loaded: false
     };
 }

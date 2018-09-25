@@ -4,8 +4,7 @@ import entityDetailsReducer, { defaultState as entityDefault } from './inventory
 
 export { entitiesReducer, entityDetailsReducer };
 
-<<<<<<< HEAD
-export function mergeWithEntities(additionalReducers = Function.prototype) {
+export function mergeWithEntities(additionalReducers = (state) => state) {
     return ({
         entities: (state, payload) => ({
             ...additionalReducers({
@@ -17,7 +16,7 @@ export function mergeWithEntities(additionalReducers = Function.prototype) {
     });
 }
 
-export function mergeWithDetail(additionalReducers = Function.prototype) {
+export function mergeWithDetail(additionalReducers = (state) => state) {
     return ({
         entityDetails: (state, payload) => ({
             ...additionalReducers({
@@ -27,28 +26,4 @@ export function mergeWithDetail(additionalReducers = Function.prototype) {
             }, payload)
         })
     });
-=======
-export function mergeWithEntities(additionalReducers = (state) => state) {
-  return ({
-    entities: (state, payload) => ({
-      ...additionalReducers({
-        ...applyReducerHash({
-          ...entitiesReducer,
-        }, entitiesDefault)(state, payload)
-      }, payload)
-    })
-  })
-}
-
-export function mergeWithDetail(additionalReducers = (state) => state) {
-  return ({
-    entityDetails: (state, payload) => ({
-      ...additionalReducers({
-        ...applyReducerHash({
-          ...entityDetailsReducer,
-        }, entityDefault)(state, payload)
-      }, payload)
-    })
-  })
->>>>>>> Add documentation how to use hot loaded app and fix multiple bugs when testing it
 }

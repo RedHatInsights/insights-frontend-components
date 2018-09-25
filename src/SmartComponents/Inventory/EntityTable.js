@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { selectEntity, setSort } from '../../redux/actions/inventory';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 import { Table } from '../../PresentationalComponents/Table';
 import keyBy from 'lodash/keyBy';
 import mapValues from 'lodash/mapValues';
@@ -19,11 +19,11 @@ class EntityTable extends React.Component {
         this.healthColumn = this.healthColumn.bind(this);
         this.state = {
             sortBy: {}
-        }
+        };
     }
 
     onRowClick(_event, key, application) {
-        const { match: {path}, history } = this.props;
+        const { match: { path }, history } = this.props;
         history.push(`${path}/${key}/${application ? application : ''}`);
     }
 
@@ -39,22 +39,23 @@ class EntityTable extends React.Component {
                     index: key,
                     direction
                 }
-            })
+            });
         }
     }
 
     renderCol(col, key, composed) {
-        if(composed) {
+        if (composed) {
             return (
                 <div className="ins-composed-col">
-                    {composed.map(path => (
-                        <div key={path}>
-                            {get(col, path, 'unknown') || '\u00A0'}
+                    { composed.map(path => (
+                        <div key={ path }>
+                            { get(col, path, 'unknown') || '\u00A0' }
                         </div>
-                    ))}
+                    )) }
                 </div>
-            )
+            );
         }
+
         return get(col, key, 'unknown');
     }
 
@@ -65,23 +66,23 @@ class EntityTable extends React.Component {
     healthColumn(oneItem) {
         return {
             title: <HealthStatus
-                items={oneItem.health}
+                items={ oneItem.health }
                 className="ins-health-status"
                 onHealthClicked={
-                        (event, clickedOn, health) => this.onHealthClicked(event, clickedOn, health, oneItem)
+                    (event, clickedOn, health) => this.onHealthClicked(event, clickedOn, health, oneItem)
                 }
             />,
             className: 'pf-m-fit-content',
             stopPropagation: true
-        }
+        };
     }
 
     actionsColumn(oneItem) {
         return {
-            title: <TableActions item={{id: oneItem.id}} />,
+            title: <TableActions item={ { id: oneItem.id } } />,
             className: 'pf-c-table__action pf-m-shrink',
             stopPropagation: true
-        }
+        };
     }
 
     render() {
@@ -98,25 +99,33 @@ class EntityTable extends React.Component {
         }));
         return <Table
             className="pf-m-compact ins-entity-table"
-            sortBy={this.state.sortBy}
-            header={columns && {
+            sortBy={ this.state.sortBy }
+            header={ columns && {
                 ...mapValues(keyBy(columns, item => item.key), item => item.title),
                 health: {
                     title: 'Health',
                     hasSort: false
                 },
                 action: ''
-            }}
-            onSort={this.onSort}
-            onRowClick={this.onRowClick}
-            onItemSelect={this.onItemSelect}
+            } }
+            onSort={ this.onSort }
+            onRowClick={ this.onRowClick }
+            onItemSelect={ this.onItemSelect }
             hasCheckbox
-            rows={data}
-        />
+            rows={ data }
+        />;
     }
 }
 
 EntityTable.propTypes = {
+    history: PropTypes.any,
+    setSort: PropTypes.func,
+    rows: PropTypes.arrayOf(PropTypes.any),
+    columns: PropTypes.arrayOf(PropTypes.shape({
+        key: PropTypes.string,
+        composed: PropTypes.arrayOf(PropTypes.string)
+    })),
+    match: PropTypes.any,
     loaded: PropTypes.bool,
     entities: PropTypes.array,
     selectEntity: PropTypes.func
@@ -127,22 +136,22 @@ EntityTable.defaultProps = {
     columns: [],
     entities: [],
     selectEntity: () => undefined
-}
+};
 
 function mapDispatchToProps(dispatch) {
     return {
         selectEntity: (id, isSelected) => dispatch(selectEntity(id, isSelected)),
         setSort: (id, isSelected) => dispatch(setSort(id, isSelected))
-    }
+    };
 }
 
-function mapStateToProps({entities: {columns, entities, rows, loaded}}) {
+function mapStateToProps({ entities: { columns, entities, rows, loaded }}) {
     return {
         entities,
         columns,
         loaded,
         rows
-    }
+    };
 }
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EntityTable));

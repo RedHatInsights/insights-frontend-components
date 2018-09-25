@@ -13,7 +13,7 @@ class EntityDetails extends Component {
         super(props);
         this.state = {
             actionCollapsed: true
-        }
+        };
         this.getFact = this.getFact.bind(this);
         this.toggleActions = this.toggleActions.bind(this);
     }
@@ -26,7 +26,7 @@ class EntityDetails extends Component {
     toggleActions(_event, collapsed) {
         this.setState({
             actionCollapsed: collapsed
-        })
+        });
     }
     render() {
         const { loaded, entity, tags } = this.props;
@@ -38,29 +38,30 @@ class EntityDetails extends Component {
                 </div>
             );
         }
+
         return (
             <div className="ins-entity-detail">
                 <Grid className="ins-entity-header">
-                    <GridItem md={6}>
-                        <Title size='2xl'>{entity.display_name}</Title>
+                    <GridItem md={ 6 }>
+                        <Title size='2xl'>{ entity.display_name }</Title>
                     </GridItem>
-                    <GridItem md={6}>
+                    <GridItem md={ 6 }>
                         <Dropdown title="Actions"
-                            isCollapsed={actionCollapsed}
-                            onToggle={this.toggleActions}
-                            position={DropdownPosition.right}>
+                            isCollapsed={ actionCollapsed }
+                            onToggle={ this.toggleActions }
+                            position={ DropdownPosition.right }>
                             <DropdownItem>Some action</DropdownItem>
                         </Dropdown>
                     </GridItem>
                 </Grid>
                 <Grid className="ins-entity-facts">
-                    <GridItem md={6}>
+                    <GridItem md={ 6 }>
                         <div>
                             <span>
                                 Hostname:
                             </span>
                             <span>
-                                {this.getFact('display_name')}
+                                { this.getFact('display_name') }
                             </span>
                         </div>
                         <div>
@@ -68,7 +69,7 @@ class EntityDetails extends Component {
                                 UUID:
                             </span>
                             <span>
-                                {this.getFact(`canonical_facts['machine-id']`)}
+                                { this.getFact(`canonical_facts['machine-id']`) }
                             </span>
                         </div>
                         <div>
@@ -76,17 +77,17 @@ class EntityDetails extends Component {
                                 System:
                             </span>
                             <span>
-                                {this.getFact('facts.release')}
+                                { this.getFact('facts.release') }
                             </span>
                         </div>
                     </GridItem>
-                    <GridItem md={6}>    
+                    <GridItem md={ 6 }>
                         <div>
                             <span>
                                 Last Check-in:
                             </span>
                             <span>
-                                {this.getFact('facts.check_in')}
+                                { this.getFact('facts.check_in') }
                             </span>
                         </div>
                         <div>
@@ -94,29 +95,30 @@ class EntityDetails extends Component {
                                 Registered:
                             </span>
                             <span>
-                                {this.getFact('facts.registered')}
+                                { this.getFact('facts.registered') }
                             </span>
                         </div>
                     </GridItem>
                 </Grid>
                 <Grid className="ins-entity-tags">
-                    {tags && Object.values(tags).map((oneTag, key) => (
-                        <GridItem span={1} key={key}>
+                    { tags && Object.values(tags).map((oneTag, key) => (
+                        <GridItem span={ 1 } key={ key }>
                             <Badge>
-                                <TimesIcon />{oneTag[0]}
+                                <TimesIcon />{ oneTag[0] }
                             </Badge>
                         </GridItem>
-                    ))}
+                    )) }
                 </Grid>
                 <ApplicationDetails />
             </div>
-        )
+        );
     }
 }
 
 EntityDetails.propTypes = {
     loaded: PropTypes.bool.isRequired,
-    entity: PropTypes.object
+    entity: PropTypes.object,
+    tags: PropTypes.any
 };
 
 export default connect(({ entityDetails }) => ({ ...entityDetails }))(EntityDetails);
