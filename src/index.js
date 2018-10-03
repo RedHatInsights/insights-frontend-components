@@ -6,7 +6,7 @@ export {
 } from './Utilities/ReducerRegistry';
 export { default as MiddlewareListener } from './Utilities/MiddlewareListener';
 export { default as registry, getRegistry } from './Utilities/Registry';
-export { default as routerParams, routerData } from './Utilities/RouterParams';
+export { default as routerParams } from './Utilities/RouterParams';
 export * from './PresentationalComponents/Section';
 export * from './PresentationalComponents/SampleComponent';
 export * from './PresentationalComponents/Ansible';

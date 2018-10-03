@@ -25,7 +25,8 @@ export default function(Component) {
     }
 
     render () {
-        return <Component {...this.props}/>;
+        const { onPathChange, ...props } = this.props;
+        return <Component { ...props }/>;
     }
   };
   return withRouter(connect(() => ({}), (dispatch) => (

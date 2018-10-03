@@ -56,10 +56,12 @@ class Main extends Component {
 
 Main.propTypes = {
     className: propTypes.string,
-    children: propTypes.any.isRequired
+    children: propTypes.any.isRequired,
+    params: propTypes.any,
+    path: propTypes.string
 };
 
-export default connect(({ routerData: { params, path }} = {}) => ({
-    params,
-    path
+export default connect(({ routerData }) => ({
+    params: routerData && routerData.params,
+    path: routerData && routerData.path
 }), () => ({}))(Main);
