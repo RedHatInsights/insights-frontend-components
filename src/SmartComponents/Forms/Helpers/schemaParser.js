@@ -6,21 +6,29 @@ const CHOICES = 'choices-component';
 const SELECT_COMPONENT = 'select-component';
 const FIXED_LIST = 'fixed-list';
 const CHECKBOX = 'checkbox';
+const SUB_FORM = 'sub-form';
 
 /**Validator functions placeholder */
 const REQUIRED = 'required-validator';
 const MIN_LENGTH = 'min-length-validator';
+const MIN_ITEMS_VALIDATOR = 'min-items-validator';
 
 let autofocusField = undefined;
+let definitions = undefined;
+let defaultValues = {};
 
-const validatorBuilder = ({ schema, fields, key }) => {
+const validatorBuilder = ({ schema, fields = {}, key }) => {
     const result = [];
     if (schema.required && schema.required.includes(key)) {
         result.push({ type: REQUIRED });
     }
 
-    if (fields[key].minLength) {
+    if (fields[key] && fields[key].minLength) {
         result.push({ type: MIN_LENGTH, treshold: fields[key].minLength });
+    }
+
+    if (schema.minItems) {
+        result.push({ type: MIN_ITEMS_VALIDATOR, treshold: schema.minItems });
     }
 
     return result;
@@ -41,9 +49,39 @@ const componentMapper = type => ({
 /**create fields from object */
 const createFieldsFromObject = (schema, uiSchema) => Object.keys(schema.properties).map(key => {
     const fields = schema.properties;
-    if (fields[key].type === 'array') {
-        console.log('should not build other fields', fields[key]);
-        return convertSchema(fields[key].items, uiSchema[key], key);
+    /**
+     * redirect to definitions if fielas have external definition
+     */
+    if (fields[key].items && fields[key].items.$ref) {
+        return convertSchema(
+            {
+                ...fields[key],
+                items: definitions[fields[key].items.$ref.split('#/definitions/').pop()]
+            },
+            uiSchema[key],
+            key
+        );
+    }
+
+    if (fields[key].type === 'array' && fields[key].items && fields[key].items.type === 'object') {
+        return {
+            title: fields[key].title,
+            component: SUB_FORM,
+            ...convertSchema(...fields[key], fields[key].items, uiSchema[key], key)
+        };
+    } else if (fields[key].type === 'array' && Array.isArray(fields[key].items) && fields[key].additionalItems) {
+        return {
+            title: fields[key].title,
+            component: FIXED_LIST,
+            ...convertSchema(
+                { ...fields[key], type: 'array', items: fields[key].items, additionalItems: fields[key].additionalItems },
+                uiSchema[key], key
+            )
+        };
+    } else if (fields[key].type === 'array' && fields[key].items && typeof fields[key].items === 'object') {
+        return {
+            ...convertSchema({ ...fields[key], items: fields[key].items, type: 'array', title: fields[key].title }, uiSchema[key], key)
+        };
     }
 
     return {
@@ -69,19 +107,39 @@ const choiceMapper = type => ({
     checkboxes: 'checkbox'
 })[type];
 
-const convertSchema = (schema, uiSchema = {}, key = 'root') => {
+const convertSchema = (schema, uiSchema = {}, key) => {
     let result = {};
-    const meta = { title: schema.title, description: schema.description };
+    const meta = {};
+    if (schema.definitions) {
+        definitions = schema.definitions;
+    }
+
+    if (schema.title) {
+        meta.title = schema.title;
+    }
+
+    if (schema.description) {
+        meta.description = schema.description;
+    }
 
     if (schema.type === 'array') {
         let nestedSchema = {};
+        /**
+         * Nested schema
+         */
         if (schema.items && schema.items.type === 'object') {
-            console.log('nested object');
-            nestedSchema = convertSchema(schema.items, uiSchema.items);
+
+            meta.title = schema.items.title;
+            nestedSchema = convertSchema(schema.items, uiSchema.items, key);
+            nestedSchema.validate = validatorBuilder({ schema, fields: schema.items.properties, key });
             nestedSchema.component = FIELD_ARRAY;
+        /**
+         * Multiple choice list
+         */
         } else if (schema.items && schema.items.enum) {
             nestedSchema = {
                 ...componentMapper(widgetMapper(uiSchema['ui:widget']) || schema.items.type),
+                validate: validatorBuilder({ schema, key }),
                 options: schema.items.enum,
                 type: choiceMapper(uiSchema['ui:widget'])
             };
@@ -98,37 +156,55 @@ const convertSchema = (schema, uiSchema = {}, key = 'root') => {
                     }
 
                     return {
+                        validate: validatorBuilder({ schema, key }),
                         name: `${key}.items.${index}`,
                         ...componentMapper(uiSchema.items && uiSchema.items[index]['ui:widget'] || type),
                         ...options
                     };
                 })
             ];
-            nestedSchema.additionalItems = convertSchema({ type: 'array', items: schema.additionalItems }, { items: uiSchema.additionalItems }, `${key}.additionalItems`);
+            nestedSchema.additionalItems = convertSchema(
+                { type: 'array', items: schema.additionalItems },
+                { items: uiSchema.additionalItems }, `${key}.additionalItems`
+            );
             nestedSchema.component = FIXED_LIST;
+        } else if (schema.items && typeof schema.items === 'object' && schema.items.type === 'array') {
+            nestedSchema.component = FIELD_ARRAY;
+            nestedSchema.fields = convertSchema({
+                ...schema.items
+            }, uiSchema && uiSchema.items, `${key}.items`);
         } else if (schema.items && typeof schema.items === 'object') {
             nestedSchema.component = FIELD_ARRAY;
-            nestedSchema.fields = [{ ...componentMapper(uiSchema.items && uiSchema.items['ui:widget'] || schema.items.type) }];
+            nestedSchema.fields = [{
+                ...componentMapper(uiSchema.items && uiSchema.items['ui:widget'] || schema.items.type),
+                validate: validatorBuilder({ schema, fields: schema.items, key })
+            }];
         }
 
         return {
+            ...meta,
             ...nestedSchema,
             ...result,
-            ...meta,
             key
         };
     }
 
     if (schema.type === 'object') {
         autofocusField = Object.keys(uiSchema).filter(key => uiSchema[key] && uiSchema[key]['ui:autofocus']).pop();
-        console.log('non-nested: ', schema, key);
-        result.fields = createFieldsFromObject(schema, uiSchema);
+        result.fields = createFieldsFromObject(schema, uiSchema, key);
         return {
-            ...result,
             ...meta,
+            ...result,
             key
         };
     }
 };
 
-export default convertSchema;
+const initialize = (schema, uiSchema) => {
+    autofocusField = undefined;
+    definitions = undefined;
+    defaultValues = {};
+    return convertSchema(schema, uiSchema);
+};
+
+export default initialize;
