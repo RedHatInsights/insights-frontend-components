@@ -1,20 +1,22 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, matchPath } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 export default function(Component) {
   class RouterParams extends React.Component {
     componentDidMount () {
-        const { match: {params, path}, onPathChange } = this.props;
-        onPathChange && onPathChange({
-          params,
-          path
-        });
+        const { match: {params, path, url}, onPathChange, location } = this.props;
+        if (matchPath(location.pathname, {path: url, exact: true})) {
+          onPathChange && onPathChange({
+            params,
+            path
+          });
+        }
     }
 
-    componentDidUpdate (prevProps) {
-      const { match: {params, path, url}, onPathChange } = this.props;
-      if(url !== prevProps.match.url) {
+    componentDidUpdate () {
+      const { match: {params, path, url}, onPathChange, location } = this.props;
+      if (matchPath(location.pathname, {path: url, exact: true})) {
         onPathChange && onPathChange({
           params,
           path

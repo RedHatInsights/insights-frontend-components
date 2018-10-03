@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { TabLayout } from '../../PresentationalComponents/TabLayout';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import AppInfo from './AppInfo';
 import { detailSelect } from '../../redux/actions/inventory';
 import { routerParams } from '../../';
@@ -11,12 +11,6 @@ class ApplicationDetails extends Component {
     constructor(props) {
         super(props);
         this.onTabClick = this.onTabClick.bind(this);
-    }
-
-    componentDidMount() {
-        const { history, match: { url }, onDetailSelect } = this.props;
-        history.push(`${url}/overview`);
-        onDetailSelect && onDetailSelect('overview');
     }
 
     onTabClick(_event, item) {
@@ -31,11 +25,12 @@ class ApplicationDetails extends Component {
             <React.Fragment>
                 {
                     items &&
-          <TabLayout items={ items } onTabClick={ this.onTabClick } active={ activeApp && activeApp.appName }>
-              <Switch>
-                  <Route exact path={ `${path}/:detail` } component={ AppInfo } />
-              </Switch>
-          </TabLayout>
+                    <TabLayout items={ items } onTabClick={ this.onTabClick } active={ activeApp && activeApp.appName }>
+                        <Switch>
+                            <Route exact path={ `${path}/:detail` } component={ AppInfo } />
+                            <Redirect to={ `${path}/overview` }/>
+                        </Switch>
+                    </TabLayout>
                 }
             </React.Fragment>
         );
@@ -53,6 +48,12 @@ ApplicationDetails.propTypes = {
         name: PropTypes.string
     }),
     onDetailSelect: PropTypes.func
+};
+
+ApplicationDetails.defaultProps = {
+    activeApp: {
+        appName: 'overview'
+    }
 };
 
 function stateToProps({ entityDetails: { activeApps, activeApp }}) {
