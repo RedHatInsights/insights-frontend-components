@@ -7,6 +7,7 @@ const SELECT_COMPONENT = 'select-component';
 const FIXED_LIST = 'fixed-list';
 const CHECKBOX = 'checkbox';
 const SUB_FORM = 'sub-form';
+const RADIO = 'radio-component';
 
 /**Validator functions placeholder */
 const REQUIRED = 'required-validator';
@@ -38,12 +39,15 @@ const componentMapper = type => ({
     string: { component: TEXT_FIELD, type: 'text' },
     tel: { component: TEXT_FIELD, type: 'tel' },
     password: { component: TEXT_FIELD, type: 'password' },
-    integer: { component: TEXT_FIELD, type: 'number' },
+    integer: { component: TEXT_FIELD, type: 'number', step: 1 },
     updown: { component: TEXT_FIELD, type: 'number' },
+    number: { component: TEXT_FIELD, type: 'number' },
+    range: { component: TEXT_FIELD, type: 'range' },
     textarea: { component: TEXTAREA_FIELD },
     choices: { component: CHOICES },
     select: { component: SELECT_COMPONENT },
-    boolean: { component: CHECKBOX, type: 'checkbox' }
+    boolean: { component: CHECKBOX, type: 'checkbox' },
+    radio: { component: RADIO, type: 'radio' }
 })[type];
 
 /**create fields from object */
@@ -67,7 +71,7 @@ const createFieldsFromObject = (schema, uiSchema) => Object.keys(schema.properti
         return {
             title: fields[key].title,
             component: SUB_FORM,
-            ...convertSchema(...fields[key], fields[key].items, uiSchema[key], key)
+            ...convertSchema({ ...fields[key] }, uiSchema[key], key)
         };
     } else if (fields[key].type === 'array' && Array.isArray(fields[key].items) && fields[key].additionalItems) {
         return {
@@ -80,21 +84,26 @@ const createFieldsFromObject = (schema, uiSchema) => Object.keys(schema.properti
         };
     } else if (fields[key].type === 'array' && fields[key].items && typeof fields[key].items === 'object') {
         return {
-            ...convertSchema({ ...fields[key], items: fields[key].items, type: 'array', title: fields[key].title }, uiSchema[key], key)
+            ...convertSchema(
+                { ...fields[key], items: fields[key].items, type: 'array', title: fields[key].title },
+                uiSchema[key],
+                key
+            )
         };
     }
 
     return {
         name: key,
-        label: fields[key].title,
+        label: uiSchema[key] && uiSchema[key]['ui:title'] || fields[key].title,
         autofocus: autofocusField === key,
         validate: validatorBuilder({ schema, fields, key }),
         description: uiSchema[key] && uiSchema[key]['ui:description'],
         helperText: uiSchema[key] && uiSchema[key]['ui:help'],
+        ...fields[key],
         ...componentMapper(
             (uiSchema[key] && uiSchema[key]['ui:widget'])
             || (uiSchema[key] && uiSchema[key]['ui:options'] && uiSchema[key]['ui:options'].inputType)
-            || fields[key].type
+            || fields[key].enum && 'select' || fields[key].type
         )
     };
 });
@@ -128,8 +137,7 @@ const convertSchema = (schema, uiSchema = {}, key) => {
          * Nested schema
          */
         if (schema.items && schema.items.type === 'object') {
-
-            meta.title = schema.items.title;
+            meta.title = schema.title;
             nestedSchema = convertSchema(schema.items, uiSchema.items, key);
             nestedSchema.validate = validatorBuilder({ schema, fields: schema.items.properties, key });
             nestedSchema.component = FIELD_ARRAY;
@@ -148,15 +156,18 @@ const convertSchema = (schema, uiSchema = {}, key) => {
                 ...schema.items.map(({ type, title, ...rest }, index) => {
                     const options = rest;
                     if (type === 'boolean') {
-                        options.options = rest.enum || uiSchema.items && uiSchema.items[index]['ui:widget'] === 'select' ? [{
-                            label: 'Please Choose',
-                            value: undefined,
-                            disabled: true
-                        }, { label: 'Yes', value: true }, { label: 'No', value: false }] : [ 'Yes', 'No' ];
+                        if (!(!rest.enum && uiSchema.items && !uiSchema.items[index] || !rest.enum && !uiSchema.items)) {
+                            options.options = rest.enum || uiSchema.items && uiSchema.items[index]['ui:widget'] === 'select' ? [{
+                                label: 'Please Choose',
+                                value: undefined,
+                                disabled: true
+                            }, { label: 'Yes', value: true }, { label: 'No', value: false }] : [ 'Yes', 'No' ];
+                        }
                     }
 
                     return {
-                        validate: validatorBuilder({ schema, key }),
+                        validate: validatorBuilder({ schema, key: `${key}.items` }),
+                        label: title,
                         name: `${key}.items.${index}`,
                         ...componentMapper(uiSchema.items && uiSchema.items[index]['ui:widget'] || type),
                         ...options
@@ -170,14 +181,16 @@ const convertSchema = (schema, uiSchema = {}, key) => {
             nestedSchema.component = FIXED_LIST;
         } else if (schema.items && typeof schema.items === 'object' && schema.items.type === 'array') {
             nestedSchema.component = FIELD_ARRAY;
-            nestedSchema.fields = convertSchema({
+            nestedSchema.fields = [ convertSchema({
                 ...schema.items
-            }, uiSchema && uiSchema.items, `${key}.items`);
+            }, uiSchema && uiSchema.items, `${key}.items`) ];
         } else if (schema.items && typeof schema.items === 'object') {
             nestedSchema.component = FIELD_ARRAY;
+            nestedSchema.validate = validatorBuilder({ schema, fields: schema.items, key: `${key}` }),
             nestedSchema.fields = [{
+                label: schema.items.title,
                 ...componentMapper(uiSchema.items && uiSchema.items['ui:widget'] || schema.items.type),
-                validate: validatorBuilder({ schema, fields: schema.items, key })
+                validate: validatorBuilder({ schema: schema.items, fields: schema.items, key: `${key}.items` })
             }];
         }
 
