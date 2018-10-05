@@ -1,5 +1,5 @@
-import { simple, uiSchemaSimple, nestedSchema, nestedUiSchema, arraySchema, uiArraySchema, numberSchema, numberUiSchema } from "../../demoData/formSchemas";
-import { simpleSchemaResult, nestedSchemaResult, arraySchemaResult, numbersSchemaResult } from './expectedParserResults';
+import { simple, uiSchemaSimple, nestedSchema, nestedUiSchema, arraySchema, uiArraySchema, numberSchema, numberUiSchema, widgetSchema, uiWidgetSchema } from "../../demoData/formSchemas";
+import { simpleSchemaResult, nestedSchemaResult, arraySchemaResult, numbersSchemaResult, widgetsExpectedResult } from './expectedParserResults';
 import convertSchema from '../../Helpers/schemaParser';
 
 describe('Mozilla json schema parser', () => {
@@ -29,5 +29,12 @@ describe('Mozilla json schema parser', () => {
     const uiSchema = numberUiSchema;
     const result = convertSchema(schema, uiSchema);
     expect(result).toEqual(numbersSchemaResult);
+  });
+
+  it('should parse widgets schema', () => {
+    const schema = widgetSchema;
+    const uiSchema = uiWidgetSchema;
+    const result = convertSchema(schema, uiSchema);
+    expect(result).toEqual(widgetsExpectedResult);
   });
 });

@@ -4,10 +4,16 @@ import './styles.scss';
 import React from 'react';
 import { render } from 'react-dom';
 import convertSchema from '../src/SmartComponents/Forms/Helpers/schemaParser';
-import { simple, uiSchemaSimple, lauraSchema1, lauraUiSchema, lauraSchema2, nestedSchema, nestedUiSchema, arraySchema, uiArraySchema } from '../src/SmartComponents/Forms/demoData/formSchemas';
+import { simple, uiSchemaSimple, lauraSchema1, lauraUiSchema, lauraSchema2, nestedSchema, nestedUiSchema, arraySchema, uiArraySchema, numberSchema, numberUiSchema } from '../src/SmartComponents/Forms/demoData/formSchemas';
 
 const Demo = () => (
   <React.Fragment>
+  <h1>
+      Number schema
+  </h1>
+    <pre>
+    {JSON.stringify(convertSchema(numberSchema, numberUiSchema), undefined, 2)}      
+    </pre>
     <h1>Array schema</h1>
     <pre>
     {JSON.stringify(convertSchema(arraySchema, uiArraySchema), undefined, 2)}      

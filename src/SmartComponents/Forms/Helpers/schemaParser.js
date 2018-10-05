@@ -35,20 +35,38 @@ const validatorBuilder = ({ schema, fields = {}, key }) => {
     return result;
 };
 
-const componentMapper = type => ({
-    string: { component: TEXT_FIELD, type: 'text' },
-    tel: { component: TEXT_FIELD, type: 'tel' },
-    password: { component: TEXT_FIELD, type: 'password' },
-    integer: { component: TEXT_FIELD, type: 'number', step: 1 },
-    updown: { component: TEXT_FIELD, type: 'number' },
-    number: { component: TEXT_FIELD, type: 'number' },
-    range: { component: TEXT_FIELD, type: 'range' },
-    textarea: { component: TEXTAREA_FIELD },
-    choices: { component: CHOICES },
-    select: { component: SELECT_COMPONENT },
-    boolean: { component: CHECKBOX, type: 'checkbox' },
-    radio: { component: RADIO, type: 'radio' }
+const componentMapper = (type, dataType) => ({
+    string: { component: TEXT_FIELD, type: 'text', dataType },
+    color: { component: TEXT_FIELD, type: 'color', dataType },
+    hidden: { component: TEXT_FIELD, type: 'hidden', dataType },
+    tel: { component: TEXT_FIELD, type: 'tel', dataType },
+    email: { component: TEXT_FIELD, type: 'email', dataType },
+    password: { component: TEXT_FIELD, type: 'password', dataType },
+    integer: { component: TEXT_FIELD, type: 'number', step: 1, dataType },
+    updown: { component: TEXT_FIELD, type: 'number', dataType },
+    number: { component: TEXT_FIELD, type: 'number', dataType },
+    range: { component: TEXT_FIELD, type: 'range', dataType },
+    textarea: { component: TEXTAREA_FIELD, dataType },
+    choices: { component: CHOICES, dataType },
+    select: { component: SELECT_COMPONENT, dataType },
+    boolean: { component: CHECKBOX, type: 'checkbox', dataType },
+    checkbox: { component: CHECKBOX, type: 'checkbox', dataType },
+    checkboxes: { component: CHECKBOX, type: 'checkbox', dataType },
+    radio: { component: RADIO, type: 'radio', dataType }
 })[type];
+
+const createFieldOptions = (options = {}) => {
+    const result = {};
+    if (options['ui:disabled']) {
+        result.isDisabled = true;
+    }
+
+    if (options['ui:readonly']) {
+        result.isReadOnly = true;
+    }
+
+    return result;
+};
 
 /**create fields from object */
 const createFieldsFromObject = (schema, uiSchema) => Object.keys(schema.properties).map(key => {
@@ -90,9 +108,23 @@ const createFieldsFromObject = (schema, uiSchema) => Object.keys(schema.properti
                 key
             )
         };
+    } else if (fields[key].properties && typeof fields[key].properties === 'object') {
+        return {
+            name: key,
+            title: uiSchema[key] && uiSchema[key]['ui:title'] || fields[key].title,
+            component: SUB_FORM,
+            autofocus: autofocusField === key,
+            validate: validatorBuilder({ schema, fields, key }),
+            description: uiSchema[key] && uiSchema[key]['ui:description'],
+            helperText: uiSchema[key] && uiSchema[key]['ui:help'],
+            ...convertSchema({
+                properties: fields[key].properties,
+                type: 'object'
+            },  uiSchema[key], key)
+        };
     }
 
-    return {
+    const field = {
         name: key,
         label: uiSchema[key] && uiSchema[key]['ui:title'] || fields[key].title,
         autofocus: autofocusField === key,
@@ -103,18 +135,46 @@ const createFieldsFromObject = (schema, uiSchema) => Object.keys(schema.properti
         ...componentMapper(
             (uiSchema[key] && uiSchema[key]['ui:widget'])
             || (uiSchema[key] && uiSchema[key]['ui:options'] && uiSchema[key]['ui:options'].inputType)
-            || fields[key].enum && 'select' || fields[key].type
-        )
+            || fields[key].enum && 'select' || fields[key].type, fields[key].type
+        ),
+        ...createFieldOptions(uiSchema[key])
     };
+
+    if (field.hasOwnProperty('enum')) {
+        // TODO determine enum option object
+    }
+
+    if (field.component === SELECT_COMPONENT) {
+        if (!field.enum) {
+            field.enum = [{ label: 'Yes', value: true }, { label: 'No', value: false }];
+            field.options = [ ...field.enum ];
+        } else {
+            field.options = field.enum.map((item, index) => ({
+                value: item,
+                label: field.enumNames && field.enumNames[index] || item
+            }));
+        }
+
+        field.options.unshift({
+            label: 'Please Choose',
+            disabled: true
+        });
+        delete field.enum;
+        delete field.enumNames;
+    }
+
+    // FIX ME should be replaced by proper options mapper after the format is known
+    if (field.enum) {
+        if (field.component === SELECT_COMPONENT) {
+            console.log('select');
+        } else {
+            field.options = field.enum;
+            delete field.enum;
+        }
+    }
+
+    return field;
 });
-
-const widgetMapper = type => ({
-    checkboxes: 'choices'
-})[type];
-
-const choiceMapper = type => ({
-    checkboxes: 'checkbox'
-})[type];
 
 const convertSchema = (schema, uiSchema = {}, key) => {
     let result = {};
@@ -146,10 +206,9 @@ const convertSchema = (schema, uiSchema = {}, key) => {
          */
         } else if (schema.items && schema.items.enum) {
             nestedSchema = {
-                ...componentMapper(widgetMapper(uiSchema['ui:widget']) || schema.items.type),
+                ...componentMapper(uiSchema['ui:widget'] || schema.items.type, schema.items.type),
                 validate: validatorBuilder({ schema, key }),
-                options: schema.items.enum,
-                type: choiceMapper(uiSchema['ui:widget'])
+                options: schema.items.enum
             };
         } else if (schema.items && Array.isArray(schema.items) && schema.additionalItems) {
             nestedSchema.fields = [
@@ -169,7 +228,7 @@ const convertSchema = (schema, uiSchema = {}, key) => {
                         validate: validatorBuilder({ schema, key: `${key}.items` }),
                         label: title,
                         name: `${key}.items.${index}`,
-                        ...componentMapper(uiSchema.items && uiSchema.items[index]['ui:widget'] || type),
+                        ...componentMapper(uiSchema.items && uiSchema.items[index]['ui:widget'] || type, type),
                         ...options
                     };
                 })
@@ -189,7 +248,7 @@ const convertSchema = (schema, uiSchema = {}, key) => {
             nestedSchema.validate = validatorBuilder({ schema, fields: schema.items, key: `${key}` }),
             nestedSchema.fields = [{
                 label: schema.items.title,
-                ...componentMapper(uiSchema.items && uiSchema.items['ui:widget'] || schema.items.type),
+                ...componentMapper(uiSchema.items && uiSchema.items['ui:widget'] || schema.items.type, schema.items.type),
                 validate: validatorBuilder({ schema: schema.items, fields: schema.items, key: `${key}.items` })
             }];
         }
