@@ -23,11 +23,18 @@ const Main = ({ className, children, ...props }) => {
                     { [`pf-m-${ theme }`]: theme  === 'dark' }
                 );
 
-                return (
-                    <section { ...props } className={ `${ mainClasses } ${ themeClasses }` }>
+                return {
+                    dark: <section { ...props } className={ `${ mainClasses } ${ themeClasses }` }>
+                        { React.Children.map(children, child => {
+                            return React.cloneElement(child, {
+                                className: 'pf-m-dark'
+                            });
+                        }) }
+                    </section>,
+                    light: <section { ...props } className={ mainClasses }>
                         { children }
                     </section>
-                );
+                } [theme];
             } }
         </ThemeContext.Consumer>
     );
