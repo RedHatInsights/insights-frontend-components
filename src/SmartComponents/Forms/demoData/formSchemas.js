@@ -921,3 +921,113 @@ export const uiWidgetSchema = {
         }
     }
 };
+
+export const orderingSchema = {
+    title: 'A registration form',
+    type: 'object',
+    required: [
+        'firstName',
+        'lastName'
+    ],
+    properties: {
+        password: {
+            type: 'string',
+            title: 'Password'
+        },
+        lastName: {
+            type: 'string',
+            title: 'Last name'
+        },
+        bio: {
+            type: 'string',
+            title: 'Bio'
+        },
+        firstName: {
+            type: 'string',
+            title: 'First name'
+        },
+        age: {
+            type: 'integer',
+            title: 'Age'
+        }
+    }
+};
+
+export const uiOrderingSchema = {
+    'ui:order': [
+        'firstName',
+        'lastName',
+        '*',
+        'password'
+    ],
+    age: {
+        'ui:widget': 'updown'
+    },
+    bio: {
+        'ui:widget': 'textarea'
+    },
+    password: {
+        'ui:widget': 'password'
+    }
+};
+
+export const referencesSchema = {
+    definitions: {
+        address: {
+            type: 'object',
+            properties: {
+                street_address: { // eslint-disable-line camelcase
+                    type: 'string'
+                },
+                city: {
+                    type: 'string'
+                },
+                state: {
+                    type: 'string'
+                }
+            },
+            required: [
+                'street_address',
+                'city',
+                'state'
+            ]
+        },
+        node: {
+            type: 'object',
+            properties: {
+                name: {
+                    type: 'string'
+                },
+                children: {
+                    type: 'array',
+                    items: {
+                        $ref: '#/definitions/node'
+                    }
+                }
+            }
+        }
+    },
+    type: 'object',
+    properties: {
+        billing_address: { // eslint-disable-line camelcase
+            title: 'Billing address',
+            $ref: '#/definitions/address'
+        },
+        shipping_address: { // eslint-disable-line camelcase
+            title: 'Shipping address',
+            $ref: '#/definitions/address'
+        },
+        tree: {
+            title: 'Recursive references',
+            $ref: '#/definitions/node'
+        }
+    }
+};
+
+export const uiReferencesSchema = {
+    'ui:order': [
+        'shipping_address',
+        'billing_address',
+        'tree'
+    ]
+};

@@ -75,14 +75,24 @@ const createFieldsFromObject = (schema, uiSchema) => Object.keys(schema.properti
      * redirect to definitions if fielas have external definition
      */
     if (fields[key].items && fields[key].items.$ref) {
+        const definition = definitions[fields[key].items.$ref.split('#/definitions/').pop()];
+        const field = { ...fields[key] };
+        delete fields[key].items.$ref;
         return convertSchema(
             {
-                ...fields[key],
-                items: definitions[fields[key].items.$ref.split('#/definitions/').pop()]
+                ...field,
+                items: definition
             },
             uiSchema[key],
             key
         );
+    } else if (fields[key] && fields[key].$ref) {
+        const definition = definitions[fields[key].$ref.split('#/definitions/').pop()];
+        delete fields[key].$ref;
+        return createFieldsFromObject({
+            properties: { [key]: { ...fields[key], ...definition }}
+        }, uiSchema).pop();
+
     }
 
     if (fields[key].type === 'array' && fields[key].items && fields[key].items.type === 'object') {
@@ -272,11 +282,47 @@ const convertSchema = (schema, uiSchema = {}, key) => {
     }
 };
 
+const orderSchema = (schema, order) => {
+    let orderedSchema = schema;
+    let orderedProperties = {};
+    const initialOrder = Object.keys(schema.properties);
+    const endingIndex = order.indexOf('*');
+
+    const startingFields = [ ...order.slice(0, endingIndex) ];
+    const endingFields = [ ...order.slice(endingIndex + 1) ];
+    const unOrdered = initialOrder.filter(item => !order.find(orderedItem => item === orderedItem));
+    /**
+     * Order starting fields
+     */
+    startingFields.forEach(fieldKey => {
+        orderedProperties[fieldKey] = schema.properties[fieldKey];
+    });
+    /**
+     * Insert unurdered fields into middle
+     */
+    unOrdered.forEach(fieldKey => {
+        orderedProperties[fieldKey] = schema.properties[fieldKey];
+    });
+    /**
+     * append ending fields to the end
+     */
+    endingFields.forEach(fieldKey => {
+        orderedProperties[fieldKey] = schema.properties[fieldKey];
+    });
+
+    return { ...orderedSchema, properties: { ...orderedProperties }};
+};
+
 const initialize = (schema, uiSchema) => {
     autofocusField = undefined;
     definitions = undefined;
     defaultValues = {};
-    return convertSchema(schema, uiSchema);
+    let inputSchema = schema;
+    if (uiSchema['ui:order']) {
+        inputSchema = orderSchema(schema, uiSchema['ui:order']);
+    }
+
+    return convertSchema(inputSchema, uiSchema);
 };
 
 export default initialize;
