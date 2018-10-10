@@ -256,7 +256,7 @@ class FormRenderer extends Component {
     }
 
     render() {
-        const { schema, uiSchema, onSubmit, initialValues } = this.props;
+        const { schema, uiSchema, onSubmit, initialValues, onCancel } = this.props;
         const { title, description, properties, type } = schema;
         const { mounted, autoFocusField } = this.state;
         const globalValidators = setGlobalValidation(schema.required);
@@ -287,6 +287,7 @@ class FormRenderer extends Component {
                                     </GridItem>
                                     <GridItem>
                                         <Button id="form-renderer-submit" variant="primary" onClick={ handleSubmit }>Submit</Button>
+                                        { onCancel && <Button id="form-renderer-cancel" onClick={ onCancel }>Cancel</Button> }
                                     </GridItem>
                                 </Grid>
                             </form>
@@ -302,12 +303,14 @@ FormRenderer.propTypes = {
     schema: PropTypes.object.isRequired,
     uiSchema: PropTypes.object,
     onSubmit: PropTypes.func.isRequired,
-    initialValues: PropTypes.object
+    initialValues: PropTypes.object,
+    onCancel: PropTypes.func
 };
 
 FormRenderer.defaultProps = {
     uiSchema: {},
-    initialValues: {}
+    initialValues: {},
+    onCancel: undefined
 };
 
 export default FormRenderer;
