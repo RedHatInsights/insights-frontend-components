@@ -1,3 +1,5 @@
+import setWith from 'lodash/setWith';
+
 /**Fields component placeholders */
 const TEXT_FIELD = 'text-field';
 const TEXTAREA_FIELD = 'textarea-field';
@@ -79,7 +81,7 @@ const createFieldOptions = (options = {}) => {
 };
 
 /**create fields from object */
-const createFieldsFromObject = (schema, uiSchema) => Object.keys(schema.properties).map(key => {
+const createFieldsFromObject = (schema, uiSchema = {}, keyPrefix) => Object.keys(schema.properties).map(key => {
     const fields = schema.properties;
     /**
      * redirect to definitions if fielas have external definition
@@ -145,7 +147,7 @@ const createFieldsFromObject = (schema, uiSchema) => Object.keys(schema.properti
     }
 
     const field = {
-        name: key,
+        name: keyPrefix ? `${keyPrefix}.${key}` : key,
         label: uiSchema[key] && uiSchema[key]['ui:title'] || fields[key].title,
         autofocus: autofocusField === key,
         validate: validatorBuilder({ schema, fields, key }),
@@ -216,6 +218,10 @@ const createFieldsFromObject = (schema, uiSchema) => Object.keys(schema.properti
         }
     }
 
+    if (field.hasOwnProperty('default')) {
+        setWith(defaultValues, keyPrefix ? `${keyPrefix}.${key}` : key, field.default, Object);
+    }
+
     return field;
 });
 
@@ -253,6 +259,9 @@ const convertSchema = (schema, uiSchema = {}, key) => {
                 validate: validatorBuilder({ schema, key }),
                 options: schema.items.enum
             };
+        /**
+         * Dynamic items list with fixed elements
+         */
         } else if (schema.items && Array.isArray(schema.items) && schema.additionalItems) {
             nestedSchema.fields = [
                 ...schema.items.map(({ type, title, ...rest }, index) => {
@@ -268,7 +277,7 @@ const convertSchema = (schema, uiSchema = {}, key) => {
                     }
 
                     return {
-                        validate: validatorBuilder({ schema, key: `${key}.items` }),
+                        validate: validatorBuilder({ schema, key: `${key}` }),
                         label: title,
                         name: `${key}.items.${index}`,
                         ...componentMapper(uiSchema.items && uiSchema.items[index]['ui:widget'] || type, type),
@@ -285,15 +294,11 @@ const convertSchema = (schema, uiSchema = {}, key) => {
             nestedSchema.component = FIELD_ARRAY;
             nestedSchema.fields = [ convertSchema({
                 ...schema.items
-            }, uiSchema && uiSchema.items, `${key}.items`) ];
+            }, uiSchema && uiSchema.items, `${key}`) ];
         } else if (schema.items && typeof schema.items === 'object') {
             nestedSchema.component = FIELD_ARRAY;
             nestedSchema.validate = validatorBuilder({ schema, fields: schema.items, key: `${key}` }),
-            nestedSchema.fields = [{
-                label: schema.items.title,
-                ...componentMapper(uiSchema.items && uiSchema.items['ui:widget'] || schema.items.type, schema.items.type),
-                validate: validatorBuilder({ schema: schema.items, fields: schema.items, key: `${key}.items` })
-            }];
+            nestedSchema.fields = createFieldsFromObject({ properties: { items: schema.items }}, uiSchema, key);
         }
 
         return {
@@ -355,7 +360,10 @@ const initialize = (schema, uiSchema) => {
         inputSchema = orderSchema(schema, uiSchema['ui:order']);
     }
 
-    return convertSchema(inputSchema, uiSchema);
+    return {
+        schema: convertSchema(inputSchema, uiSchema),
+        defaultValues
+    };
 };
 
 export default initialize;

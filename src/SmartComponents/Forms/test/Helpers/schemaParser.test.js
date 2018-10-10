@@ -4,44 +4,84 @@ import convertSchema from '../../Helpers/schemaParser';
 
 describe('Mozilla json schema parser', () => {
   it('should parse simple form example', () => {
-    const schema = simple;
+    const  formSchema = simple;
     const uiSchema = uiSchemaSimple;
-    const result = convertSchema(schema, uiSchema);
-    expect(result).toEqual(simpleSchemaResult);
+    const  { schema, defaultValues } = convertSchema(formSchema, uiSchema);
+    expect(schema).toEqual(simpleSchemaResult);
+    expect(defaultValues).toEqual({});
   });
 
   it('should parse nested schema', () => {
-    const schema = nestedSchema;
+    const  formSchema = nestedSchema;
     const uiSchema = nestedUiSchema;
-    const result = convertSchema(schema, uiSchema);
-    expect(result).toEqual(nestedSchemaResult);
+    const  { schema, defaultValues } = convertSchema(formSchema, uiSchema);
+    expect(schema).toEqual(nestedSchemaResult);
+    expect(defaultValues).toEqual({ tasks: { done: false } });
   });
 
   it('should parse array schema', () => {
-    const schema = arraySchema;
+    const  formSchema = arraySchema;
     const uiSchema = uiArraySchema;
-    const result = convertSchema(schema, uiSchema);
-    expect(result).toEqual(arraySchemaResult);
+    const  { schema, defaultValues } = convertSchema(formSchema, uiSchema);
+    expect(schema).toEqual(arraySchemaResult);
+    expect(defaultValues).toEqual({
+      defaultsAndMinItems: {
+        items: 'unidentified'
+      },
+      fixedNoToolbar: {
+        additionalItems: {
+          items: 'lorem ipsum'
+        }
+      },
+      listOfStrings: {
+        items: 'bazinga'
+      },
+      minItemsList:  {
+        name: "Default name",
+      },
+      nestedList:  {
+        items: "lorem ipsum",
+      },
+      noToolbar:  {
+        items: "lorem ipsum",
+      },
+      unorderable:  {
+        items: "lorem ipsum",
+      },
+      unremovable:  {
+        items: "lorem ipsum",
+      },
+    });
   });
 
   it('should parse numbers schema', () => {
-    const schema = numberSchema;
+    const  formSchema = numberSchema;
     const uiSchema = numberUiSchema;
-    const result = convertSchema(schema, uiSchema);
-    expect(result).toEqual(numbersSchemaResult);
+    const  { schema, defaultValues } = convertSchema(formSchema, uiSchema);
+    expect(schema).toEqual(numbersSchemaResult);
+    expect(defaultValues).toEqual({});
   });
 
   it('should parse widgets schema', () => {
-    const schema = widgetSchema;
+    const  formSchema = widgetSchema;
     const uiSchema = uiWidgetSchema;
-    const result = convertSchema(schema, uiSchema);
-    expect(result).toEqual(widgetsExpectedResult);
+    const  { schema, defaultValues } = convertSchema(formSchema, uiSchema);
+    expect(schema).toEqual(widgetsExpectedResult);
+    expect(defaultValues).toEqual({
+      disabled: 'I am disabled.',
+      readonly: 'I am read-only.',
+      secret: "I'm a hidden string.",
+      string: {
+        color: '#151ce6'
+      },
+      widgetOptions: 'I am yellow'
+    });
   });
 
   it('should parse ordered schema', () => {
-    const schema = orderingSchema;
+    const  formSchema = orderingSchema;
     const uiSchema = uiOrderingSchema;
-    const result = convertSchema(schema, uiSchema);
+    const  { schema, defaultValues } = convertSchema(formSchema, uiSchema);
     const expectedResult =  {
       title: 'A registration form',
       fields: [
@@ -62,13 +102,14 @@ describe('Mozilla json schema parser', () => {
         })
       ]
     };
-    expect(result).toEqual(expectedResult);
+    expect(schema).toEqual(expectedResult);
+    expect(defaultValues).toEqual({});
   });
 
   it('should parse references schema', () => {
-    const schema = referencesSchema;
+    const  formSchema = referencesSchema;
     const uiSchema = uiReferencesSchema;
-    const result = convertSchema(schema, uiSchema);
+    const  { schema, defaultValues } = convertSchema(formSchema, uiSchema);
     const expectedResult = {
       fields: [
         expect.objectContaining({
@@ -76,17 +117,17 @@ describe('Mozilla json schema parser', () => {
           title: 'Shipping address',
           fields: [
             expect.objectContaining({
-              name: 'street_address',
+              name: 'shipping_address.street_address',
               component: 'text-field',
               type: 'text',
             }),
             expect.objectContaining({
-              name: 'city',
+              name: 'shipping_address.city',
               component: 'text-field',
               type: 'text',
             }),
             expect.objectContaining({
-              name: 'state',
+              name: 'shipping_address.state',
               component: 'text-field',
               type: 'text',
             })
@@ -97,17 +138,17 @@ describe('Mozilla json schema parser', () => {
           title: 'Billing address',
           fields: [
             expect.objectContaining({
-              name: 'street_address',
+              name: 'billing_address.street_address',
               component: 'text-field',
               type: 'text',
             }),
             expect.objectContaining({
-              name: 'city',
+              name: 'billing_address.city',
               component: 'text-field',
               type: 'text',
             }),
             expect.objectContaining({
-              name: 'state',
+              name: 'billing_address.state',
               component: 'text-field',
               type: 'text',
             })
@@ -119,7 +160,7 @@ describe('Mozilla json schema parser', () => {
           component: 'sub-form',
           fields: [
             expect.objectContaining({
-              name: 'name',
+              name: 'tree.name',
             }),
             expect.objectContaining({
               component: 'field-array',
@@ -128,6 +169,7 @@ describe('Mozilla json schema parser', () => {
         }),
       ]
     }
-    expect(result).toEqual(expectedResult);
+    expect(schema).toEqual(expectedResult);
+    expect(defaultValues).toEqual({});
   });
 });
