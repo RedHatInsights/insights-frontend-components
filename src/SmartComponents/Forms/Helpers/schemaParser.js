@@ -2,17 +2,18 @@
 const TEXT_FIELD = 'text-field';
 const TEXTAREA_FIELD = 'textarea-field';
 const FIELD_ARRAY = 'field-array';
-const CHOICES = 'choices-component';
-const SELECT_COMPONENT = 'select-component';
+const SELECT_COMPONENT = 'select-field';
 const FIXED_LIST = 'fixed-list';
-const CHECKBOX = 'checkbox';
+const CHECKBOX = 'checkbox-field';
 const SUB_FORM = 'sub-form';
-const RADIO = 'radio-component';
+const RADIO = 'radio-field';
 
 /**Validator functions placeholder */
 const REQUIRED = 'required-validator';
 const MIN_LENGTH = 'min-length-validator';
 const MIN_ITEMS_VALIDATOR = 'min-items-validator';
+const MIN_NUMBER_VALUE = 'min-number-value';
+const MAX_NUMBER_VALUE = 'max-number-value';
 
 let autofocusField = undefined;
 let definitions = undefined;
@@ -26,6 +27,7 @@ const validatorBuilder = ({ schema, fields = {}, key }) => {
 
     if (fields[key] && fields[key].minLength) {
         result.push({ type: MIN_LENGTH, treshold: fields[key].minLength });
+        delete fields[key].minLength;
     }
 
     if (schema.minItems) {
@@ -47,7 +49,6 @@ const componentMapper = (type, dataType) => ({
     number: { component: TEXT_FIELD, type: 'number', dataType },
     range: { component: TEXT_FIELD, type: 'range', dataType },
     textarea: { component: TEXTAREA_FIELD, dataType },
-    choices: { component: CHOICES, dataType },
     select: { component: SELECT_COMPONENT, dataType },
     boolean: { component: CHECKBOX, type: 'checkbox', dataType },
     checkbox: { component: CHECKBOX, type: 'checkbox', dataType },
@@ -57,12 +58,21 @@ const componentMapper = (type, dataType) => ({
 
 const createFieldOptions = (options = {}) => {
     const result = {};
+    const uiOption = options['ui:options'] || {};
     if (options['ui:disabled']) {
         result.isDisabled = true;
     }
 
     if (options['ui:readonly']) {
         result.isReadOnly = true;
+    }
+
+    if (uiOption.inline) {
+        result.inline = true;
+    }
+
+    if (uiOption.rows) {
+        result.rows = uiOption.rows;
     }
 
     return result;
@@ -149,6 +159,29 @@ const createFieldsFromObject = (schema, uiSchema) => Object.keys(schema.properti
         ),
         ...createFieldOptions(uiSchema[key])
     };
+
+    if (field.dataType === 'number' || field.dataType === 'integer') {
+        if (field.minimum) {
+            field.validate = [ ...field.validate, {
+                type: MIN_NUMBER_VALUE,
+                value: field.minimum
+            }];
+            delete field.minimum;
+        }
+
+        if (field.maximum) {
+            field.validate = [ ...field.validate, {
+                type: MAX_NUMBER_VALUE,
+                value: field.maximum
+            }];
+            delete field.maximum;
+        }
+
+        if (field.multipleOf) {
+            field.step = field.multipleOf;
+            delete field.multipleOf;
+        }
+    }
 
     if (field.hasOwnProperty('enum')) {
         // TODO determine enum option object

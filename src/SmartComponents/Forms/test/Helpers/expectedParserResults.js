@@ -50,7 +50,6 @@ export const simpleSchemaResult = {
         component: 'text-field',
         type: 'password',
         autofocus: false,
-        minLength: 3,
         helperText: 'Hint: Make it strong!',
         validate: [{
             type: 'min-length-validator',
@@ -61,7 +60,6 @@ export const simpleSchemaResult = {
         dataType: 'string',
         label: 'Telephone',
         title: 'Telephone',
-        minLength: 10,
         autofocus: false,
         component: 'text-field',
         type: 'tel',
@@ -118,7 +116,7 @@ export const nestedSchemaResult = {
             label: 'Done?',
             title: 'Done?',
             default: false,
-            component: 'checkbox',
+            component: 'checkbox-field',
             type: 'checkbox',
             autofocus: false,
             validate: []
@@ -141,7 +139,7 @@ export const arraySchemaResult = {
     }, {
         key: 'multipleChoicesList',
         title: 'A multiple choices list',
-        component: 'checkbox',
+        component: 'checkbox-field',
         dataType: 'string',
         validate: [],
         options: [
@@ -167,7 +165,7 @@ export const arraySchemaResult = {
             dataType: 'boolean',
             label: 'a boolean value',
             validate: [],
-            component: 'select-component',
+            component: 'select-field',
             options: [{
                 disabled: true,
                 label: 'Please Choose'
@@ -287,7 +285,7 @@ export const arraySchemaResult = {
             name: 'fixedNoToolbar.items.1',
             dataType: 'boolean',
             label: 'A boolean',
-            component: 'checkbox',
+            component: 'checkbox-field',
             type: 'checkbox',
             validate: [],
             default: false
@@ -333,7 +331,7 @@ export const numbersSchemaResult = {
         label: 'Number enum',
         title: 'Number enum',
         autofocus: false,
-        component: 'select-component',
+        component: 'select-field',
         type: 'number',
         options: [{
             label: 'Please Choose',
@@ -356,7 +354,8 @@ export const numbersSchemaResult = {
         dataType: 'number',
         autofocus: false,
         options: [ 1, 2, 3 ],
-        component: 'radio-component',
+        inline: true,
+        component: 'radio-field',
         validate: [],
         type: 'radio'
     }, {
@@ -364,9 +363,13 @@ export const numbersSchemaResult = {
         label: 'Integer range',
         title: 'Integer range',
         dataType: 'integer',
-        minimum: 42,
-        maximum: 100,
-        validate: [],
+        validate: [{
+            type: 'min-number-value',
+            value: 42
+        }, {
+            type: 'max-number-value',
+            value: 100
+        }],
         component: 'text-field',
         type: 'range',
         autofocus: false
@@ -375,10 +378,14 @@ export const numbersSchemaResult = {
         dataType: 'integer',
         label: 'Integer range (by 10)',
         title: 'Integer range (by 10)',
-        minimum: 50,
-        maximum: 100,
-        multipleOf: 10,
-        validate: [],
+        step: 10,
+        validate: [{
+            type: 'min-number-value',
+            value: 50
+        }, {
+            type: 'max-number-value',
+            value: 100
+        }],
         component: 'text-field',
         type: 'range',
         autofocus: false
@@ -425,7 +432,7 @@ export const widgetsExpectedResult = {
             validate: [],
             autofocus: false,
             description: 'This is the checkbox-description',
-            component: 'checkbox',
+            component: 'checkbox-field',
             type: 'checkbox',
             dataType: 'boolean'
         }, {
@@ -435,7 +442,7 @@ export const widgetsExpectedResult = {
             validate: [],
             autofocus: false,
             description: 'This is the radio-description',
-            component: 'radio-component',
+            component: 'radio-field',
             type: 'radio',
             dataType: 'boolean'
         }, {
@@ -444,7 +451,7 @@ export const widgetsExpectedResult = {
             name: 'select',
             title: 'select box',
             label: 'select box',
-            component: 'select-component',
+            component: 'select-field',
             type: 'boolean',
             dataType: 'boolean',
             description: 'This is the select-description',
@@ -479,6 +486,7 @@ export const widgetsExpectedResult = {
             autofocus: false,
             validate: [],
             name: 'textarea',
+            rows: 5,
             type: 'string',
             dataType: 'string',
             component: 'textarea-field',
@@ -541,7 +549,7 @@ export const widgetsExpectedResult = {
         name: 'selectWidgetOptions',
         type: 'string',
         dataType: 'string',
-        component: 'select-component',
+        component: 'select-field',
         title: 'Custom select widget with options',
         label: 'Custom select widget with options',
         options: [{
