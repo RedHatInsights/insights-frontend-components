@@ -51,7 +51,7 @@ class Main extends Component {
                                       className: 'pf-m-dark'
                                   });
                               }) }
-                          </section>
+                          </section>,
                         light:
                           <section { ...props }
                               { ...dynamic }
@@ -60,7 +60,7 @@ class Main extends Component {
                           >
                               { children }
                           </section>
-                    };
+                    } [theme];
                 } }
             </ThemeContext.Consumer>
         );
