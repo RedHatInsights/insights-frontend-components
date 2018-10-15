@@ -1,12 +1,12 @@
-import { simple, uiSchemaSimple, nestedSchema, nestedUiSchema, arraySchema, uiArraySchema, numberSchema, numberUiSchema, widgetSchema, uiWidgetSchema, orderingSchema, uiOrderingSchema, referencesSchema, uiReferencesSchema } from "../../demoData/formSchemas";
+import { simple, uiSchemaSimple, nestedSchema, nestedUiSchema, arraySchema, uiArraySchema, numberSchema, numberUiSchema, widgetSchema, uiWidgetSchema, orderingSchema, uiOrderingSchema, referencesSchema, uiReferencesSchema, anyOfSelectSchema } from "../../demoData/formSchemas";
 import { simpleSchemaResult, nestedSchemaResult, arraySchemaResult, numbersSchemaResult, widgetsExpectedResult } from './expectedParserResults';
-import convertSchema from '../../Helpers/schemaParser';
+import { mozillaSchemaParser } from '../../SchemaParsers';
 
 describe('Mozilla json schema parser', () => {
   it('should parse simple form example', () => {
     const  formSchema = simple;
     const uiSchema = uiSchemaSimple;
-    const  { schema, defaultValues } = convertSchema(formSchema, uiSchema);
+    const  { schema, defaultValues } = mozillaSchemaParser(formSchema, uiSchema);
     expect(schema).toEqual(simpleSchemaResult);
     expect(defaultValues).toEqual({});
   });
@@ -14,7 +14,7 @@ describe('Mozilla json schema parser', () => {
   it('should parse nested schema', () => {
     const  formSchema = nestedSchema;
     const uiSchema = nestedUiSchema;
-    const  { schema, defaultValues } = convertSchema(formSchema, uiSchema);
+    const  { schema, defaultValues } = mozillaSchemaParser(formSchema, uiSchema);
     expect(schema).toEqual(nestedSchemaResult);
     expect(defaultValues).toEqual({ tasks: { done: false } });
   });
@@ -22,7 +22,7 @@ describe('Mozilla json schema parser', () => {
   it('should parse array schema', () => {
     const  formSchema = arraySchema;
     const uiSchema = uiArraySchema;
-    const  { schema, defaultValues } = convertSchema(formSchema, uiSchema);
+    const  { schema, defaultValues } = mozillaSchemaParser(formSchema, uiSchema);
     expect(schema).toEqual(arraySchemaResult);
     expect(defaultValues).toEqual({
       defaultsAndMinItems: {
@@ -57,7 +57,7 @@ describe('Mozilla json schema parser', () => {
   it('should parse numbers schema', () => {
     const  formSchema = numberSchema;
     const uiSchema = numberUiSchema;
-    const  { schema, defaultValues } = convertSchema(formSchema, uiSchema);
+    const  { schema, defaultValues } = mozillaSchemaParser(formSchema, uiSchema);
     expect(schema).toEqual(numbersSchemaResult);
     expect(defaultValues).toEqual({});
   });
@@ -65,7 +65,7 @@ describe('Mozilla json schema parser', () => {
   it('should parse widgets schema', () => {
     const  formSchema = widgetSchema;
     const uiSchema = uiWidgetSchema;
-    const  { schema, defaultValues } = convertSchema(formSchema, uiSchema);
+    const  { schema, defaultValues } = mozillaSchemaParser(formSchema, uiSchema);
     expect(schema).toEqual(widgetsExpectedResult);
     expect(defaultValues).toEqual({
       disabled: 'I am disabled.',
@@ -81,7 +81,7 @@ describe('Mozilla json schema parser', () => {
   it('should parse ordered schema', () => {
     const  formSchema = orderingSchema;
     const uiSchema = uiOrderingSchema;
-    const  { schema, defaultValues } = convertSchema(formSchema, uiSchema);
+    const  { schema, defaultValues } = mozillaSchemaParser(formSchema, uiSchema);
     const expectedResult =  {
       title: 'A registration form',
       fields: [
@@ -109,7 +109,7 @@ describe('Mozilla json schema parser', () => {
   it('should parse references schema', () => {
     const  formSchema = referencesSchema;
     const uiSchema = uiReferencesSchema;
-    const  { schema, defaultValues } = convertSchema(formSchema, uiSchema);
+    const  { schema, defaultValues } = mozillaSchemaParser(formSchema, uiSchema);
     const expectedResult = {
       fields: [
         expect.objectContaining({
@@ -171,5 +171,33 @@ describe('Mozilla json schema parser', () => {
     }
     expect(schema).toEqual(expectedResult);
     expect(defaultValues).toEqual({});
+  });
+
+  it('should parse anyOf select definition', () => {
+    const  formSchema = anyOfSelectSchema;
+    const  { schema, defaultValues } = mozillaSchemaParser(formSchema);
+    const expectedSchema = expect.objectContaining({
+      fields: expect.arrayContaining([
+        expect.objectContaining({
+          component: 'select-field',
+          dataType: 'string',
+          name: 'authentication',
+          options: [{
+            value: 'oauth',
+            label: 'OAuth 2.0'
+          }, {
+            value: 'basic',
+            label: 'Basic Authentication'
+          }, {
+            value: 'none',
+            label: 'No Authentication needed'
+          }]
+        })
+      ])
+    });
+    expect(schema).toEqual(expectedSchema);
+    expect(defaultValues).toEqual({
+      authentication: 'none',
+    });
   });
 });

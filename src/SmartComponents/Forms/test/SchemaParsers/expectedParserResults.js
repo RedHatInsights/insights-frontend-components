@@ -359,8 +359,7 @@ export const numbersSchemaResult = {
         component: 'select-field',
         type: 'number',
         options: [{
-            label: 'Please Choose',
-            disabled: true
+            label: 'Please Choose'
         }, {
             label: 1,
             value: 1
@@ -481,8 +480,7 @@ export const widgetsExpectedResult = {
             dataType: 'boolean',
             description: 'This is the select-description',
             options: [{
-                label: 'Please Choose',
-                disabled: true
+                label: 'Please Choose'
             }, {
                 value: true,
                 label: 'Yes'
@@ -579,7 +577,6 @@ export const widgetsExpectedResult = {
         label: 'Custom select widget with options',
         options: [{
             label: 'Please Choose',
-            disabled: true
         }, {
             value: 'foo',
             label: 'Foo'

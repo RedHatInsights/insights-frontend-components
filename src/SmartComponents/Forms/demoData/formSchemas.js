@@ -1031,3 +1031,46 @@ export const uiReferencesSchema = {
         'tree'
     ]
 };
+
+export const anyOfSelectSchema = {
+    title: 'Web hook',
+    description: 'This web hook allows us to send a JSON object from the service portal',
+    type: 'object',
+    definitions: {
+        Authentications: {
+            title: 'Authentications',
+            type: 'string',
+            anyOf: [
+                {
+                    type: 'string',
+                    enum: [
+                        'oauth'
+                    ],
+                    title: 'OAuth 2.0'
+                },
+                {
+                    type: 'string',
+                    enum: [
+                        'basic'
+                    ],
+                    title: 'Basic Authentication'
+                },
+                {
+                    type: 'string',
+                    enum: [
+                        'none'
+                    ],
+                    title: 'No Authentication needed'
+                }
+            ]
+        }
+    },
+    properties: {
+        authentication: {
+            $ref: '#/definitions/Authentications',
+            title: 'Authentication',
+            default: 'none'
+        }
+
+    }
+};
