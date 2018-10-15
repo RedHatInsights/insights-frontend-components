@@ -8,6 +8,7 @@ import componentMapper from './componentMapper';
 import validationMapper from './validationMapper';
 import { FormTitle, FormField, Select, BooleanGroup } from './formComponents';
 import { composeValidators, optionsMapper, componentArrayMapper } from '../Helpers/helpers';
+import { SelectField } from '../FormFields/formFields';
 
 const setGlobalValidation = (validators = []) => validators.reduce((acc, accur) => ({ ...acc, [accur]: validationMapper('required') }), {});
 
@@ -140,6 +141,15 @@ const renderArray = ({ items: { items, additionalItems, ...restItem }, uiSchema,
 })[componentArrayMapper({ items })];
 
 const renderFields = ({ properties, uiSchema = {}, globalValidators = [], options }) => Object.keys(properties).map((key) => {
+    if (properties[key].$ref) {
+        const { $ref, ...rest } = properties[key];
+        return renderFields({
+            properties: {
+                [key]: { ...rest, ...options.definitions[$ref.split('/').pop()] }
+            }, uiSchema, globalValidators, options
+        });
+    }
+
     if ((properties[key].type === 'object')) {
         return (
             <Fragment key={ properties[key].title }>
@@ -235,6 +245,11 @@ const renderFields = ({ properties, uiSchema = {}, globalValidators = [], option
         return <BooleanGroup type={ type } { ...fieldProps } />;
     }
 
+    if (properties[key].anyOf) {
+        return <FormField { ...fieldProps } component={ SelectField } type="select" options={ properties[key].anyOf.map(({ title, ...rest }) =>
+            ({ label: title, value: rest.enum[0] })) }/>;
+    }
+
     return <FormField key={ key } { ...fieldProps } />;
 });
 
@@ -282,7 +297,8 @@ class FormRenderer extends Component {
                                                 autoFocus: autoFocusField,
                                                 type,
                                                 push,
-                                                remove
+                                                remove,
+                                                definitions: schema.definitions
                                             }}) }
                                     </GridItem>
                                     <GridItem>
