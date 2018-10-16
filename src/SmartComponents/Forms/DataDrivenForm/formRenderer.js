@@ -6,7 +6,7 @@ import arrayMutators from 'final-form-arrays';
 import { FieldArray } from 'react-final-form-arrays';
 import componentMapper from './componentMapper';
 import validationMapper from './validationMapper';
-import { FormTitle, FormField, Select, BooleanGroup } from './formComponents';
+import { FormTitle, FormField, Select, BooleanGroup, Condition } from './formComponents';
 import { composeValidators, optionsMapper, componentArrayMapper } from '../Helpers/helpers';
 import { SelectField } from '../FormFields/formFields';
 
@@ -140,7 +140,25 @@ const renderArray = ({ items: { items, additionalItems, ...restItem }, uiSchema,
     nestedList: () => undefined
 })[componentArrayMapper({ items })];
 
-const renderFields = ({ properties, uiSchema = {}, globalValidators = [], options }) => Object.keys(properties).map((key) => {
+const renderFields = ({ properties, uiSchema = {}, globalValidators = [], options, dependencies }) => Object.keys(properties).map((key) => {
+
+    if (dependencies && dependencies[key] && dependencies[key].oneOf) {
+        const dependeciesProperties = {
+            [key]: { ...properties[key] },
+            ...dependencies[key].oneOf.reduce((acc, curr) => {
+                const conditionValues = [ ...curr.properties[key].enum ];
+                const properties = { ...curr.properties };
+                delete properties[key];
+                const enhancedProperties = Object.keys(properties).reduce((accumulator, propertyKey) =>
+                    ({ ...accumulator, [propertyKey]: { ...properties[propertyKey], condition: {
+                        when: key, is: conditionValues
+                    }}}), {});
+                return { ...acc, ...enhancedProperties };
+            }, {})
+        };
+        return renderFields({ properties: dependeciesProperties, uiSchema, globalValidators, options });
+    }
+
     if (properties[key].$ref) {
         const { $ref, ...rest } = properties[key];
         return renderFields({
@@ -221,7 +239,7 @@ const renderFields = ({ properties, uiSchema = {}, globalValidators = [], option
 
     const { component, type } = componentMapper(
         properties[key].enum ? 'select' : properties[key].type,
-        uiSchema[key] ? uiSchema[key]['ui:widget'] : undefined
+        uiSchema[key] ? uiSchema[key]['ui:widget'] : properties[key].format || undefined
     );
     const widgetOptions = uiSchema[key] ? optionsMapper(uiSchema[key]) : {};
     const minLength = properties[key].minLength ? validationMapper('minLength')(properties[key].minLength) : undefined;
@@ -250,6 +268,14 @@ const renderFields = ({ properties, uiSchema = {}, globalValidators = [], option
             ({ label: title, value: rest.enum[0] })) }/>;
     }
 
+    if (properties[key].condition) {
+        return (
+            <Condition key={ key } when={ properties[key].condition.when } is={ properties[key].condition.is }>
+                <FormField key={ key } { ...fieldProps } />
+            </Condition>
+        );
+    }
+
     return <FormField key={ key } { ...fieldProps } />;
 });
 
@@ -272,7 +298,7 @@ class FormRenderer extends Component {
 
     render() {
         const { schema, uiSchema, onSubmit, initialValues, onCancel } = this.props;
-        const { title, description, properties, type } = schema;
+        const { title, description, properties, type, dependencies } = schema;
         const { mounted, autoFocusField } = this.state;
         const globalValidators = setGlobalValidation(schema.required);
         return (
@@ -293,6 +319,7 @@ class FormRenderer extends Component {
                                             properties,
                                             uiSchema,
                                             globalValidators,
+                                            dependencies,
                                             options: {
                                                 autoFocus: autoFocusField,
                                                 type,
