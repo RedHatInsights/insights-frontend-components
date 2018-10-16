@@ -38,20 +38,17 @@ const Battery = ({ severity, label, labelHidden, className, ...props }) => {
 
     function generateBattery (severity, batteryClasses, ariaLabels) {
         return (
-            <React.Fragement>
-                { batteryLevels(severity) && (
-                    <i className= { batteryClasses } { ...ariaLabels }>
-                        <svg version="1.1"
-                            id="battery_svg"
-                            x="0px" y="0px"
-                            viewBox="0 0 448 512"
-                            style={ { enableBackground: 'new 0 0 448 512' } }
-                            shapeRendering= 'geometricpresision'>
-                            { batteryLevels(severity) }
-                        </svg>
-                    </i>
-                ) }
-            </React.Fragement>
+            <i className= { batteryClasses } { ...ariaLabels }>
+                <svg
+                    version="1.1"
+                    id="battery_svg"
+                    x="0px" y="0px"
+                    viewBox="0 0 448 512"
+                    style={ { enableBackground: 'new 0 0 448 512' } }
+                    shapeRendering= 'geometricpresision'>
+                    { batteryLevels(severity) }
+                </svg>
+            </i>
         );
     }
 
@@ -73,8 +70,7 @@ const Battery = ({ severity, label, labelHidden, className, ...props }) => {
             case 1:
                 return <LowBattery/>;
             default:
-                console.error('Warning: Unsupported value presented to battery component');
-                return false;
+                return null;
         }
     }
 
