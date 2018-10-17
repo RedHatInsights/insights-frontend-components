@@ -154,3 +154,8 @@ export const createDynamicListWithFixed = (schema, uiSchema, key) => [
         };
     })
 ];
+
+export const createAnyOfOptions = anyOf => anyOf.map(({ title, ...rest }) => ({
+    label: title,
+    value: rest.enum[0]
+}));

@@ -12,7 +12,8 @@ import {
     ifFullSubForm,
     replaceKeys,
     orderSchema,
-    createDynamicListWithFixed
+    createDynamicListWithFixed,
+    createAnyOfOptions
 } from './mozillaHelpers';
 
 const keyReplacements = {
@@ -163,24 +164,35 @@ const createFieldsFromObject = (schema, uiSchema = {}, keyPrefix) => Object.keys
      * Create propper value, label options for enum fields like radio, checkboxes etc.
      */
     if (field.hasOwnProperty('enum')) {
-        // TODO determine enum option object
+        field.enum = field.enum.map((item, index) => ({
+            value: item,
+            label: field.enumNames && field.enumNames[index] || item
+        }));
+        delete field.enumNames;
     }
 
+    /**
+     * Alternative way to define select field
+     * https://github.com/mozilla-services/react-jsonschema-form#alternative-json-schema-compliant-approach
+     */
+    if (field.anyOf) {
+        field.enum = field.anyOf.map(({ title, ...rest }) => ({ label: title, value: rest.enum[0] }));
+        field.component = components.SELECT_COMPONENT;
+        delete field.anyOf;
+    }
+
+    /**
+     * Add default option for select and define options if none were defined
+     */
     if (field.component === components.SELECT_COMPONENT) {
         if (!field.enum) {
             field.enum = [{ label: 'Yes', value: true }, { label: 'No', value: false }];
-        } else {
-            field.enum = field.enum.map((item, index) => ({
-                value: item,
-                label: field.enumNames && field.enumNames[index] || item
-            }));
         }
 
         field.enum.unshift({
             label: 'Please Choose',
             disabled: field.isRequired
         });
-        delete field.enumNames;
     }
 
     /**
@@ -191,11 +203,6 @@ const createFieldsFromObject = (schema, uiSchema = {}, keyPrefix) => Object.keys
      */
     if (field.hasOwnProperty('default')) {
         setWith(defaultValues, keyPrefix ? `${keyPrefix}.${key}` : key, field.default, Object);
-    }
-
-    if (field.anyOf) {
-        field.anyOf = field.anyOf.map(({ title, ...rest }) => ({ label: title, value: rest.enum[0] }));
-        field.component = components.SELECT_COMPONENT;
     }
 
     field = replaceKeys(field, keyReplacements);
@@ -237,7 +244,7 @@ const convertSchema = (schema, uiSchema = {}, key) => {
             nestedSchema = {
                 ...componentMapper(uiSchema['ui:widget'] || schema.items.type, schema.items.type),
                 validate: validatorBuilder({ schema, key }),
-                options: schema.items.enum
+                options: schema.items.enum.map((value, index) => ({ value, label: schema.items.enumNames && schema.items.enumNames[index] || value }))
             };
         /**
          * Dynamic items list with fixed elements

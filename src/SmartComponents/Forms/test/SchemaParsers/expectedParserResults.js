@@ -145,11 +145,19 @@ export const arraySchemaResult = {
         component: 'checkbox-field',
         dataType: 'string',
         validate: [],
-        options: [
-            'foo',
-            'bar',
-            'fuzz',
-            'qux'
+        options: [{
+            label: 'foo',
+            value: 'foo'
+        }, {
+            value: 'bar',
+            label: 'bar'
+        }, {
+            value: 'fuzz',
+            label: 'fuzz'
+        }, {
+            value: 'qux',
+            label: 'qux'
+        }
         ],
         type: 'checkbox'
     }, {
@@ -377,7 +385,16 @@ export const numbersSchemaResult = {
         title: 'Number enum',
         dataType: 'number',
         autofocus: false,
-        options: [ 1, 2, 3 ],
+        options: [{
+            label: 1,
+            value: 1
+        }, {
+            label: 2,
+            value: 2
+        }, {
+            label: 3,
+            value: 3
+        }],
         inline: true,
         component: 'radio-field',
         validate: [],
@@ -576,7 +593,7 @@ export const widgetsExpectedResult = {
         title: 'Custom select widget with options',
         label: 'Custom select widget with options',
         options: [{
-            label: 'Please Choose',
+            label: 'Please Choose'
         }, {
             value: 'foo',
             label: 'Foo'

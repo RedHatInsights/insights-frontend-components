@@ -183,6 +183,8 @@ describe('Mozilla json schema parser', () => {
           dataType: 'string',
           name: 'authentication',
           options: [{
+            label: 'Please Choose',
+          }, {
             value: 'oauth',
             label: 'OAuth 2.0'
           }, {
