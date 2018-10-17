@@ -14,20 +14,24 @@ export const components = {
 export const validators = {
     REQUIRED: 'required-validator',
     /**
- * min length if the input value
- */
+     * min length if the input value
+     */
     MIN_LENGTH: 'min-length-validator',
     /**
- * minimum count of fileds in some dynamic list of fields
- */
+     * minimum count of fileds in some dynamic list of fields
+     */
     MIN_ITEMS_VALIDATOR: 'min-items-validator',
     /**
- * Minimum value of number input
- */
+     * Minimum value of number input
+     */
     MIN_NUMBER_VALUE: 'min-number-value',
     /**
- * Maximum value of number inpuy
- */
-    MAX_NUMBER_VALUE: 'max-number-value'
+     * Maximum value of number inpuy
+     */
+    MAX_NUMBER_VALUE: 'max-number-value',
+    /**
+     * Regexp pattern validator
+     */
+    PATTERN_VALIDATOR: 'pattern-validator'
 };
 

@@ -13,13 +13,14 @@ import {
     replaceKeys,
     orderSchema,
     createDynamicListWithFixed,
-    createAnyOfOptions
+    buildConditionalFields
 } from './mozillaHelpers';
 
 const keyReplacements = {
     multipleOf: 'step',
     anyOf: 'options',
-    enum: 'options'
+    enum: 'options',
+    format: 'type'
 };
 
 /**
@@ -62,6 +63,18 @@ const prepareSubForm = ({ schema, fields, uiSchema, key }) => ({ name: key,
  */
 const createFieldsFromObject = (schema, uiSchema = {}, keyPrefix) => Object.keys(schema.properties).map(key => {
     const fields = schema.properties;
+
+    /**
+     * build conditional fields
+     * Follows pattern when field 'x' has value 'y' show field 'z'
+     */
+    if (schema.dependencies && schema.dependencies[key] && schema.dependencies[key].oneOf) {
+        const { dependencies, ...rest } = schema;
+        return createFieldsFromObject({ // eslint-disable-line no-use-before-define
+            type: 'object',
+            properties: buildConditionalFields(fields, dependencies, key)
+        }, uiSchema, keyPrefix);
+    }
 
     /**
      * Redirect to initial schema conversion when the field format is defined using references
@@ -132,6 +145,7 @@ const createFieldsFromObject = (schema, uiSchema = {}, keyPrefix) => Object.keys
         helperText: uiSchema[key] && uiSchema[key]['ui:help'],
         ...fields[key],
         ...componentMapper(
+            fields[key].format ||
             (uiSchema[key] && uiSchema[key]['ui:widget'])
             || (uiSchema[key] && uiSchema[key]['ui:options'] && uiSchema[key]['ui:options'].inputType)
             || (fields[key].enum && 'select') || fields[key].type, fields[key].type
@@ -205,7 +219,14 @@ const createFieldsFromObject = (schema, uiSchema = {}, keyPrefix) => Object.keys
         setWith(defaultValues, keyPrefix ? `${keyPrefix}.${key}` : key, field.default, Object);
     }
 
+    /**
+     * Replace key names to match PF4 prop types.
+     */
     field = replaceKeys(field, keyReplacements);
+    /**
+     * Delete unused fields properties
+     */
+    delete field.pattern;
     return field;
 });
 
@@ -294,6 +315,9 @@ const convertSchema = (schema, uiSchema = {}, key) => {
 
 /**
  * Resets additional information about form
+ * Follows React rendering principles.
+ * Creates single array, where each item is equal to one React component, or another array with React components.
+ * (That is the same structure, that react is able to render => node / array / array of array of nodes etc.)
  * @param {Object} schema form schema
  * @param {Object} [uiSchema = {}] form ui schema
  * @returns {Object} parsed mozilla json schema

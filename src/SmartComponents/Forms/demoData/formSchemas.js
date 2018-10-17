@@ -1074,3 +1074,115 @@ export const anyOfSelectSchema = {
 
     }
 };
+
+export const conditionalSchema = {
+    title: 'Web hook',
+    description: 'This web hook allows us to send a JSON object from the service portal',
+    type: 'object',
+    required: [
+        'url'
+    ],
+    definitions: {
+        Authentications: {
+            title: 'Authentications',
+            type: 'string',
+            anyOf: [
+                {
+                    type: 'string',
+                    enum: [
+                        'oauth'
+                    ],
+                    title: 'OAuth 2.0'
+                },
+                {
+                    type: 'string',
+                    enum: [
+                        'basic'
+                    ],
+                    title: 'Basic Authentication'
+                },
+                {
+                    type: 'string',
+                    enum: [
+                        'none'
+                    ],
+                    title: 'No Authentication needed'
+                }
+            ]
+        }
+    },
+    properties: {
+        url: {
+            type: 'string',
+            title: 'URL',
+            description: 'The URL which will be receving this request',
+            pattern: '^(http|https)://*'
+        },
+        verify_ssl: { // eslint-disable-line camelcase
+            type: 'boolean',
+            default: true,
+            title: 'Verify Server Certificate'
+        },
+        secret: {
+            type: 'string',
+            title: 'Secret',
+            description: 'If specified we will create a HMAC signature of the body with the secret and include it in the HTTP Header X-Service-Portal-Signature' // eslint-disable-line
+        },
+        authentication: {
+            $ref: '#/definitions/Authentications',
+            title: 'Authentication',
+            default: 'none'
+        }
+    },
+    dependencies: {
+        authentication: {
+            oneOf: [
+                {
+                    properties: {
+                        authentication: {
+                            enum: [
+                                'none'
+                            ]
+                        }
+                    }
+                },
+                {
+                    properties: {
+                        authentication: {
+                            enum: [
+                                'oauth'
+                            ]
+                        },
+                        token: {
+                            type: 'string',
+                            title: 'Bearer Token',
+                            description: 'For OAuth 2.0 authentication please provide a token'
+                        }
+
+                    }
+                },
+                {
+                    properties: {
+                        authentication: {
+                            enum: [
+                                'basic'
+                            ]
+                        },
+                        userid: {
+                            type: 'string',
+                            title: 'Username',
+                            description: 'For basic authentication please provide a userid'
+                        },
+                        password: {
+                            type: 'string',
+                            title: 'Password',
+                            format: 'password',
+                            description: 'For basic authentication please provide a password'
+                        }
+
+                    }
+                }
+            ]
+        }
+    }
+};

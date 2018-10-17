@@ -9,6 +9,7 @@ export const simpleSchemaResult = {
         component: 'text-field',
         type: 'text',
         autofocus: true,
+        isRequired: true,
         validate: [{
             type: 'required-validator'
         }]
@@ -18,6 +19,7 @@ export const simpleSchemaResult = {
         component: 'text-field',
         label: 'Last name',
         title: 'Last name',
+        isRequired: true,
         validate: [{
             type: 'required-validator'
         }],
@@ -76,6 +78,7 @@ export const nestedSchemaResult = {
         name: 'title',
         dataType: 'string',
         autofocus: false,
+        isRequired: true,
         validate: [{
             type: 'required-validator'
         }],
@@ -96,6 +99,7 @@ export const nestedSchemaResult = {
             type: 'text',
             description: 'A sample title',
             component: 'text-field',
+            isRequired: true,
             validate: [{
                 type: 'required-validator'
             }],
@@ -445,17 +449,15 @@ export const widgetsExpectedResult = {
         fields: [{
             name: 'stringFormats.email',
             component: 'text-field',
-            type: 'text',
+            type: 'email',
             dataType: 'string',
-            format: 'email',
             validate: [],
             autofocus: false
         }, {
             name: 'stringFormats.uri',
             component: 'text-field',
-            type: 'text',
+            type: 'uri',
             dataType: 'string',
-            format: 'uri',
             validate: [],
             autofocus: false
         }]

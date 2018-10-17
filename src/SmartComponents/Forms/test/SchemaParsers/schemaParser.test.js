@@ -1,4 +1,4 @@
-import { simple, uiSchemaSimple, nestedSchema, nestedUiSchema, arraySchema, uiArraySchema, numberSchema, numberUiSchema, widgetSchema, uiWidgetSchema, orderingSchema, uiOrderingSchema, referencesSchema, uiReferencesSchema, anyOfSelectSchema } from "../../demoData/formSchemas";
+import { simple, uiSchemaSimple, nestedSchema, nestedUiSchema, arraySchema, uiArraySchema, numberSchema, numberUiSchema, widgetSchema, uiWidgetSchema, orderingSchema, uiOrderingSchema, referencesSchema, uiReferencesSchema, anyOfSelectSchema, conditionalSchema } from "../../demoData/formSchemas";
 import { simpleSchemaResult, nestedSchemaResult, arraySchemaResult, numbersSchemaResult, widgetsExpectedResult } from './expectedParserResults';
 import { mozillaSchemaParser } from '../../SchemaParsers';
 
@@ -201,5 +201,71 @@ describe('Mozilla json schema parser', () => {
     expect(defaultValues).toEqual({
       authentication: 'none',
     });
+  });
+
+  it('should parse conditional fields', () => {
+    const formSchema = conditionalSchema;
+    const  { schema, defaultValues } = mozillaSchemaParser(formSchema);
+    const expectedSchema = {
+      title: 'Web hook',
+      description: 'This web hook allows us to send a JSON object from the service portal',
+      fields: [
+      expect.objectContaining({
+        name: 'url',
+        validate: [{
+          type: 'required-validator'
+        },{
+          type: 'pattern-validator',
+          pattern: '^(http|https)://*'
+        }]
+      }),
+      expect.objectContaining({
+        name: 'verify_ssl',
+      }), 
+      expect.objectContaining({
+        name: 'secret',
+      }), [
+        expect.objectContaining({
+          name: 'authentication',
+          component: 'select-field',
+          type: 'text',
+          options: [{
+            label: 'Please Choose'
+          }, {
+            label: 'OAuth 2.0',
+            value: 'oauth',
+          }, {
+            label: 'Basic Authentication',
+            value: 'basic',
+          }, {
+            label: 'No Authentication needed',
+            value: 'none'
+          }]
+        }),
+        expect.objectContaining({
+          component: 'text-field',
+          condition: { when: 'authentication', is: ['oauth'] },
+          name: 'token',
+          type: 'text',
+        }),
+        expect.objectContaining({
+          component: 'text-field',
+          condition: { when: 'authentication', is: ['basic'] },
+          name: 'userid',
+          type: 'text'
+        }),
+        expect.objectContaining({
+          component: 'text-field',
+          condition: { when: 'authentication', is: ['basic'] },
+          type: "password",
+          name: "password",
+        }),
+      ]]
+    };
+    expect(schema).toEqual(expectedSchema);
+    expect(defaultValues).toEqual({
+      authentication: 'none',
+      verify_ssl: true
+    })
   });
 });

@@ -12,11 +12,16 @@ export const validatorBuilder = ({ schema, fields = {}, key }) => {
     const result = [];
     if (schema.required && schema.required.includes(key)) {
         result.push({ type: validators.REQUIRED });
+        fields[key].isRequired = true;
     }
 
     if (fields[key] && fields[key].minLength) {
         result.push({ type: validators.MIN_LENGTH, treshold: fields[key].minLength });
         delete fields[key].minLength;
+    }
+
+    if (fields[key] && fields[key].pattern) {
+        result.push({ type: validators.PATTERN_VALIDATOR, pattern: fields[key].pattern });
     }
 
     if (schema.minItems) {
@@ -41,6 +46,9 @@ export const validatorBuilder = ({ schema, fields = {}, key }) => {
  */
 export const componentMapper = (type, dataType) => ({
     string: { component: components.TEXT_FIELD, type: 'text', dataType },
+    uri: { component: components.TEXT_FIELD, type: 'uri', dataType },
+    date: { component: components.TEXT_FIELD, type: 'date', dataType },
+    'date-time': { component: components.TEXT_FIELD, type: 'datetime-local', dataType },
     color: { component: components.TEXT_FIELD, type: 'color', dataType },
     hidden: { component: components.TEXT_FIELD, type: 'hidden', dataType },
     tel: { component: components.TEXT_FIELD, type: 'tel', dataType },
@@ -155,7 +163,18 @@ export const createDynamicListWithFixed = (schema, uiSchema, key) => [
     })
 ];
 
-export const createAnyOfOptions = anyOf => anyOf.map(({ title, ...rest }) => ({
-    label: title,
-    value: rest.enum[0]
-}));
+export const buildConditionalFields = (properties, dependencies, key) => ({
+    [key]: { ...properties[key] },
+    ...dependencies[key].oneOf.reduce((acc, curr) => {
+        const conditionValues = [ ...curr.properties[key].enum ];
+        const newProperty = { ...curr.properties };
+        delete newProperty[key];
+        const enhancedProperties = Object.keys(newProperty).reduce((accumulator, propertyKey) => ({
+            ...accumulator,
+            [propertyKey]: { ...newProperty[propertyKey], condition: {
+                when: key, is: conditionValues
+            }}
+        }), {});
+        return { ...acc, ...enhancedProperties };
+    }, {})
+});
