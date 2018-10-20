@@ -7,6 +7,7 @@ import CriticalBattery from './CriticalBattery';
 import HighBattery from './HighBattery';
 import MediumBattery from './MediumBattery';
 import LowBattery from './LowBattery';
+import NullBattery from './NullBattery';
 
 import './battery.scss';
 
@@ -39,8 +40,7 @@ const Battery = ({ severity, label, labelHidden, className, ...props }) => {
     function generateBattery (severity, batteryClasses, ariaLabels) {
         return (
             <i className= { batteryClasses } { ...ariaLabels }>
-                <svg
-                    version="1.1"
+                <svg version="1.1"
                     id="battery_svg"
                     x="0px" y="0px"
                     viewBox="0 0 448 512"
@@ -70,7 +70,9 @@ const Battery = ({ severity, label, labelHidden, className, ...props }) => {
             case 1:
                 return <LowBattery/>;
             default:
-                return null;
+                // eslint-disable-next-line
+                console.error('Warning: Unsupported value presented to battery component');
+                return <NullBattery/>;
         }
     }
 
@@ -100,3 +102,8 @@ Battery.propTypes = {
     label: propTypes.string.isRequired,
     labelHidden: propTypes.bool
 };
+
+Battery.defaultProps = {
+    severity: 'null'
+};
+
