@@ -20,7 +20,8 @@ const keyReplacements = {
     multipleOf: 'step',
     anyOf: 'options',
     enum: 'options',
-    format: 'type'
+    format: 'type',
+    autofocus: 'autoFocus'
 };
 
 /**
@@ -44,7 +45,7 @@ let defaultValues = {};
 const prepareSubForm = ({ schema, fields, uiSchema, key }) => ({ name: key,
     title: uiSchema[key] && uiSchema[key]['ui:title'] || fields[key].title,
     component: components.SUB_FORM,
-    autofocus: autofocusField === key,
+    autoFocus: autofocusField === key,
     validate: validatorBuilder({ schema, fields, key }),
     description: uiSchema[key] && uiSchema[key]['ui:description'],
     helperText: uiSchema[key] && uiSchema[key]['ui:help'],
@@ -118,11 +119,17 @@ const createFieldsFromObject = (schema, uiSchema = {}, keyPrefix) => Object.keys
                 uiSchema[key], key
             ) };
     /**
-     * Create new schema if a field is another type of SUB form
+     * Create new schema if a field is another type of array form with only one item
      */
     } else if (isAddableWithOneField(fields, key)) {
         return { ...convertSchema( // eslint-disable-line no-use-before-define
-            { ...fields[key], items: fields[key].items, type: 'array', title: fields[key].title },
+            { ...fields[key],
+                itemDefault: fields[key].items.default,
+                items: { ...fields[key].items,
+                    default: [ fields[key].items.default ]},
+                type: 'array',
+                title: fields[key].title
+            },
             uiSchema[key],
             key
         ) };
@@ -152,6 +159,13 @@ const createFieldsFromObject = (schema, uiSchema = {}, keyPrefix) => Object.keys
         ),
         ...createFieldOptions(uiSchema[key])
     };
+
+    /**
+     * Store initial field key
+     */
+    if (field.name !== key) {
+        field.initialKey = key;
+    }
 
     /**
      * Adding validator for minimum and maximum number value
@@ -198,24 +212,38 @@ const createFieldsFromObject = (schema, uiSchema = {}, keyPrefix) => Object.keys
     /**
      * Add default option for select and define options if none were defined
      */
-    if (field.component === components.SELECT_COMPONENT) {
+    if (field.component === components.SELECT_COMPONENT || field.component === components.RADIO) {
         if (!field.enum) {
             field.enum = [{ label: 'Yes', value: true }, { label: 'No', value: false }];
         }
 
-        field.enum.unshift({
-            label: 'Please Choose',
-            disabled: field.isRequired
-        });
+        /**
+         * Need update PF select component. No option to have empty default state
+         */
+        if (!field.isRequired && field.component === components.SELECT_COMPONENT) {
+            field.enum.unshift({
+                label: 'Please Choose',
+                disabled: field.isRequired
+            });
+        }
+    }
+
+    /**
+     * Match field label to field name if it does not exist and key is not generic
+     * https://mozilla-services.github.io/react-jsonschema-form/
+     */
+    if (!field.label && key !== 'items' && key !== 'aditionalItems') {
+        field.label = key;
     }
 
     /**
      * Map a form default value
      * Key must match the field name
      * If the field is in some nested structure, it must use prefixed name to avoid name collisions.
-     * The default value must be in the same object structure.
+     * The default value must be in the same object structure and must be either object. If the the component is part of dyamic array
+     * default values are added to new item when its created.
      */
-    if (field.hasOwnProperty('default')) {
+    if (field.hasOwnProperty('default') && !Array.isArray(field.default)) {
         setWith(defaultValues, keyPrefix ? `${keyPrefix}.${key}` : key, field.default, Object);
     }
 
@@ -227,9 +255,27 @@ const createFieldsFromObject = (schema, uiSchema = {}, keyPrefix) => Object.keys
      * Delete unused fields properties
      */
     delete field.pattern;
+
+    /**
+     * remove label, helperText, description and validation from hidden input
+     */
+    if (field.type === 'hidden') {
+        delete field.label;
+        delete field.validate;
+        delete field.description;
+        delete field.helperText;
+    }
+
     return field;
 });
 
+/**
+ * Fuinction that converts mozilla schema into unified array of components
+ * @param {Object} schema fields definition object
+ * @param {Object} uiSchema fields UI definition object
+ * @param {string} key schema identifier
+ * @returns {Object} object representing form fields in unified React schema
+ */
 const convertSchema = (schema, uiSchema = {}, key) => {
     const meta = {};
 
@@ -248,6 +294,9 @@ const convertSchema = (schema, uiSchema = {}, key) => {
         meta.description = schema.description;
     }
 
+    /**
+     * Check if current schema is dynamic array
+     */
     if (schema.type === 'array') {
         let nestedSchema = {};
         /**
@@ -258,12 +307,18 @@ const convertSchema = (schema, uiSchema = {}, key) => {
             nestedSchema = convertSchema(schema.items, uiSchema.items, key);
             nestedSchema.validate = validatorBuilder({ schema, fields: schema.items.properties, key });
             nestedSchema.component = components.FIELD_ARRAY;
+            nestedSchema.itemDefault = Object.keys(schema.items.properties).reduce((acc, curr) => ({
+                ...acc,
+                [curr]: schema.items.properties[curr].default
+            }), {});
         /**
          * Options list checkboxes/selects/radion buttons
          */
         } else if (schema.items && schema.items.enum) {
             nestedSchema = {
                 ...componentMapper(uiSchema['ui:widget'] || schema.items.type, schema.items.type),
+                name: key,
+                label: schema.title,
                 validate: validatorBuilder({ schema, key }),
                 options: schema.items.enum.map((value, index) => ({ value, label: schema.items.enumNames && schema.items.enumNames[index] || value }))
             };
@@ -279,18 +334,22 @@ const convertSchema = (schema, uiSchema = {}, key) => {
             nestedSchema.component = components.FIXED_LIST;
         /**
          * Another condition for dynamic form fields
+         * Dynamic nested schema
          */
         } else if (schema.items && typeof schema.items === 'object' && schema.items.type === 'array') {
+            nestedSchema.name = key;
             nestedSchema.component = components.FIELD_ARRAY;
             nestedSchema.fields = [ convertSchema({
                 ...schema.items
             }, uiSchema && uiSchema.items, `${key}`) ];
 
         /**
-         * Another condition for dynamic form fields
+         * Condition for dynamic form single fields
          */
         } else if (schema.items && typeof schema.items === 'object') {
+            setWith(defaultValues, key, schema.default, Object);
             nestedSchema.component = components.FIELD_ARRAY;
+            nestedSchema.itemDefault = schema.itemDefault;
             nestedSchema.validate = validatorBuilder({ schema, fields: schema.items, key: `${key}` }),
             nestedSchema.fields = createFieldsFromObject({ properties: { items: schema.items }}, uiSchema, key);
         }

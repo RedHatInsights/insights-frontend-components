@@ -81,13 +81,16 @@ export const createFieldOptions = (options = {}) => {
     return result;
 };
 
-export const isNestedReference = (fields, key) => fields[key].items && fields[key].items.$ref;
+export const isNestedReference = (fields, key) => fields[key] && fields[key].items && fields[key].items.$ref;
 export const isDefinedByReference = (fields, key) => fields[key] && fields[key].$ref;
-export const isAddableSubForm = (fields, key) => fields[key].type === 'array' && fields[key].items && fields[key].items.type === 'object';
+export const isAddableSubForm = (fields, key) =>
+    fields[key] && fields[key].type === 'array' && fields[key].items && fields[key].items.type === 'object';
 export const isAddableWithFixedFields = (fields, key) =>
-    fields[key].type === 'array' && Array.isArray(fields[key].items) && fields[key].additionalItems;
-export const isAddableWithOneField = (fields, key) => fields[key].type === 'array' && fields[key].items && typeof fields[key].items === 'object';
-export const ifFullSubForm = (fields, key) => fields[key].properties && typeof fields[key].properties === 'object';
+    fields[key] && fields[key].type === 'array' && Array.isArray(fields[key].items) && fields[key].additionalItems;
+export const isAddableWithOneField = (fields, key) =>
+    fields[key] && fields[key].type === 'array' && fields[key].items && typeof fields[key].items === 'object';
+export const ifFullSubForm = (fields, key) =>
+    fields[key] && fields[key].properties && typeof fields[key].properties === 'object';
 
 /**
  * Replace object keys with mapped values

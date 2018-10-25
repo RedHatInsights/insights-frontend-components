@@ -24,34 +24,12 @@ describe('Mozilla json schema parser', () => {
     const uiSchema = uiArraySchema;
     const  { schema, defaultValues } = mozillaSchemaParser(formSchema, uiSchema);
     expect(schema).toEqual(arraySchemaResult);
-    expect(defaultValues).toEqual({
-      defaultsAndMinItems: {
-        items: 'unidentified'
-      },
-      fixedNoToolbar: {
-        additionalItems: {
-          items: 'lorem ipsum'
-        }
-      },
-      listOfStrings: {
-        items: 'bazinga'
-      },
-      minItemsList:  {
-        name: "Default name",
-      },
-      nestedList:  {
-        items: "lorem ipsum",
-      },
-      noToolbar:  {
-        items: "lorem ipsum",
-      },
-      unorderable:  {
-        items: "lorem ipsum",
-      },
-      unremovable:  {
-        items: "lorem ipsum",
-      },
-    });
+    expect(defaultValues).toEqual(expect.objectContaining({
+        fixedItemsList: { additionalItems: undefined },
+        minItemsList: { name: 'Default name' },
+        defaultsAndMinItems: [ 'carp', 'trout', 'bream' ],
+        fixedNoToolbar: { additionalItems: { items: 'lorem ipsum' } }
+    }));
   });
 
   it('should parse numbers schema', () => {
@@ -102,73 +80,6 @@ describe('Mozilla json schema parser', () => {
         })
       ]
     };
-    expect(schema).toEqual(expectedResult);
-    expect(defaultValues).toEqual({});
-  });
-
-  it('should parse references schema', () => {
-    const  formSchema = referencesSchema;
-    const uiSchema = uiReferencesSchema;
-    const  { schema, defaultValues } = mozillaSchemaParser(formSchema, uiSchema);
-    const expectedResult = {
-      fields: [
-        expect.objectContaining({
-          name: 'shipping_address',
-          title: 'Shipping address',
-          fields: [
-            expect.objectContaining({
-              name: 'shipping_address.street_address',
-              component: 'text-field',
-              type: 'text',
-            }),
-            expect.objectContaining({
-              name: 'shipping_address.city',
-              component: 'text-field',
-              type: 'text',
-            }),
-            expect.objectContaining({
-              name: 'shipping_address.state',
-              component: 'text-field',
-              type: 'text',
-            })
-          ]
-        }),
-        expect.objectContaining({
-          name: 'billing_address',
-          title: 'Billing address',
-          fields: [
-            expect.objectContaining({
-              name: 'billing_address.street_address',
-              component: 'text-field',
-              type: 'text',
-            }),
-            expect.objectContaining({
-              name: 'billing_address.city',
-              component: 'text-field',
-              type: 'text',
-            }),
-            expect.objectContaining({
-              name: 'billing_address.state',
-              component: 'text-field',
-              type: 'text',
-            })
-          ]
-        }),
-
-        expect.objectContaining({
-          name: 'tree',
-          component: 'sub-form',
-          fields: [
-            expect.objectContaining({
-              name: 'tree.name',
-            }),
-            expect.objectContaining({
-              component: 'field-array',
-            })
-          ]
-        }),
-      ]
-    }
     expect(schema).toEqual(expectedResult);
     expect(defaultValues).toEqual({});
   });
@@ -224,7 +135,8 @@ describe('Mozilla json schema parser', () => {
       }), 
       expect.objectContaining({
         name: 'secret',
-      }), [
+      }), 
+      expect.arrayContaining([
         expect.objectContaining({
           name: 'authentication',
           component: 'select-field',
@@ -260,7 +172,7 @@ describe('Mozilla json schema parser', () => {
           type: "password",
           name: "password",
         }),
-      ]]
+      ])]
     };
     expect(schema).toEqual(expectedSchema);
     expect(defaultValues).toEqual({

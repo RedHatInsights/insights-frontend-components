@@ -8,7 +8,7 @@ export const simpleSchemaResult = {
         dataType: 'string',
         component: 'text-field',
         type: 'text',
-        autofocus: true,
+        autoFocus: true,
         isRequired: true,
         validate: [{
             type: 'required-validator'
@@ -24,7 +24,7 @@ export const simpleSchemaResult = {
             type: 'required-validator'
         }],
         type: 'text',
-        autofocus: false
+        autoFocus: false
     }, {
         name: 'age',
         dataType: 'integer',
@@ -33,7 +33,7 @@ export const simpleSchemaResult = {
         description: '(earthian year)',
         component: 'text-field',
         type: 'number',
-        autofocus: false,
+        autoFocus: false,
         validate: []
     }, {
         name: 'bio',
@@ -41,7 +41,7 @@ export const simpleSchemaResult = {
         component: 'textarea-field',
         label: 'Bio',
         title: 'Bio',
-        autofocus: false,
+        autoFocus: false,
         validate: [],
         type: 'string'
     }, {
@@ -51,7 +51,7 @@ export const simpleSchemaResult = {
         dataType: 'string',
         component: 'text-field',
         type: 'password',
-        autofocus: false,
+        autoFocus: false,
         helperText: 'Hint: Make it strong!',
         validate: [{
             type: 'min-length-validator',
@@ -62,7 +62,7 @@ export const simpleSchemaResult = {
         dataType: 'string',
         label: 'Telephone',
         title: 'Telephone',
-        autofocus: false,
+        autoFocus: false,
         component: 'text-field',
         type: 'tel',
         validate: [{
@@ -77,7 +77,7 @@ export const nestedSchemaResult = {
     fields: [{
         name: 'title',
         dataType: 'string',
-        autofocus: false,
+        autoFocus: false,
         isRequired: true,
         validate: [{
             type: 'required-validator'
@@ -87,6 +87,9 @@ export const nestedSchemaResult = {
         component: 'text-field',
         type: 'text'
     }, {
+        itemDefault: {
+            done: false
+        },
         component: 'field-array',
         validate: [],
         title: 'Tasks',
@@ -94,6 +97,7 @@ export const nestedSchemaResult = {
         fields: [{
             dataType: 'string',
             name: 'tasks.title',
+            initialKey: 'title',
             label: 'Title',
             title: 'Title',
             type: 'text',
@@ -103,9 +107,10 @@ export const nestedSchemaResult = {
             validate: [{
                 type: 'required-validator'
             }],
-            autofocus: false
+            autoFocus: false
         }, {
             name: 'tasks.details',
+            initialKey: 'details',
             dataType: 'string',
             label: 'Task details',
             title: 'Task details',
@@ -113,16 +118,17 @@ export const nestedSchemaResult = {
             component: 'textarea-field',
             type: 'string',
             validate: [],
-            autofocus: false
+            autoFocus: false
         }, {
             name: 'tasks.done',
+            initialKey: 'done',
             dataType: 'boolean',
             label: 'Done?',
             title: 'Done?',
             default: false,
             component: 'checkbox-field',
             type: 'checkbox',
-            autofocus: false,
+            autoFocus: false,
             validate: []
         }]
     }]
@@ -133,19 +139,23 @@ export const arraySchemaResult = {
         title: 'A list of strings',
         key: 'listOfStrings',
         component: 'field-array',
+        itemDefault: 'bazinga',
         validate: [],
         fields: [{
             component: 'text-field',
             dataType: 'string',
             type: 'text',
             validate: [],
+            initialKey: 'items',
             name: 'listOfStrings.items',
-            default: 'bazinga',
-            autofocus: false
+            default: [ 'bazinga' ],
+            autoFocus: false
         }]
     }, {
         key: 'multipleChoicesList',
         title: 'A multiple choices list',
+        name: 'multipleChoicesList',
+        label: 'A multiple choices list',
         component: 'checkbox-field',
         dataType: 'string',
         validate: [],
@@ -197,12 +207,13 @@ export const arraySchemaResult = {
             validate: [],
             component: 'field-array',
             fields: [{
+                initialKey: 'items',
                 dataType: 'number',
                 label: 'Additional item',
                 component: 'text-field',
                 type: 'number',
                 validate: [],
-                autofocus: false,
+                autoFocus: false,
                 name: 'fixedItemsList.additionalItems.items',
                 title: 'Additional item'
             }]
@@ -216,18 +227,24 @@ export const arraySchemaResult = {
             treshold: 3
         }],
         fields: [{
+            label: 'name',
+            initialKey: 'name',
             name: 'minItemsList.name',
             dataType: 'string',
             default: 'Default name',
             component: 'text-field',
             type: 'text',
             validate: [],
-            autofocus: false
-        }]
+            autoFocus: false
+        }],
+        itemDefault: {
+            name: 'Default name'
+        }
     }, {
         key: 'defaultsAndMinItems',
         component: 'field-array',
         title: 'List and item level defaults',
+        itemDefault: 'unidentified',
         validate: [{
             type: 'min-items-validator',
             treshold: 5
@@ -237,12 +254,14 @@ export const arraySchemaResult = {
             component: 'text-field',
             type: 'text',
             validate: [],
+            initialKey: 'items',
             name: 'defaultsAndMinItems.items',
-            default: 'unidentified',
-            autofocus: false
+            default: [ 'unidentified' ],
+            autoFocus: false
         }]
     }, {
         key: 'nestedList',
+        name: 'nestedList',
         title: 'Nested list',
         component: 'field-array',
         fields: [{
@@ -255,9 +274,10 @@ export const arraySchemaResult = {
                 component: 'text-field',
                 validate: [],
                 type: 'text',
+                initialKey: 'items',
                 name: 'nestedList.items',
                 default: 'lorem ipsum',
-                autofocus: false
+                autoFocus: false
             }]
         }]
     }, {
@@ -270,10 +290,12 @@ export const arraySchemaResult = {
             component: 'text-field',
             type: 'text',
             validate: [],
+            initialKey: 'items',
             name: 'unorderable.items',
-            default: 'lorem ipsum',
-            autofocus: false
-        }]
+            default: [ 'lorem ipsum' ],
+            autoFocus: false
+        }],
+        itemDefault: 'lorem ipsum'
     }, {
         key: 'unremovable',
         title: 'Unremovable items',
@@ -285,9 +307,11 @@ export const arraySchemaResult = {
             type: 'text',
             validate: [],
             name: 'unremovable.items',
-            default: 'lorem ipsum',
-            autofocus: false
-        }]
+            initialKey: 'items',
+            default: [ 'lorem ipsum' ],
+            autoFocus: false
+        }],
+        itemDefault: 'lorem ipsum'
     }, {
         key: 'noToolbar',
         title: 'No add, remove and order buttons',
@@ -299,9 +323,11 @@ export const arraySchemaResult = {
             type: 'text',
             validate: [],
             name: 'noToolbar.items',
-            default: 'lorem ipsum',
-            autofocus: false
-        }]
+            initialKey: 'items',
+            default: [ 'lorem ipsum' ],
+            autoFocus: false
+        }],
+        itemDefault: 'lorem ipsum'
     }, {
         key: 'fixedNoToolbar',
         title: 'Fixed array without buttons',
@@ -332,8 +358,9 @@ export const arraySchemaResult = {
                 component: 'text-field',
                 label: 'A string',
                 title: 'A string',
+                initialKey: 'items',
                 name: 'fixedNoToolbar.additionalItems.items',
-                autofocus: false,
+                autoFocus: false,
                 default: 'lorem ipsum',
                 type: 'text',
                 validate: []
@@ -352,10 +379,10 @@ export const numbersSchemaResult = {
         label: 'Number',
         title: 'Number',
         validate: [],
-        autofocus: false
+        autoFocus: false
     }, {
         name: 'integer',
-        autofocus: false,
+        autoFocus: false,
         component: 'text-field',
         dataType: 'integer',
         type: 'number',
@@ -367,7 +394,7 @@ export const numbersSchemaResult = {
         dataType: 'number',
         label: 'Number enum',
         title: 'Number enum',
-        autofocus: false,
+        autoFocus: false,
         component: 'select-field',
         type: 'number',
         options: [{
@@ -388,7 +415,7 @@ export const numbersSchemaResult = {
         label: 'Number enum',
         title: 'Number enum',
         dataType: 'number',
-        autofocus: false,
+        autoFocus: false,
         options: [{
             label: 1,
             value: 1
@@ -417,7 +444,7 @@ export const numbersSchemaResult = {
         }],
         component: 'text-field',
         type: 'range',
-        autofocus: false
+        autoFocus: false
     }, {
         name: 'integerRangeSteps',
         dataType: 'integer',
@@ -433,36 +460,40 @@ export const numbersSchemaResult = {
         }],
         component: 'text-field',
         type: 'range',
-        autofocus: false
+        autoFocus: false
     }]
 };
 
 export const widgetsExpectedResult = {
     title: 'Widgets',
     fields: [{
-        autofocus: false,
+        autoFocus: false,
         name: 'stringFormats',
         validate: [],
         key: 'stringFormats',
         title: 'String formats',
         component: 'sub-form',
         fields: [{
+            initialKey: 'email',
             name: 'stringFormats.email',
             component: 'text-field',
             type: 'email',
+            label: 'email',
             dataType: 'string',
             validate: [],
-            autofocus: false
+            autoFocus: false
         }, {
             name: 'stringFormats.uri',
+            label: 'uri',
+            initialKey: 'uri',
             component: 'text-field',
             type: 'uri',
             dataType: 'string',
             validate: [],
-            autofocus: false
+            autoFocus: false
         }]
     }, {
-        autofocus: false,
+        autoFocus: false,
         name: 'boolean',
         title: 'Boolean field',
         validate: [],
@@ -470,28 +501,38 @@ export const widgetsExpectedResult = {
         component: 'sub-form',
         fields: [{
             name: 'boolean.default',
+            initialKey: 'default',
             title: 'checkbox (default)',
             label: 'checkbox (default)',
             validate: [],
-            autofocus: false,
+            autoFocus: false,
             description: 'This is the checkbox-description',
             component: 'checkbox-field',
             type: 'checkbox',
             dataType: 'boolean'
         }, {
             name: 'boolean.radio',
+            initialKey: 'radio',
             title: 'radio buttons',
             label: 'radio buttons',
             validate: [],
-            autofocus: false,
+            autoFocus: false,
             description: 'This is the radio-description',
             component: 'radio-field',
             type: 'radio',
-            dataType: 'boolean'
+            dataType: 'boolean',
+            options: [{
+                label: 'Yes',
+                value: true
+            }, {
+                label: 'No',
+                value: false
+            }]
         }, {
-            autofocus: false,
+            autoFocus: false,
             validate: [],
             name: 'boolean.select',
+            initialKey: 'select',
             title: 'select box',
             label: 'select box',
             component: 'select-field',
@@ -509,25 +550,27 @@ export const widgetsExpectedResult = {
             }]
         }]
     }, {
-        autofocus: false,
+        autoFocus: false,
         name: 'string',
         title: 'String field',
         validate: [],
         component: 'sub-form',
         key: 'string',
         fields: [{
-            autofocus: false,
+            autoFocus: false,
             validate: [],
             name: 'string.default',
+            initialKey: 'default',
             type: 'text',
             dataType: 'string',
             component: 'text-field',
             title: 'text input (default)',
             label: 'text input (default)'
         }, {
-            autofocus: false,
+            autoFocus: false,
             validate: [],
             name: 'string.textarea',
+            initialKey: 'textarea',
             rows: 5,
             type: 'string',
             dataType: 'string',
@@ -535,9 +578,10 @@ export const widgetsExpectedResult = {
             title: 'textarea',
             label: 'textarea'
         }, {
-            autofocus: false,
+            autoFocus: false,
             validate: [],
             name: 'string.color',
+            initialKey: 'color',
             type: 'color',
             dataType: 'string',
             component: 'text-field',
@@ -546,15 +590,14 @@ export const widgetsExpectedResult = {
             default: '#151ce6'
         }]
     }, {
-        autofocus: false,
-        validate: [],
+        autoFocus: false,
         name: 'secret',
         type: 'hidden',
         dataType: 'string',
         component: 'text-field',
         default: 'I\'m a hidden string.'
     }, {
-        autofocus: false,
+        autoFocus: false,
         validate: [],
         name: 'disabled',
         type: 'text',
@@ -565,7 +608,7 @@ export const widgetsExpectedResult = {
         default: 'I am disabled.',
         isDisabled: true
     }, {
-        autofocus: false,
+        autoFocus: false,
         validate: [],
         name: 'readonly',
         type: 'text',
@@ -576,7 +619,7 @@ export const widgetsExpectedResult = {
         default: 'I am read-only.',
         isReadOnly: true
     }, {
-        autofocus: false,
+        autoFocus: false,
         validate: [],
         name: 'widgetOptions',
         type: 'text',
@@ -586,7 +629,7 @@ export const widgetsExpectedResult = {
         label: 'Custom widget with options',
         default: 'I am yellow'
     }, {
-        autofocus: false,
+        autoFocus: false,
         validate: [],
         name: 'selectWidgetOptions',
         type: 'string',

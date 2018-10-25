@@ -83,7 +83,7 @@ export const lauraSchema2 = {
         verify_ssl: { title: 'Verify SSL', type: 'boolean', default: false }, // eslint-disable-line camelcase
         user: { title: 'User Name', type: 'string', default: '' },
         token: { title: 'Token', type: 'string', default: '' },
-        password: { title: 'Password', type: 'string', minlength: 6 }
+        password: { title: 'Password', type: 'string', minLength: 6 }
     },
     required: [ 'name', 'url' ]
 };
@@ -991,20 +991,6 @@ export const referencesSchema = {
                 'city',
                 'state'
             ]
-        },
-        node: {
-            type: 'object',
-            properties: {
-                name: {
-                    type: 'string'
-                },
-                children: {
-                    type: 'array',
-                    items: {
-                        $ref: '#/definitions/node'
-                    }
-                }
-            }
         }
     },
     type: 'object',
@@ -1016,10 +1002,6 @@ export const referencesSchema = {
         shipping_address: { // eslint-disable-line camelcase
             title: 'Shipping address',
             $ref: '#/definitions/address'
-        },
-        tree: {
-            title: 'Recursive references',
-            $ref: '#/definitions/node'
         }
     }
 };
