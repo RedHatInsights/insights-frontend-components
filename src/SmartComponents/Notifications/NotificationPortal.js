@@ -6,14 +6,14 @@ import { removeNotification } from '../../redux/actions/notifications';
 import Notification from './Notification';
 import './notifications.scss';
 
-const Portal = ({ notifications, removeNotification }) =>
+const Portal = ({ notifications, removeNotification, rootId }) =>
     (!notifications || Array.isArray(notifications) && notifications.length === 0)
         ? null
         : createPortal((
             <div className="notifications-portal">
                 {  notifications.map(props => <Notification onDismiss={ removeNotification } key={ props.id } { ...props } />) }
             </div>
-        ), document.getElementById('main') || document.body);
+        ), document.getElementById(rootId) || document.body);
 
 Portal.propTypes = {
     notifications: PropTypes.arrayOf(PropTypes.shape({
