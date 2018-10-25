@@ -14,7 +14,7 @@
   ],
   "dependencies": {
     "@patternfly/react-icons": "^2.5.2",
-    "@patternfly/react-core": "^1.24.2",
+    "@patternfly/react-core": "^1.27.0",
     "bootstrap-sass": "^3.3.7",
     "c3": "^0.6.7",
     "classnames": "^2.2.5",
