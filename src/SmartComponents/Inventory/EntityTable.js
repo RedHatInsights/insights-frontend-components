@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import routerParams from '../../Utilities/RouterParams';
-import { selectEntity, setSort } from '../../redux/actions/inventory';
+import { selectEntity, setSort, detailSelect } from '../../redux/actions/inventory';
 import { connect } from 'react-redux';
 import { Table } from '../../PresentationalComponents/Table';
 import keyBy from 'lodash/keyBy';
@@ -23,8 +23,9 @@ class EntityTable extends React.Component {
     }
 
     onRowClick(_event, key, application) {
-        const { match: { path }, history } = this.props;
+        const { match: { path }, history, onDetailSelect } = this.props;
         history.push(`${path}/${key}/${application ? application : ''}`);
+        onDetailSelect && onDetailSelect(application);
     }
 
     onItemSelect(_event, key, checked) {
@@ -128,20 +129,23 @@ EntityTable.propTypes = {
     match: PropTypes.any,
     loaded: PropTypes.bool,
     entities: PropTypes.array,
-    selectEntity: PropTypes.func
+    selectEntity: PropTypes.func,
+    onDetailSelect: PropTypes.func
 };
 
 EntityTable.defaultProps = {
     loaded: false,
     columns: [],
     entities: [],
-    selectEntity: () => undefined
+    selectEntity: () => undefined,
+    onDetailSelect: () => undefined
 };
 
 function mapDispatchToProps(dispatch) {
     return {
         selectEntity: (id, isSelected) => dispatch(selectEntity(id, isSelected)),
-        setSort: (id, isSelected) => dispatch(setSort(id, isSelected))
+        setSort: (id, isSelected) => dispatch(setSort(id, isSelected)),
+        onDetailSelect: (name) => dispatch(detailSelect(name))
     };
 }
 

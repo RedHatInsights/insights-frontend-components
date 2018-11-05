@@ -1,45 +1,58 @@
-export const INVENTORY_API_BASE = '/entities';
+export const INVENTORY_API_BASE = '/hosts';
 
 /* eslint camelcase: off */
 function buildMock(i) {
     return {
-        id: i,
+        id: `${i}`,
         canonical_facts: {
-            'machine-id': `${i}c1497de-0ec7-43bb-a8a6-35cabd59e0bf`
+            machine_id: `${i}c1497de-0ec7-43bb-a8a6-35cabd59e0bf`
         },
         account: '000001',
-        facts: {
-            release: 'Red Hat Enterprise Linux Server release 7.5 (Maipo)',
-            rhel_version: '7.5',
-            host_system_id: '6c1497de-0ec7-43bb-a8a6-35cabd59e0bf',
-            bios_information: {
-                vendor: 'SeaBIOS',
-                version: '1.10.2-3.el7_4.1',
-                release_date: '04/01/2014',
-                bios_revision: '0.0'
-            },
-            system_information: {
-                family: 'Red Hat Enterprise Linux',
-                manufacturer: 'Red Hat',
-                product_name: 'RHEV Hypervisor',
-                virtual_machine: true
-            },
-            listening_processes: [],
-            timezone_information: {
-                timezone: 'EDT',
-                utcoffset: '-14400'
+        facts: [
+            {
+                facts: {
+                    hostname: `server0${i}.redhat.com`,
+                    machine_id: `${i}c1497de-0ec7-43bb-a8a6-35cabd59e0bf`,
+                    release: 'Red Hat Enterprise Linux Server release 7.5 (Maipo)',
+                    rhel_version: '7.5',
+                    host_system_id: '6c1497de-0ec7-43bb-a8a6-35cabd59e0bf',
+                    bios_information: {
+                        vendor: 'SeaBIOS',
+                        version: '1.10.2-3.el7_4.1',
+                        release_date: '04/01/2014',
+                        bios_revision: '0.0'
+                    },
+                    system_information: {
+                        family: 'Red Hat Enterprise Linux',
+                        manufacturer: 'Red Hat',
+                        product_name: 'RHEV Hypervisor',
+                        virtual_machine: true
+                    },
+                    listening_processes: [],
+                    timezone_information: {
+                        timezone: 'EDT',
+                        utcoffset: '-0400'
+                    }
+                },
+                namespace: 'insights'
             }
-        },
-        display_name: `server0${i}.redhat.com`
+        ],
+        display_name: 'Red Hat Enterprise Linux 8'
     };
 }
 
 function mockData(id) {
     const mocked = Array.from({ length: 5 }).map((_v, i) => buildMock(i));
-    return id !== undefined ? mocked[0] : mocked;
+    return id !== undefined ? {
+        count: 1,
+        results: [ mocked[id] ]
+    } : {
+        count: 5,
+        results: mocked
+    };
 }
 
-export function getEntities () {
+export function getEntities() {
     return fetch(INVENTORY_API_BASE).then(r => {
         if (r.ok) {
             return r.json();
@@ -54,7 +67,7 @@ export function getEntities () {
     });
 }
 
-export function getEntity (id) {
+export function getEntity(id) {
     return fetch(`${INVENTORY_API_BASE}/${id}`).then(r => {
         if (r.ok) {
             return r.json();
