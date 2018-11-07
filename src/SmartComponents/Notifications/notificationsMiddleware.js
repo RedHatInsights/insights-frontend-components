@@ -33,20 +33,20 @@ const createNotificationsMiddleware = (options = {}) => {
 
     return ({ dispatch }) => next => action => {
         const { meta, type } = action;
-        if (meta && meta.flashMessage) {
-            const { flashMessage } = meta;
-            if (matchPending(type) && flashMessage.pending) {
-                dispatch(addNotification({ ...defaultNotificationOptions, ...flashMessage.pending }));
-            } else if (matchFulfilled(type) && flashMessage.fulfilled) {
-                dispatch(addNotification({ ...defaultNotificationOptions, ...flashMessage.fulfilled }));
-            } else if (matchRejected(type) && flashMessage.rejected) {
-                dispatch(addNotification({ ...defaultNotificationOptions, ...flashMessage.rejected }));
+        if (meta && meta.notifications) {
+            const { notifications } = meta;
+            if (matchPending(type) && notifications.pending) {
+                dispatch(addNotification({ ...defaultNotificationOptions, ...notifications.pending }));
+            } else if (matchFulfilled(type) && notifications.fulfilled) {
+                dispatch(addNotification({ ...defaultNotificationOptions, ...notifications.fulfilled }));
+            } else if (matchRejected(type) && notifications.rejected) {
+                dispatch(addNotification({ ...defaultNotificationOptions, ...notifications.rejected }));
             }
         }
 
         if (shouldDispatchDefaultError({
             isRejected: matchRejected(type),
-            hasCustomNotification: meta && meta.flashMessage && meta.flashMessage.rejected,
+            hasCustomNotification: meta && meta.notifications && meta.notifications.rejected,
             noErrorOverride: meta && meta.noError,
             dispatchDefaultFailure: middlewareOptions.dispatchDefaultFailure
         })) {
