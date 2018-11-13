@@ -61,7 +61,7 @@ class EntityDetails extends Component {
                                 Hostname:
                             </span>
                             <span>
-                                { this.getFact('facts[0].facts.hostname') }
+                                { this.getFact('facts.inventory.hostname') }
                             </span>
                         </div>
                         <div>
@@ -77,7 +77,7 @@ class EntityDetails extends Component {
                                 System:
                             </span>
                             <span>
-                                { this.getFact('facts[0].facts.release') }
+                                { this.getFact('facts.inventory.release') }
                             </span>
                         </div>
                     </GridItem>
@@ -87,7 +87,7 @@ class EntityDetails extends Component {
                                 Last Check-in:
                             </span>
                             <span>
-                                { this.getFact('facts[0].facts.checked') }
+                                { (new Date(this.getFact('updated'))).toLocaleString() }
                             </span>
                         </div>
                         <div>
@@ -95,7 +95,7 @@ class EntityDetails extends Component {
                                 Registered:
                             </span>
                             <span>
-                                { this.getFact('facts[0].facts.registered') }
+                                { (new Date(this.getFact('created'))).toLocaleString() }
                             </span>
                         </div>
                     </GridItem>

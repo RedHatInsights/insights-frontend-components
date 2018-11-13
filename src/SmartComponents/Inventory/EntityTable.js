@@ -24,7 +24,8 @@ class EntityTable extends React.Component {
 
     onRowClick(_event, key, application) {
         const { match: { path }, history, onDetailSelect } = this.props;
-        history.push(`${path}/${key}/${application ? application : ''}`);
+        const dilimeter = path.substr(-1, 1) === '/' ? '' : '/';
+        history.push(`${path}${dilimeter}${key}/${application ? application : ''}`);
         onDetailSelect && onDetailSelect(application);
     }
 
@@ -44,17 +45,21 @@ class EntityTable extends React.Component {
         }
     }
 
-    renderCol(col, key, composed) {
+    renderCol(col, key, composed, isTime) {
         if (composed) {
             return (
                 <div className="ins-composed-col">
                     { composed.map(path => (
-                        <div key={ path }>
+                        <div key={ path } widget="col" data-key={ path }>
                             { get(col, path, 'unknown') || '\u00A0' }
                         </div>
                     )) }
                 </div>
             );
+        }
+
+        if (isTime) {
+            return (new Date(get(col, key, 'unknown'))).toLocaleString();
         }
 
         return get(col, key, 'unknown');
@@ -93,7 +98,7 @@ class EntityTable extends React.Component {
             id: oneItem.id,
             selected: oneItem.selected,
             cells: [
-                ...columns.map(oneCell => this.renderCol(oneItem, oneCell.key, oneCell.composed)),
+                ...columns.map(oneCell => this.renderCol(oneItem, oneCell.key, oneCell.composed, oneCell.isTime)),
                 this.healthColumn(oneItem),
                 this.actionsColumn(oneItem)
             ]

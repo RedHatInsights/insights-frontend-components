@@ -8,7 +8,7 @@ export const defaultState = { loaded: false };
 
 const defaultColumns = [
     { key: 'display_name', title: 'Name', composed: [ 'facts[0].facts.hostname', 'display_name' ]},
-    { key: 'facts.last_seen', title: 'Last Seen' }
+    { key: 'updated', title: 'Last Seen', isTime: true }
 ];
 
 function entitiesPending(state) {

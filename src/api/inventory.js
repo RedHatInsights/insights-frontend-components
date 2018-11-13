@@ -52,15 +52,26 @@ function mockData(id) {
     };
 }
 
+const mapData = ({ results, ...data }) => ({
+    ...data,
+    results: results.map(({ facts, ...oneResult }) => ({
+        ...oneResult,
+        facts: facts.reduce((acc, curr) => ({
+            ...acc,
+            [curr.namespace]: curr.facts
+        }), {})
+    }))
+});
+
 export function getEntities() {
     return fetch(INVENTORY_API_BASE).then(r => {
         if (r.ok) {
-            return r.json();
+            return r.json().then(mapData);
         }
 
         // TODO: remove me
         if (r.status === 404) {
-            return mockData();
+            return mapData(mockData());
         }
 
         throw new Error(`Unexpected response code ${r.status}`);
@@ -70,12 +81,12 @@ export function getEntities() {
 export function getEntity(id) {
     return fetch(`${INVENTORY_API_BASE}/${id}`).then(r => {
         if (r.ok) {
-            return r.json();
+            return r.json().then(mapData);
         }
 
         // TODO: remove me
         if (r.status === 404) {
-            return mockData(id);
+            return mapData(mockData(id));
         }
 
         throw new Error(`Unexpected response code ${r.status}`);
