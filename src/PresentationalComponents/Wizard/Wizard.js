@@ -50,6 +50,7 @@ class Wizard extends Component {
 
         return (
             <Modal
+                { ...this.props }
                 isLarge = { this.props.isLarge }
                 title= { this.props.title }
                 className= { this.props.className }
