@@ -35,21 +35,15 @@ class Wizard extends Component {
 
     render() {
 
-        if (this.props.steps !== this.props.content.length) {
-            // eslint-disable-next-line
-            console.error(`[WIZARD] You specified ${this.props.steps} steps, but only passed content for ${this.props.content.length} steps`);
-        }
-
-        let renderModalActions =  [
+        const renderModalActions =  [
             <Button key="cancel" variant="secondary" onClick={ this.handleOnClose }>
             Cancel
             </Button>,
             // Conditionally render 'previous' button if not on first page
-            this.state.currentStep > 0
-                ? <Button key="previous" variant="secondary" onClick={ this.handlePreviousModalStep }> Previous </Button>
-                : null,
+            this.state.currentStep !== 0 &&
+                <Button key="previous" variant="secondary" onClick={ this.handlePreviousModalStep }> Previous </Button>,
             // Conditionally render 'confirm' button if on last page
-            this.state.currentStep < this.props.steps - 1
+            this.state.currentStep < this.props.content.length - 1
                 ? <Button key="continue" variant="primary" onClick={ this.handleNextModalStep }> Continue </Button>
                 : <Button key="confirm" variant="primary" onClick={ this.handleOnClose }> Confirm </Button>
         ];
@@ -74,7 +68,6 @@ Wizard.propTypes = {
     className: PropTypes.string,
     isOpen: PropTypes.any,
     handleModalToggle: PropTypes.any,
-    steps: PropTypes.number,
     content: PropTypes.array
 };
 
