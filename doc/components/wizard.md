@@ -58,9 +58,6 @@ class YourCmp extends React.Component {
                     className='ins-c-plan-modal'
                     handleModalToggle = { this.handleModalToggle }
                     isOpen= { isModalOpen }
-
-                    // NOTE: if steps !== content.length, console will throw error
-                    steps= { 3 }
                     content = { ModalStepContent }
                 />
             </React.Fragment>
@@ -80,7 +77,6 @@ Wizard
     className: PropTypes.string,
     isOpen: PropTypes.any,
     handleModalToggle: PropTypes.any,
-    steps: PropTypes.number,
     content: PropTypes.array
 };
 ```
