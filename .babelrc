@@ -2,7 +2,7 @@
     "presets": ["./.babelrc.js"],
     "plugins": [
         "add-react-displayname", 
-        "@babel/plugin-transform-react-display-name"
+        "babel-plugin-transform-react-display-name"
     ]
 }
   

@@ -55,7 +55,6 @@
     "fontAwesome": "node_modules/font-awesome-sass/assets/stylesheets"
   },
   "devDependencies": {
-    "@babel/plugin-transform-react-display-name": "^7.0.0",
     "@khala/commit-analyzer-wildcard": "^1.0.2",
     "@patternfly/patternfly-next": "^1.0.56",
     "@semantic-release/git": "^6.0.2",
@@ -67,6 +66,7 @@
     "babel-plugin-dual-import": "^1.2.1",
     "babel-plugin-lodash": "^3.3.2",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-react-display-name": "^6.25.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
