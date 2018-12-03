@@ -13,6 +13,7 @@ class Wizard extends Component {
         this.handlePreviousModalStep = this.handlePreviousModalStep.bind(this);
         this.handleNextModalStep = this.handleNextModalStep.bind(this);
         this.handleOnClose = this.handleOnClose.bind(this);
+        this.handleOnSubmit = this.handleOnSubmit.bind(this);
     };
 
     handleNextModalStep() {
@@ -30,12 +31,20 @@ class Wizard extends Component {
     // On modal close, reset currentStep back to the initial step, the call modalToggle(PF)
     handleOnClose() {
         this.setState({ currentStep: 0 });
-        this.props.handleModalToggle && this.props.handleModalToggle();
+        console.log('Closed');
+        this.props.handleOnClose && this.props.handleOnClose();
+    }
+
+    // On modal submit, reset currentStep back to the initial step, the call modalToggle(PF)
+    handleOnSubmit() {
+        this.setState({ currentStep: 0 });
+        console.log('Submitted');
+        this.props.handleOnSubmit && this.props.handleOnSubmit();
     }
 
     render() {
 
-        const { isLarge, title, className, isOpen, handleModalToggle, ...props } = this.props;
+        const { isLarge, title, className, isOpen, handleOnClose, handleOnSubmit, ...props } = this.props;
 
         const renderModalActions =  [
             <Button key="cancel" variant="secondary" onClick={ this.handleOnClose }>
@@ -47,7 +56,7 @@ class Wizard extends Component {
             // Conditionally render 'confirm' button if on last page
             this.state.currentStep < this.props.content.length - 1
                 ? <Button key="continue" variant="primary" onClick={ this.handleNextModalStep }> Continue </Button>
-                : <Button key="confirm" variant="primary" onClick={ this.handleOnClose }> Confirm </Button>
+                : <Button key="confirm" variant="primary" onClick={ this.handleOnSubmit }> Confirm </Button>
         ];
 
         return (
@@ -70,7 +79,8 @@ Wizard.propTypes = {
     title: PropTypes.string,
     className: PropTypes.string,
     isOpen: PropTypes.any,
-    handleModalToggle: PropTypes.any,
+    onClose: PropTypes.any,
+    onSubmit: PropTypes.any,
     content: PropTypes.array
 };
 
