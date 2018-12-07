@@ -11,10 +11,9 @@ import './InventoryList.scss';
 class InventoryList extends React.Component {
     constructor(props) {
         super(props);
-        this.filterEntities = this.filterEntities.bind(this);
     }
 
-    filterEntities(filterBy) {
+    filterEntities = (filterBy) => {
         this.props.filterEntities && this.props.filterEntities('display_name', filterBy);
     }
 

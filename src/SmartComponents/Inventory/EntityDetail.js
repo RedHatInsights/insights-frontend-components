@@ -14,16 +14,14 @@ class EntityDetails extends Component {
         this.state = {
             actionCollapsed: true
         };
-        this.getFact = this.getFact.bind(this);
-        this.toggleActions = this.toggleActions.bind(this);
     }
 
-    getFact(path) {
+    getFact = (path) => {
         const { entity } = this.props;
         return get(entity, path, 'unknown');
     }
 
-    toggleActions(_event, collapsed) {
+    toggleActions = (_event, collapsed) => {
         this.setState({
             actionCollapsed: collapsed
         });

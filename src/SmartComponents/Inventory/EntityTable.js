@@ -13,27 +13,23 @@ import get from 'lodash/get';
 class EntityTable extends React.Component {
     constructor(props) {
         super(props);
-        this.onRowClick = this.onRowClick.bind(this);
-        this.onItemSelect = this.onItemSelect.bind(this);
-        this.onSort = this.onSort.bind(this);
-        this.healthColumn = this.healthColumn.bind(this);
         this.state = {
             sortBy: {}
         };
     }
 
-    onRowClick(_event, key, application) {
-        const { match: { path }, history, onDetailSelect } = this.props;
-        const dilimeter = path.substr(-1, 1) === '/' ? '' : '/';
-        history.push(`${path}${dilimeter}${key}/${application ? application : ''}`);
+    onRowClick = (_event, key, application) => {
+        const { match: { url }, history, onDetailSelect } = this.props;
+        const dilimeter = url.substr(-1, 1) === '/' ? '' : '/';
+        history.push(`${url}${dilimeter}${key}/${application ? application : ''}`);
         onDetailSelect && onDetailSelect(application);
     }
 
-    onItemSelect(_event, key, checked) {
+    onItemSelect = (_event, key, checked) => {
         this.props.selectEntity && this.props.selectEntity(key, checked);
     }
 
-    onSort(_event, key, direction) {
+    onSort = (_event, key, direction) => {
         if (key !== 'action' && key !== 'health') {
             this.props.setSort && this.props.setSort(key, direction);
             this.setState({
@@ -45,7 +41,7 @@ class EntityTable extends React.Component {
         }
     }
 
-    renderCol(col, key, composed, isTime) {
+    renderCol = (col, key, composed, isTime) => {
         if (composed) {
             return (
                 <div className="ins-composed-col">
@@ -65,11 +61,11 @@ class EntityTable extends React.Component {
         return get(col, key, 'unknown');
     }
 
-    onHealthClicked(event, _clickedOn, health, item) {
+    onHealthClicked = (event, _clickedOn, health, item) => {
         this.onRowClick(event, item.id, health.redirect);
     }
 
-    healthColumn(oneItem) {
+    healthColumn = (oneItem) => {
         return {
             title: <HealthStatus
                 items={ oneItem.health }
@@ -83,7 +79,7 @@ class EntityTable extends React.Component {
         };
     }
 
-    actionsColumn(oneItem) {
+    actionsColumn = (oneItem) => {
         return {
             title: <TableActions item={ { id: oneItem.id } } />,
             className: 'pf-c-table__action pf-m-shrink',

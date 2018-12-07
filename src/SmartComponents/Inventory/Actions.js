@@ -5,18 +5,16 @@ import { Dropdown, DropdownItem, DropdownPosition } from '../../PresentationalCo
 class Actions extends React.Component {
     constructor(props) {
         super(props);
-        this.onToggle = this.onToggle.bind(this);
-        this.onSelect = this.onSelect.bind(this);
         this.state = {
             isCollapsed: true
         };
     }
 
-    onToggle(_event, collapsed) {
+    onToggle = (_event, collapsed) => {
         this.setState({ isCollapsed: collapsed });
     }
 
-    onSelect(event) {
+    onSelect = (event) => {
         event.stopPropagation();
         this.setState({ isCollapsed: true });
     }
