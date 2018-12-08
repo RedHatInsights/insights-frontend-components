@@ -110,7 +110,7 @@ class SomeCmp extends React.Component {
         });
 
         this.setState({
-            InventoryCmp: inventoryConnector().InventoryItem
+            InventoryCmp: inventoryConnector().InventoryDetail
         })
     }
 
@@ -251,7 +251,7 @@ class SomeCmp extends React.Component {
         });
 
         this.setState({
-            InventoryCmp: inventoryConnector().InventoryItem
+            InventoryCmp: inventoryConnector().InventoryDetail
         });
     }
 
@@ -382,7 +382,7 @@ class SomeCmp extends React.Component {
         });
 
         this.setState({
-            InventoryCmp: inventoryConnector().InventoryItem
+            InventoryCmp: inventoryConnector().InventoryDetail
         })
     }
   //...

@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Title, Grid, GridItem, Label } from '@patternfly/react-core';
+import { Title, Grid, GridItem, Label, Dropdown, DropdownPosition, DropdownItem, DropdownToggle } from '@patternfly/react-core';
 import { TimesIcon } from '@patternfly/react-icons';
 import { SyncAltIcon } from '@patternfly/react-icons';
-import { Dropdown, DropdownItem, DropdownPosition } from '../../PresentationalComponents/Dropdown';
 import get from 'lodash/get';
 import { connect } from 'react-redux';
 import ApplicationDetails from './ApplicationDetails';
@@ -21,9 +20,9 @@ class EntityDetails extends Component {
         return get(entity, path, 'unknown');
     }
 
-    toggleActions = (_event, collapsed) => {
+    toggleActions = () => {
         this.setState({
-            actionCollapsed: collapsed
+            actionCollapsed: !this.state.actionCollapsed
         });
     }
     render() {
@@ -44,12 +43,15 @@ class EntityDetails extends Component {
                         <Title size='2xl'>{ entity.display_name }</Title>
                     </GridItem>
                     <GridItem md={ 6 }>
-                        <Dropdown title="Actions"
-                            isCollapsed={ actionCollapsed }
-                            onToggle={ this.toggleActions }
-                            position={ DropdownPosition.right }>
-                            <DropdownItem>Some action</DropdownItem>
-                        </Dropdown>
+                        <Dropdown
+                            onSelect={this.onSelect}
+                            toggle={<DropdownToggle onToggle={this.toggleActions}>Actions</DropdownToggle>}
+                            isOpen={!actionCollapsed}
+                            position={DropdownPosition.right}
+                            dropdownItems={[
+                                <DropdownItem key="1">Some action</DropdownItem>
+                            ]}
+                        />
                     </GridItem>
                 </Grid>
                 <Grid className="ins-entity-facts">

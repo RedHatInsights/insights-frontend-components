@@ -18,10 +18,6 @@ class ApplicationDetails extends Component {
         onDetailSelect && onDetailSelect(item.name);
     }
 
-    componentDidMount() {
-        const { match, history } = this.props;
-    }
-
     render() {
         const { match: { path }, activeApp, items } = this.props;
         const defaultApp = (activeApp && activeApp.appName) || items && items[0] && items[0].name;
