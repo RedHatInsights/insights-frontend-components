@@ -17,14 +17,18 @@ class InventoryList extends React.Component {
         this.props.filterEntities && this.props.filterEntities('display_name', filterBy);
     }
 
-    componentDidMount() {
-        this.props.loadEntities(
+    loadEntities = () => {
+        this.props.loadEntities && this.props.loadEntities(
             this.props.items,
             {
                 prefix: this.props.pathPrefix,
                 base: this.props.apiBase
             }
         );
+    }
+
+    componentDidMount() {
+        this.loadEntities();
     }
 
     render() {
@@ -44,7 +48,7 @@ class InventoryList extends React.Component {
                     </GridItem>
                     <GridItem span={ 1 }>
                         <div className='buttons'>
-                            <Button variant='primary' onClick={ entites }>Refresh</Button>
+                            <Button variant='primary' onClick={ this.loadEntities }>Refresh</Button>
                         </div>
                     </GridItem>
                 </Grid>

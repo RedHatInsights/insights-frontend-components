@@ -88,7 +88,7 @@ class EntityTable extends React.Component {
     }
 
     render() {
-        const { columns, entities, rows, showHealth } = this.props;
+        const { columns, entities, rows, showHealth, loaded } = this.props;
         const filteredData = (entities || rows).filter(oneRow => oneRow.account);
         const data = filteredData.map(oneItem => ({
             id: oneItem.id,
@@ -116,7 +116,7 @@ class EntityTable extends React.Component {
             onRowClick={ this.onRowClick }
             onItemSelect={ this.onItemSelect }
             hasCheckbox
-            rows={ data }
+            rows={ loaded && data }
         />;
     }
 }
