@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Title, Grid, GridItem, Label, Dropdown, DropdownPosition, DropdownItem, DropdownToggle } from '@patternfly/react-core';
 import { TimesIcon } from '@patternfly/react-icons';
-import { SyncAltIcon } from '@patternfly/react-icons';
+import { List } from 'react-content-loader';
 import get from 'lodash/get';
 import { connect } from 'react-redux';
 import ApplicationDetails from './ApplicationDetails';
@@ -31,7 +31,7 @@ class EntityDetails extends Component {
         if (!loaded) {
             return (
                 <div>
-                    <SyncAltIcon/>
+                    <List/>
                 </div>
             );
         }
@@ -44,13 +44,13 @@ class EntityDetails extends Component {
                     </GridItem>
                     <GridItem md={ 6 }>
                         <Dropdown
-                            onSelect={this.onSelect}
-                            toggle={<DropdownToggle onToggle={this.toggleActions}>Actions</DropdownToggle>}
-                            isOpen={isOpen}
-                            position={DropdownPosition.right}
-                            dropdownItems={[
+                            onSelect={ this.onSelect }
+                            toggle={ <DropdownToggle onToggle={ this.toggleActions }>Actions</DropdownToggle> }
+                            isOpen={ isOpen }
+                            position={ DropdownPosition.right }
+                            dropdownItems={ [
                                 <DropdownItem key="1">Some action</DropdownItem>
-                            ]}
+                            ] }
                         />
                     </GridItem>
                 </Grid>

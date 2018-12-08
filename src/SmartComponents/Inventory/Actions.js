@@ -25,14 +25,14 @@ export default class KebabDropdown extends Component {
         const { isOpen } = this.state;
         return (
             <Dropdown
-                onSelect={this.onSelect}
-                toggle={<KebabToggle onToggle={this.onToggle} />}
-                isOpen={isOpen}
-                position={DropdownPosition.right}
+                onSelect={ this.onSelect }
+                toggle={ <KebabToggle onToggle={ this.onToggle } /> }
+                isOpen={ isOpen }
+                position={ DropdownPosition.right }
                 isPlain
-                dropdownItems={[
+                dropdownItems={ [
                     <DropdownItem key="link">First action</DropdownItem>
-                ]}
+                ] }
             />
         );
     }

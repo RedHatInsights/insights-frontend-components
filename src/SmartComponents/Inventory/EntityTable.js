@@ -95,7 +95,7 @@ class EntityTable extends React.Component {
             selected: oneItem.selected,
             cells: [
                 ...columns.map(oneCell => this.renderCol(oneItem, oneCell.key, oneCell.composed, oneCell.isTime)),
-                ...showHealth ? [this.healthColumn(oneItem)] : [],
+                ...showHealth ? [ this.healthColumn(oneItem) ] : [],
                 this.actionsColumn(oneItem)
             ]
         }));
