@@ -4,8 +4,14 @@ import routerParams from '../../Utilities/RouterParams';
 import InventoryList from './InventoryList';
 import InventoryDetail from './InventoryDetail';
 
-const InventoryTable = ({ items = [], pathPrefix = 0, apiBase, ...props }) => (
-    <InventoryList { ...props } items={ items } pathPrefix={ pathPrefix } apiBase={ apiBase } />
+const InventoryTable = ({ items = [], pathPrefix = 0, apiBase, showHealth, ...props }) => (
+    <InventoryList
+        { ...props }
+        items={ items }
+        pathPrefix={ pathPrefix }
+        apiBase={ apiBase }
+        showHealth={ showHealth }
+    />
 );
 
 const InventoryItem = ({ root, pathPrefix = 0, apiBase, ...props }) => (

@@ -28,6 +28,7 @@ class InventoryList extends React.Component {
     }
 
     render() {
+        const { showHealth, entites } = this.props;
         return (
             <React.Fragment>
                 <Grid guttter="sm" className="ins-inventory-list">
@@ -39,11 +40,11 @@ class InventoryList extends React.Component {
                         />
                     </GridItem>
                     <GridItem span={ 12 }>
-                        <InventoryEntityTable />
+                        <InventoryEntityTable showHealth={ showHealth }/>
                     </GridItem>
                     <GridItem span={ 1 }>
                         <div className='buttons'>
-                            <Button variant='primary' onClick={ this.props.entites }>Refresh</Button>
+                            <Button variant='primary' onClick={ entites }>Refresh</Button>
                         </div>
                     </GridItem>
                 </Grid>
@@ -57,6 +58,7 @@ InventoryList.propTypes = {
     loadEntities: PropTypes.func,
     pathPrefix: PropTypes.number,
     apiBase: PropTypes.string,
+    showHealth: PropTypes.bool,
     items: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.string),
         PropTypes.shape({

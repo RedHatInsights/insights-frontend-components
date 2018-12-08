@@ -11,7 +11,7 @@ class EntityDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            actionCollapsed: true
+            isOpen: false
         };
     }
 
@@ -20,14 +20,14 @@ class EntityDetails extends Component {
         return get(entity, path, 'unknown');
     }
 
-    toggleActions = () => {
+    toggleActions = (collapsed) => {
         this.setState({
-            actionCollapsed: !this.state.actionCollapsed
+            isOpen: collapsed
         });
     }
     render() {
         const { loaded, entity } = this.props;
-        const { actionCollapsed } = this.state;
+        const { isOpen } = this.state;
         if (!loaded) {
             return (
                 <div>
@@ -46,7 +46,7 @@ class EntityDetails extends Component {
                         <Dropdown
                             onSelect={this.onSelect}
                             toggle={<DropdownToggle onToggle={this.toggleActions}>Actions</DropdownToggle>}
-                            isOpen={!actionCollapsed}
+                            isOpen={isOpen}
                             position={DropdownPosition.right}
                             dropdownItems={[
                                 <DropdownItem key="1">Some action</DropdownItem>

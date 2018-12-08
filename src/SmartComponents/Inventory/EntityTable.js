@@ -88,14 +88,14 @@ class EntityTable extends React.Component {
     }
 
     render() {
-        const { columns, entities, rows } = this.props;
+        const { columns, entities, rows, showHealth } = this.props;
         const filteredData = (entities || rows).filter(oneRow => oneRow.account);
         const data = filteredData.map(oneItem => ({
             id: oneItem.id,
             selected: oneItem.selected,
             cells: [
                 ...columns.map(oneCell => this.renderCol(oneItem, oneCell.key, oneCell.composed, oneCell.isTime)),
-                this.healthColumn(oneItem),
+                ...showHealth ? [this.healthColumn(oneItem)] : [],
                 this.actionsColumn(oneItem)
             ]
         }));
@@ -104,10 +104,12 @@ class EntityTable extends React.Component {
             sortBy={ this.state.sortBy }
             header={ columns && {
                 ...mapValues(keyBy(columns, item => item.key), item => item.title),
-                health: {
-                    title: 'Health',
-                    hasSort: false
-                },
+                ...showHealth ? {
+                    health: {
+                        title: 'Health',
+                        hasSort: false
+                    }
+                } : {},
                 action: ''
             } }
             onSort={ this.onSort }
@@ -127,6 +129,7 @@ EntityTable.propTypes = {
         key: PropTypes.string,
         composed: PropTypes.arrayOf(PropTypes.string)
     })),
+    showHealth: PropTypes.bool,
     match: PropTypes.any,
     loaded: PropTypes.bool,
     entities: PropTypes.array,
@@ -136,6 +139,7 @@ EntityTable.propTypes = {
 
 EntityTable.defaultProps = {
     loaded: false,
+    showHealth: false,
     columns: [],
     entities: [],
     selectEntity: () => undefined,
