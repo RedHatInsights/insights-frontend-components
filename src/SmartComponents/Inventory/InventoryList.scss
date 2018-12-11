@@ -1,5 +1,26 @@
+@import "~@patternfly/patternfly-next/utilities/Flex/flex.css";
+@import "~@patternfly/patternfly-next/utilities/Display/display.css";
+
+
+
 .ins-inventory-filter {
-  padding-bottom: 10px;
+    margin-left: 1em;
+    .pf-c-dropdown__menu {
+        max-height: 500px;
+        overflow-y: auto;
+        overflow-x: hidden;
+
+        button.pf-m-disabled {
+            color: black;
+            font-weight: 800;
+        }
+
+        @for $i from 1 through 2 {
+            .ins-inventory-filter-#{$i} {
+                margin-left: #{$i * 1.5}em;
+            }
+        }
+    }
 }
 
 .ins-entity-table.pf-c-table {

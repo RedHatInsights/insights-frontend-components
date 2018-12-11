@@ -1,4 +1,4 @@
-import { ACTION_TYPES, SELECT_ENTITY, CHANGE_SORT, FILTER_ENTITIES, SHOW_ENTITIES } from '../../action-types';
+import { ACTION_TYPES, SELECT_ENTITY, CHANGE_SORT, FILTER_ENTITIES, SHOW_ENTITIES, FILTER_SELECT } from '../../action-types';
 import { mergeArraysByKey } from '../../../Utilities/helpers';
 import { SortDirection } from '../../../PresentationalComponents/Table';
 import get from 'lodash/get';
@@ -36,7 +36,8 @@ function entitiesLoaded(state, { payload }) {
         loaded: payload.hasOwnProperty('loaded') ? payload.loaded : true,
         rows: entities,
         entities,
-        count: payload.count
+        count: payload.count,
+        total: payload.total
     };
 }
 
@@ -61,6 +62,30 @@ function changeSort(state, { payload: { key, direction }}) {
     };
 }
 
+function selectFilter(state, { payload: { item: { items, ...item }, selected } }) {
+    let { activeFilters = [] } = state;
+    if(selected) {
+        activeFilters = [
+            ...activeFilters,
+            item,
+            ...items ? items : []
+        ];
+        const values = activeFilters.map(active => active.value);
+        activeFilters = activeFilters.filter((filter, key) => values.indexOf(filter.value) === key);
+    } else {
+        activeFilters.splice(activeFilters.map(active => active.value).indexOf(item.value), 1);
+        if (items) {
+            items.forEach(subItem => {
+                activeFilters.splice(activeFilters.map(active => active.value).indexOf(subItem.value), 1);
+            })
+        }
+    }
+    return {
+        ...state,
+        activeFilters
+    }
+}
+
 export default {
     [ACTION_TYPES.LOAD_ENTITIES_PENDING]: entitiesPending,
     [ACTION_TYPES.LOAD_ENTITIES_FULFILLED]: entitiesLoaded,
@@ -70,6 +95,7 @@ export default {
             loaded: false
         }
     }),
+    [FILTER_SELECT]: selectFilter,
     [SELECT_ENTITY]: selectEntity,
     [CHANGE_SORT]: changeSort,
     [FILTER_ENTITIES]: filterEntities

@@ -3,6 +3,8 @@ import { Route, Switch } from 'react-router-dom';
 import routerParams from '../../Utilities/RouterParams';
 import InventoryList from './InventoryList';
 import InventoryDetail from './InventoryDetail';
+import Filter from './Filter';
+// import Pagination from './Pagination';
 
 const InventoryTable = ({ items = [], pathPrefix = 0, apiBase, showHealth, ...props }) => (
     <InventoryList
@@ -17,6 +19,14 @@ const InventoryTable = ({ items = [], pathPrefix = 0, apiBase, showHealth, ...pr
 const InventoryItem = ({ root, pathPrefix = 0, apiBase, ...props }) => (
     <InventoryDetail { ...props } root={ root } pathPrefix={ pathPrefix } apiBase={ apiBase } />
 );
+
+const InventoryFilter = ({ pathPrefix = 0, apiBase, ...props }) => (
+    <Filter {...props} pathPrefix={pathPrefix} apiBase={apiBase} />
+);
+
+// const InventoryPagination = ({ pathPrefix = 0, apiBase, ...props }) => (
+//     <Pagination {...props} pathPrefix={pathPrefix} apiBase={apiBase} />
+// )
 
 const Inventory = ({ match, noTable = false, items = [], pathPrefix = 0, apiBase }) => {
     return (
@@ -41,6 +51,8 @@ export default routerParams((Inventory));
 export function inventoryConnector() {
     return {
         InventoryTable,
+        InventoryFilter,
+        // InventoryPagination,
         InventoryDetail: InventoryItem,
         Inventory: routerParams(Inventory)
     };
