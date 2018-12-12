@@ -63,8 +63,15 @@ const mapData = ({ results, ...data }) => ({
     }))
 });
 
-export function getEntities(items, { base = INVENTORY_API_BASE }) {
-    return fetch(`${base}${items.length !== 0 ? '/' + items : ''}`).then(r => {
+export function getEntities(items, { base = INVENTORY_API_BASE, per_page, page }) {
+    let query = '';
+    if(per_page || page) {
+        const params = { per_page, page };
+        query = '?' + Object.keys(params).reduce(
+            (acc, curr) => [...acc, `${curr}=${params[curr]}`], []
+        ).join('&')
+    }
+    return fetch(`${base}${items.length !== 0 ? '/' + items : ''}${query}`).then(r => {
         if (r.ok) {
             return r.json().then(mapData);
         }

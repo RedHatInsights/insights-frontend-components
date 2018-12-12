@@ -15,6 +15,8 @@ function entitiesPending(state) {
     return {
         ...state,
         columns: mergeArraysByKey([ state.columns, defaultColumns ], 'key'),
+        entities: [],
+        rows: [],
         loaded: false
     };
 }
@@ -36,6 +38,8 @@ function entitiesLoaded(state, { payload }) {
         loaded: payload.hasOwnProperty('loaded') ? payload.loaded : true,
         rows: entities,
         entities,
+        perPage: payload['per_page'],
+        page: payload.page,
         count: payload.count,
         total: payload.total
     };
@@ -62,9 +66,9 @@ function changeSort(state, { payload: { key, direction }}) {
     };
 }
 
-function selectFilter(state, { payload: { item: { items, ...item }, selected } }) {
-    let { activeFilters = [] } = state;
-    if(selected) {
+function selectFilter(state, { payload: { item: { items, ...item }, selected }}) {
+    let { activeFilters = []} = state;
+    if (selected) {
         activeFilters = [
             ...activeFilters,
             item,
@@ -77,13 +81,14 @@ function selectFilter(state, { payload: { item: { items, ...item }, selected } }
         if (items) {
             items.forEach(subItem => {
                 activeFilters.splice(activeFilters.map(active => active.value).indexOf(subItem.value), 1);
-            })
+            });
         }
     }
+
     return {
         ...state,
         activeFilters
-    }
+    };
 }
 
 export default {

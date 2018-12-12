@@ -16,7 +16,7 @@ export const showEntities = (items = []) => ({
 export const filterSelect = (selectedItem) => ({
     type: FILTER_SELECT,
     payload: selectedItem
-})
+});
 
 export const loadEntity = (id, config) => ({
     type: ACTION_TYPES.LOAD_ENTITY,

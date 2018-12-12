@@ -31,7 +31,7 @@ export const CHANGE_SORT = 'CHANGE_SORT';
 export const FILTER_ENTITIES = 'FILTER_ENTITIES';
 export const APPLICATION_SELECTED = 'APPLICATION_SELECTED';
 export const SHOW_ENTITIES = 'SHOW_ENTITIES';
-export const FILTER_SELECT = 'FILTER_SELECT'
+export const FILTER_SELECT = 'FILTER_SELECT';
 
 /**
  * Notifications actions

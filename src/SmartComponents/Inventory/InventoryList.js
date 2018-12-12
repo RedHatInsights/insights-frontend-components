@@ -7,8 +7,9 @@ import { SimpleTableFilter } from '../../PresentationalComponents/SimpleTableFil
 import { Grid, GridItem } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import './InventoryList.scss';
+import { InventoryContext } from './Inventory';
 
-class InventoryList extends React.Component {
+class ContextInventoryList extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -17,10 +18,12 @@ class InventoryList extends React.Component {
         this.props.filterEntities && this.props.filterEntities('display_name', filterBy);
     }
 
-    loadEntities = () => {
+    loadEntities = (options) => {
+        const { page, perPage } = this.props;
         this.props.loadEntities && this.props.loadEntities(
             this.props.items,
             {
+                ...options || { page, per_page: perPage },
                 prefix: this.props.pathPrefix,
                 base: this.props.apiBase
             }
@@ -28,6 +31,8 @@ class InventoryList extends React.Component {
     }
 
     componentDidMount() {
+        const { setRefresh } = this.props;
+        setRefresh && setRefresh(this.loadEntities);
         this.loadEntities();
     }
 
@@ -37,12 +42,7 @@ class InventoryList extends React.Component {
             <React.Fragment>
                 <Grid guttter="sm" className="ins-inventory-list">
                     <GridItem span={ 12 }>
-                        <InventoryEntityTable showHealth={ showHealth }/>
-                    </GridItem>
-                    <GridItem span={ 1 }>
-                        <div className='buttons'>
-                            <Button variant='primary' onClick={ this.loadEntities }>Refresh</Button>
-                        </div>
+                        <InventoryEntityTable showHealth={ showHealth } />
                     </GridItem>
                 </Grid>
             </React.Fragment>
@@ -50,12 +50,14 @@ class InventoryList extends React.Component {
     }
 }
 
-InventoryList.propTypes = {
+const propTypes = {
     filterEntities: PropTypes.func,
     loadEntities: PropTypes.func,
     pathPrefix: PropTypes.number,
     apiBase: PropTypes.string,
     showHealth: PropTypes.bool,
+    page: PropTypes.number,
+    perPage: PropTypes.number,
     items: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.string),
         PropTypes.shape({
@@ -64,6 +66,26 @@ InventoryList.propTypes = {
     ]),
     entites: PropTypes.arrayOf(PropTypes.any)
 };
+
+ContextInventoryList.propTypes = {
+    ...propTypes,
+    setRefresh: PropTypes.func
+};
+
+ContextInventoryList.defaultProps = {
+    perPage: 50,
+    page: 1
+}
+
+const InventoryList = ({ ...props }) => (
+    <InventoryContext.Consumer>
+        { ({ setRefresh }) => (
+            <ContextInventoryList { ...props } setRefresh={ setRefresh } />
+        ) }
+    </InventoryContext.Consumer>
+);
+
+InventoryList.propTypes = propTypes;
 
 function mapDispatchToProps(dispatch) {
     return {
@@ -83,4 +105,7 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-export default connect(() => ({}), mapDispatchToProps)(InventoryList);
+export default connect(
+    ({entities: { page, per_page }}) => ({ page, perPage: per_page }),
+    mapDispatchToProps
+)(InventoryList);
