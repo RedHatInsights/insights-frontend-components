@@ -9,6 +9,7 @@ import mapValues from 'lodash/mapValues';
 import TableActions from './Actions';
 import HealthStatus from './HealthStatus';
 import get from 'lodash/get';
+import { List } from 'react-content-loader'
 
 class EntityTable extends React.Component {
     constructor(props) {
@@ -19,10 +20,12 @@ class EntityTable extends React.Component {
     }
 
     onRowClick = (_event, key, application) => {
-        const { match: { url }, history, onDetailSelect } = this.props;
-        const dilimeter = url.substr(-1, 1) === '/' ? '' : '/';
-        history.push(`${url}${dilimeter}${key}/${application ? application : ''}`);
-        onDetailSelect && onDetailSelect(application);
+        const { match: { url }, history, onDetailSelect, loaded } = this.props;
+        if (loaded) {
+            const dilimeter = url.substr(-1, 1) === '/' ? '' : '/';
+            history.push(`${url}${dilimeter}${key}/${application ? application : ''}`);
+            onDetailSelect && onDetailSelect(application);
+        }
     }
 
     onItemSelect = (_event, key, checked) => {
@@ -99,6 +102,12 @@ class EntityTable extends React.Component {
                 this.actionsColumn(oneItem)
             ]
         }));
+        const loading = [{
+            cells: [{
+                title: <List />,
+                colSpan: columns.length + showHealth + 1
+            }],
+        }]
         return <Table
             className="pf-m-compact ins-entity-table"
             sortBy={ this.state.sortBy }
@@ -115,8 +124,8 @@ class EntityTable extends React.Component {
             onSort={ this.onSort }
             onRowClick={ this.onRowClick }
             onItemSelect={ this.onItemSelect }
-            hasCheckbox
-            rows={ loaded && data }
+            hasCheckbox={ loaded }
+            rows={loaded ? data : loading }
         />;
     }
 }

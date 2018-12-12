@@ -9,6 +9,7 @@ import { filterSelect } from '../../../redux/actions/inventory';
 import { SyncAltIcon } from '@patternfly/react-icons';
 import { InventoryContext } from '../Inventory';
 import FilterItem from './FilterItem';
+import debounce from 'lodash/debounce';
 
 function generateFilters(filters = [], activeFilters) {
     const calculateFilter = (filter) => ({
@@ -70,6 +71,7 @@ class ContextFilter extends Component {
 
     onFilterClick = (_event, { selected, ...item }, key) => {
         const { filters } = this.state;
+        const { onRefreshData } = this.props;
         const values = filters.map(({ filter }) => filter.value);
         filters[key].filter.selected = !filters[key].filter.selected;
 
@@ -83,7 +85,7 @@ class ContextFilter extends Component {
         this.props.onFilterSelect({ item, selected: filters[key].filter.selected });
         this.setState({
             filters
-        });
+        }, () => onRefreshData({ filters: this.props.activeFilters }));
     }
 
     render() {
@@ -129,7 +131,7 @@ class ContextFilter extends Component {
                         className="ins-refresh"
                         title="Refresh"
                         aria-label="Refresh"
-                        onClick={ onRefreshData }
+                        onClick={_event => onRefreshData() }
                     >
                         <SyncAltIcon />
                     </Button>
@@ -142,7 +144,7 @@ class ContextFilter extends Component {
 const Filter = ({ ...props }) => (
     <InventoryContext.Consumer>
         { ({ onRefreshData }) => (
-            <ContextFilter { ...props } onRefreshData={ _event => onRefreshData() } />
+            <ContextFilter { ...props } onRefreshData={ onRefreshData } />
         ) }
     </InventoryContext.Consumer>
 );
@@ -167,7 +169,8 @@ Filter.propTypes = {
 };
 Filter.defaultProps = {
     filters: [],
-    activeFilters: []
+    activeFilters: [],
+    onFilterSelect: () => undefined
 };
 
 function mapStateToProps({ entities: { columns, total, activeFilters }}) {

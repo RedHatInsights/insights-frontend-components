@@ -38,7 +38,7 @@ function entitiesLoaded(state, { payload }) {
         loaded: payload.hasOwnProperty('loaded') ? payload.loaded : true,
         rows: entities,
         entities,
-        perPage: payload['per_page'],
+        perPage: payload.per_page,
         page: payload.page,
         count: payload.count,
         total: payload.total

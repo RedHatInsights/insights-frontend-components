@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Title, Grid, GridItem, Label, Dropdown, DropdownPosition, DropdownItem, DropdownToggle } from '@patternfly/react-core';
 import { TimesIcon } from '@patternfly/react-icons';
-import { List } from 'react-content-loader';
+import { BulletList } from 'react-content-loader';
 import get from 'lodash/get';
 import { connect } from 'react-redux';
 import ApplicationDetails from './ApplicationDetails';
@@ -31,7 +31,7 @@ class EntityDetails extends Component {
         if (!loaded) {
             return (
                 <div>
-                    <List/>
+                    <BulletList/>
                 </div>
             );
         }

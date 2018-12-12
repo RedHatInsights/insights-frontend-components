@@ -18,12 +18,20 @@ class ContextInventoryList extends React.Component {
         this.props.filterEntities && this.props.filterEntities('display_name', filterBy);
     }
 
-    loadEntities = (options) => {
-        const { page, perPage } = this.props;
+    loadEntities = (options = {}) => {
+        const { page, perPage, onRefresh } = this.props;
+        options = {
+            page: options.page || page,
+            // eslint-disable-next-line camelcase
+            per_page: options.per_page || perPage,
+            ...options
+        };
+        onRefresh(options);
         this.props.loadEntities && this.props.loadEntities(
             this.props.items,
             {
-                ...options || { page, per_page: perPage },
+                // eslint-disable-next-line camelcase
+                ...options,
                 prefix: this.props.pathPrefix,
                 base: this.props.apiBase
             }
@@ -37,7 +45,7 @@ class ContextInventoryList extends React.Component {
     }
 
     render() {
-        const { showHealth, entites } = this.props;
+        const { showHealth } = this.props;
         return (
             <React.Fragment>
                 <Grid guttter="sm" className="ins-inventory-list">
@@ -58,6 +66,7 @@ const propTypes = {
     showHealth: PropTypes.bool,
     page: PropTypes.number,
     perPage: PropTypes.number,
+    onRefresh: PropTypes.func,
     items: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.string),
         PropTypes.shape({
@@ -74,8 +83,9 @@ ContextInventoryList.propTypes = {
 
 ContextInventoryList.defaultProps = {
     perPage: 50,
-    page: 1
-}
+    page: 1,
+    onRefresh: () => undefined
+};
 
 const InventoryList = ({ ...props }) => (
     <InventoryContext.Consumer>
@@ -106,6 +116,6 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(
-    ({entities: { page, per_page }}) => ({ page, perPage: per_page }),
+    ({ entities: { page, perPage }}) => ({ page, perPage }),
     mapDispatchToProps
 )(InventoryList);

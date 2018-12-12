@@ -18,7 +18,7 @@ class InventoryTable extends Component {
     }
 
     render() {
-        const { items = [], pathPrefix = 0, filters, apiBase, showHealth, ...props } = this.props;
+        const { items = [], pathPrefix = 0, filters, apiBase, showHealth, onRefresh, ...props } = this.props;
         return (
             <InventoryContext.Provider value={ {
                 onRefreshData: this.state.onRefreshData,
@@ -33,6 +33,7 @@ class InventoryTable extends Component {
                     <CardBody>
                         <InventoryList
                             { ...props }
+                            onRefresh={onRefresh}
                             items={ items }
                             pathPrefix={ pathPrefix }
                             apiBase={ apiBase }
@@ -51,10 +52,6 @@ class InventoryTable extends Component {
 const InventoryItem = ({ root, pathPrefix = 0, apiBase, ...props }) => (
     <InventoryDetail { ...props } root={ root } pathPrefix={ pathPrefix } apiBase={ apiBase } />
 );
-
-// const InventoryPagination = ({ pathPrefix = 0, apiBase, ...props }) => (
-//     <Pagination {...props} pathPrefix={pathPrefix} apiBase={apiBase} />
-// )
 
 const Inventory = ({ match, noTable = false, items = [], pathPrefix = 0, apiBase }) => {
     return (
