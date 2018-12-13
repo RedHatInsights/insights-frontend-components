@@ -75,7 +75,7 @@ function selectFilter(state, { payload: { item: { items, ...item }, selected }})
             ...items ? items : []
         ];
         const values = activeFilters.map(active => active.value);
-        activeFilters = activeFilters.filter((filter, key) => values.indexOf(filter.value) === key);
+        activeFilters = activeFilters.filter((filter, key) => values.lastIndexOf(filter.value) === key);
     } else {
         activeFilters.splice(activeFilters.map(active => active.value).indexOf(item.value), 1);
         if (items) {

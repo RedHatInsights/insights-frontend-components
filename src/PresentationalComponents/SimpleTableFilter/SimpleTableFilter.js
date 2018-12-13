@@ -71,7 +71,10 @@ class SimpleFilter extends Component {
                         dropdownItems={ dropdownItems }
                     />
                 }
-                <Input placeholder={ placeholder } onChange={ this.onInputChange }/>
+                <Input placeholder={ placeholder }
+                    onKeyPress={ event => event.key === 'Enter' && this.onInputChange(event) }
+                    onChange={ this.onInputChange }
+                />
                 {
                     buttonTitle &&
                     <Button variant={ ButtonVariant.secondary } onClick={ this.onFilterSubmit }>{ buttonTitle }</Button>

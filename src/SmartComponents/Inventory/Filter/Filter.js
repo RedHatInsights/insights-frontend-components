@@ -12,9 +12,10 @@ import FilterItem from './FilterItem';
 import debounce from 'lodash/debounce';
 
 function generateFilters(filters = [], activeFilters) {
-    const calculateFilter = (filter) => ({
+    const calculateFilter = (filter, { value }) => ({
         ...filter,
-        selected: !!activeFilters.find(item => item.value === filter.value)
+        selected: !!activeFilters.find(item => item.value === filter.value),
+        group: value
     });
 
     return [
@@ -29,12 +30,12 @@ function generateFilters(filters = [], activeFilters) {
         ...items.flatMap(({ items: subItems, ...subFilter }) => ([
             {
                 filter: {
-                    ...calculateFilter(subFilter),
-                    items: subItems
+                    ...calculateFilter(subFilter, filter),
+                    items: subItems,
                 }
             },
             ...subItems ? subItems.map(itemFilter => ({
-                filter: calculateFilter(itemFilter),
+                filter: calculateFilter(itemFilter, filter),
                 pad: 1
             })) : []
         ]))
@@ -88,6 +89,18 @@ class ContextFilter extends Component {
         }, () => onRefreshData({ filters: this.props.activeFilters }));
     }
 
+    filterEntities = (value, selected) => {
+        if (selected) {
+            const { onRefreshData } = this.props;
+            const textualFilter = { value: selected.value, filter: value };
+            const { filters } = this.state;
+            this.props.onFilterSelect({ item: textualFilter, selected: true });
+            this.setState({
+                filters
+            }, () => onRefreshData({ filters: this.props.activeFilters }));
+        }
+    }
+
     render() {
         const { columns, total, children, onRefreshData } = this.props;
         const { filterByString, isOpen, filters } = this.state;
@@ -96,10 +109,12 @@ class ContextFilter extends Component {
                 <GridItem span={ 4 } className="ins-inventory-text-filter">
                     <SimpleTableFilter
                         options={ {
-                            items: columns && columns.map(column => ({
-                                ...column,
-                                value: column.key
-                            }))
+                            items: columns && columns.map(column => (
+                                !column.isTime && {
+                                    ...column,
+                                    value: column.key
+                                }
+                            )).filter(Boolean)
                         } }
                         onOptionSelect={ this.onFilterByString }
                         onFilterChange={ this.filterEntities }

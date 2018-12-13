@@ -40,7 +40,7 @@ class EntityDetails extends Component {
             <div className="ins-entity-detail">
                 <Grid className="ins-entity-header">
                     <GridItem md={ 6 }>
-                        <Title size='2xl'>{ entity.display_name }</Title>
+                        <Title size='2xl'>{ entity && entity.display_name }</Title>
                     </GridItem>
                     <GridItem md={ 6 }>
                         <Dropdown
@@ -101,7 +101,7 @@ class EntityDetails extends Component {
                     </GridItem>
                 </Grid>
                 <Grid className="ins-entity-tags">
-                    { entity.tags && Object.values(entity.tags).map((oneTag, key) => (
+                    { entity && entity.tags && Object.values(entity.tags).map((oneTag, key) => (
                         <GridItem span={ 1 } key={ key } data-key={ key } widget="tag">
                             <Label isCompact>
                                 <TimesIcon />{ oneTag }
@@ -119,5 +119,9 @@ EntityDetails.propTypes = {
     loaded: PropTypes.bool.isRequired,
     entity: PropTypes.object
 };
+
+EntityDetails.defualtProps = {
+    entity: {}
+}
 
 export default connect(({ entityDetails }) => ({ ...entityDetails }))(EntityDetails);
