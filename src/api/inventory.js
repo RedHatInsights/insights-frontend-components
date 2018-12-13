@@ -64,7 +64,7 @@ const mapData = ({ results, ...data }) => ({
 });
 
 function buildQuery({ per_page, page, filters }) {
-    const allowedFilters = ['display_name'];
+    const allowedFilters = [ 'display_name' ];
     let query = [];
     const makeValue = (item, keyValue, keyFilter) => (
         allowedFilters.find(allowed => allowed === item[keyValue]) && `${item[keyValue]}=${item[keyFilter]}`
@@ -74,7 +74,7 @@ function buildQuery({ per_page, page, filters }) {
         query = [
             ...query,
             ...Object.keys(params).reduce(
-                (acc, curr) => [...acc, `${curr}=${params[curr]}`], []
+                (acc, curr) => [ ...acc, `${curr}=${params[curr]}` ], []
             )
         ];
     }
@@ -89,6 +89,7 @@ function buildQuery({ per_page, page, filters }) {
             ], [])
         ];
     }
+
     return query ? `?${query.join('&')}` : '';
 }
 

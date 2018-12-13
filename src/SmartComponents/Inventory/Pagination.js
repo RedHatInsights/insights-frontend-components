@@ -27,17 +27,17 @@ class ContextFooterPagination extends Component {
         const { total, page, perPage, loaded } = this.props;
         return (
             <Fragment>
-                {loaded && (
+                { loaded && (
                     <Pagination
-                        numberOfItems={total}
-                        perPageOptions={perPageOptions}
-                        page={page}
-                        itemsPerPage={perPage}
-                        direction={dropDirection.up}
-                        onSetPage={this.onSetPage}
-                        onPerPageSelect={this.onPerPageSelect}
+                        numberOfItems={ total }
+                        perPageOptions={ perPageOptions }
+                        page={ page }
+                        itemsPerPage={ perPage }
+                        direction={ dropDirection.up }
+                        onSetPage={ this.onSetPage }
+                        onPerPageSelect={ this.onPerPageSelect }
                     />
-                )}
+                ) }
             </Fragment>
         );
     }

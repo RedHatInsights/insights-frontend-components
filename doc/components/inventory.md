@@ -29,6 +29,7 @@ Expected dependencies is object with shape:
     reactRouterDom: reactRouterDom //React router dom { withRouter, Switch, Route, Redirect, Link } are required
     reactIcons: reactIcons //PF icons { TimesIcon, SyncIcon, hieldAltIcon, DollarSignIcon, WrenchIcon, CertificateIcon } are required, but they might be changed and more will be needed in future
     reactCore: reactCore //PF react core items, best is to import * and pass whole reactCore
+    pfreact: pfreact // PF 3 react components - PaginationRow is currently used
 }
 ```
 
@@ -39,6 +40,7 @@ import React from 'react';
 import * as reactRouterDom from 'react-router-dom';
 import * as reactCore from '@patternfly/react-core';
 import * as reactIcons from '@patternfly/react-icons';
+import { PaginationRow } from 'patternfly-react';
 import { registry as registryDecorator } from '@red-hat-insights/insights-frontend-components';
 
 @registryDecorator()
@@ -57,7 +59,8 @@ class SomeCmp extends React.Component {
             react: React,
             reactRouterDom,
             reactCore,
-            reactIcons
+            reactIcons,
+            pfReact: { PaginationRow }
         });
 
         this.getRegistry().register({
@@ -84,6 +87,7 @@ import React from 'react';
 import * as reactRouterDom from 'react-router-dom';
 import * as reactCore from '@patternfly/react-core';
 import * as reactIcons from '@patternfly/react-icons';
+import { PaginationRow } from 'patternfly-react';
 import { registry as registryDecorator } from '@red-hat-insights/insights-frontend-components';
 
 @registryDecorator()
@@ -102,7 +106,8 @@ class SomeCmp extends React.Component {
             react: React,
             reactRouterDom,
             reactCore,
-            reactIcons
+            reactIcons,
+            pfReact: { PaginationRow }
         });
 
         this.getRegistry().register({
@@ -136,6 +141,7 @@ import React from 'react';
 import * as reactRouterDom from 'react-router-dom';
 import * as reactCore from '@patternfly/react-core';
 import * as reactIcons from '@patternfly/react-icons';
+import { PaginationRow } from 'patternfly-react';
 import { registry as registryDecorator } from '@red-hat-insights/insights-frontend-components';
 import { hostData } from './api';
 
@@ -160,7 +166,8 @@ class SomeCmp extends React.Component {
             react: React,
             reactRouterDom,
             reactCore,
-            reactIcons
+            reactIcons,
+            pfReact: { PaginationRow }
         });
 
         this.getRegistry().register({
@@ -188,6 +195,7 @@ import React from 'react';
 import * as reactRouterDom from 'react-router-dom';
 import * as reactCore from '@patternfly/react-core';
 import * as reactIcons from '@patternfly/react-icons';
+import { PaginationRow } from 'patternfly-react';
 import { registry as registryDecorator } from '@red-hat-insights/insights-frontend-components';
 
 @registryDecorator()
@@ -198,7 +206,8 @@ class SomeCmp extends React.Component {
             react: React,
             reactRouterDom,
             reactCore,
-            reactIcons
+            reactIcons,
+            pfReact: { PaginationRow }
         });
 
         this.getRegistry().register({
@@ -228,6 +237,7 @@ import React from 'react';
 import * as reactRouterDom from 'react-router-dom';
 import * as reactCore from '@patternfly/react-core';
 import * as reactIcons from '@patternfly/react-icons';
+import { PaginationRow } from 'patternfly-react';
 import { registry as registryDecorator } from '@red-hat-insights/insights-frontend-components';
 
 @registryDecorator()
@@ -238,7 +248,8 @@ class SomeCmp extends React.Component {
             react: React,
             reactRouterDom,
             reactCore,
-            reactIcons
+            reactIcons,
+            pfReact: { PaginationRow }
         });
 
         this.getRegistry().register({
@@ -289,6 +300,7 @@ import React from 'react';
 import * as reactRouterDom from 'react-router-dom';
 import * as reactCore from '@patternfly/react-core';
 import * as reactIcons from '@patternfly/react-icons';
+import { PaginationRow } from 'patternfly-react';
 import { listReducer } from './store/reducers';
 import { registry as registryDecorator } from '@red-hat-insights/insights-frontend-components';
 
@@ -300,7 +312,8 @@ class SomeCmp extends React.Component {
       react: React,
       reactRouterDom,
       reactCore,
-      reactIcons
+      reactIcons,
+      pfReact: { PaginationRow }
     });
 
     this.getRegistry().register({
@@ -353,6 +366,7 @@ import React from 'react';
 import * as reactRouterDom from 'react-router-dom';
 import * as reactCore from '@patternfly/react-core';
 import * as reactIcons from '@patternfly/react-icons';
+import { PaginationRow } from 'patternfly-react';
 import { entityDetailReducer } from './store/reducers';
 import { registry as registryDecorator } from '@red-hat-insights/insights-frontend-components';
 
@@ -368,7 +382,8 @@ class SomeCmp extends React.Component {
             react: React,
             reactRouterDom,
             reactCore,
-            reactIcons
+            reactIcons,
+            pfReact: { PaginationRow }
         });
 
         this.getRegistry().register({

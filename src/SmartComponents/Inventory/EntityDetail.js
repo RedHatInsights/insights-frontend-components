@@ -122,6 +122,6 @@ EntityDetails.propTypes = {
 
 EntityDetails.defualtProps = {
     entity: {}
-}
+};
 
 export default connect(({ entityDetails }) => ({ ...entityDetails }))(EntityDetails);

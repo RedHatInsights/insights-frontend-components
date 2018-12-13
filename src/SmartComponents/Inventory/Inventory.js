@@ -33,7 +33,7 @@ class InventoryTable extends Component {
                     <CardBody>
                         <InventoryList
                             { ...props }
-                            onRefresh={onRefresh}
+                            onRefresh={ onRefresh }
                             items={ items }
                             pathPrefix={ pathPrefix }
                             apiBase={ apiBase }

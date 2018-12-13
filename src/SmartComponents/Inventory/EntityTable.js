@@ -9,7 +9,7 @@ import mapValues from 'lodash/mapValues';
 import TableActions from './Actions';
 import HealthStatus from './HealthStatus';
 import get from 'lodash/get';
-import { List } from 'react-content-loader'
+import { List } from 'react-content-loader';
 
 class EntityTable extends React.Component {
     constructor(props) {
@@ -106,8 +106,8 @@ class EntityTable extends React.Component {
             cells: [{
                 title: <List />,
                 colSpan: columns.length + showHealth + 1
-            }],
-        }]
+            }]
+        }];
         return <Table
             className="pf-m-compact ins-entity-table"
             sortBy={ this.state.sortBy }
@@ -125,7 +125,7 @@ class EntityTable extends React.Component {
             onRowClick={ this.onRowClick }
             onItemSelect={ this.onItemSelect }
             hasCheckbox={ loaded }
-            rows={loaded ? data : loading }
+            rows={ loaded ? data : loading }
         />;
     }
 }

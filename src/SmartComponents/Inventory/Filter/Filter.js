@@ -31,7 +31,7 @@ function generateFilters(filters = [], activeFilters) {
             {
                 filter: {
                     ...calculateFilter(subFilter, filter),
-                    items: subItems,
+                    items: subItems
                 }
             },
             ...subItems ? subItems.map(itemFilter => ({
@@ -146,7 +146,7 @@ class ContextFilter extends Component {
                         className="ins-refresh"
                         title="Refresh"
                         aria-label="Refresh"
-                        onClick={_event => onRefreshData() }
+                        onClick={ _event => onRefreshData() }
                     >
                         <SyncAltIcon />
                     </Button>
