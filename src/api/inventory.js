@@ -87,7 +87,7 @@ function buildQuery({ per_page, page, filters }) {
                 makeValue(curr, 'value', 'filter'),
                 makeValue(curr, 'group', 'value')
             ], [])
-        ];
+        ].filter(Boolean);
     }
 
     return query ? `?${query.join('&')}` : '';

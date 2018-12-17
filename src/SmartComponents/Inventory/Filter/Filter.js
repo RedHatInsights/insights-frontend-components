@@ -86,7 +86,7 @@ class ContextFilter extends Component {
         this.props.onFilterSelect({ item, selected: filters[key].filter.selected });
         this.setState({
             filters
-        }, () => onRefreshData({ filters: this.props.activeFilters }));
+        }, () => onRefreshData({ filters: this.props.activeFilters, page: 1 }));
     }
 
     filterEntities = (value, selected) => {
@@ -97,7 +97,7 @@ class ContextFilter extends Component {
             this.props.onFilterSelect({ item: textualFilter, selected: true });
             this.setState({
                 filters
-            }, () => onRefreshData({ filters: this.props.activeFilters }));
+            }, () => onRefreshData({ filters: this.props.activeFilters, page: 1 }));
         }
     }
 
