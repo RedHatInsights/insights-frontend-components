@@ -1,1 +1,1 @@
-export { default as Truncate } from './SampleComponent.js';
+export { default as Truncate } from './Truncate.js';

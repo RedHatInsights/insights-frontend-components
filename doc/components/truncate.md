@@ -1,6 +1,6 @@
-# Truncate Icon
+# Truncate
 
-Implementation of 'Truncate' icon that represent levels of severity.
+Implementation of 'Truncate' that truncates text to a certain length
 
 ## Usage
 
