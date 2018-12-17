@@ -1,0 +1,1 @@
+export { default as Truncate } from './SampleComponent.js';

@@ -37,8 +37,21 @@ class Truncate extends React.Component {
 
         const { showText } = this.state;
 
-        const expandButton = <Button className='ins-c-expand-button' variant='link' onClick={ this.toggleText }> { this.props.expandText } </Button>;
-        const collapseButton = <Button className='ins-c-collapse-button' variant='link' onClick={ this.toggleText }> { this.props.collapseText } </Button>;
+        const expandButton =
+            <Button
+                className='ins-c-expand-button'
+                variant='link'
+                onClick={ this.toggleText }>
+                { this.props.expandText }
+            </Button>;
+
+        const collapseButton =
+            <Button
+                className='ins-c-collapse-button'
+                variant='link'
+                onClick={ this.toggleText }>
+                { this.props.collapseText }
+            </Button>;
 
         if (this.props.inline) {
             return (
