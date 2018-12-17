@@ -96,18 +96,34 @@ class EntityTable extends React.Component {
         };
     }
 
+    buildCells = (item) => {
+        const { columns, showHealth } = this.props;
+        let actions, health, cells;
+        if (!item.hasOwnProperty('isOpen')) {
+            actions = this.actionsColumn(item);
+            health = showHealth && this.healthColumn(item);
+            cells = columns.map(({ key, composed, isTime }) => this.renderCol(item, key, composed, isTime));
+        } else {
+            cells = [{
+                title: item.title,
+                colSpan: columns.length + 1 + showHealth
+            }]
+        }
+        return [
+            ...cells,
+            health,
+            actions
+        ].filter(Boolean)
+    }
+
     render() {
         const { columns, entities, rows, showHealth, loaded, expandable, onExpandClick } = this.props;
         const filteredData = (entities || rows).filter(oneRow => oneRow.account);
-        const data = filteredData.map(oneItem => ({
+        const data = filteredData.map((oneItem) => ({
             ...oneItem,
             id: oneItem.id,
             selected: oneItem.selected,
-            cells: [
-                ...columns.map(oneCell => this.renderCol(oneItem, oneCell.key, oneCell.composed, oneCell.isTime)),
-                ...showHealth ? [ this.healthColumn(oneItem) ] : [],
-                this.actionsColumn(oneItem)
-            ]
+            cells: this.buildCells(oneItem)
         }));
         const loading = [{
             cells: [{

@@ -273,6 +273,163 @@ class SomeCmp extends React.Component {
 }
 ```
 
+### InventoryTable as tree
+Since inventory table is regular table you can pass additional data to it to be rendered as tree table with collapsible rows and some specific data in such row.
+```JSX
+import React from 'react';
+import * as reactRouterDom from 'react-router-dom';
+import * as reactCore from '@patternfly/react-core';
+import * as reactIcons from '@patternfly/react-icons';
+import { PaginationRow } from 'patternfly-react';
+import { registry as registryDecorator } from '@red-hat-insights/insights-frontend-components';
+
+@registryDecorator()
+class SomeCmp extends React.Component {
+    constructor(props, ctx) {
+        super(props, ctx);
+        this.state = {
+            InventoryCmp: () => <div>Loading...</div>,
+            items: [{
+                id: 'some-id',
+                children: [1], // please select some kind of more specific ID
+                active: false // to indicate that parent is not expanded
+            }, {
+                account: true, // since inventory table is checking if account is set
+                isOpen: false,
+                title: <div>Blaaa</div>, // What to show in expanded row
+            }]
+        }
+        this.onExpandClick = this.onExpandClick.bind(this);
+        this.fetchInventory();
+    }
+
+    async fetchInventory() {
+        const { inventoryConnector, mergeWithEntities } = await insights.loadInventory({
+            react: React,
+            reactRouterDom,
+            reactCore,
+            reactIcons,
+            pfReact: { PaginationRow }
+        });
+
+        this.getRegistry().register({
+            ...mergeWithEntities()
+        });
+
+        const { InventoryTable, updateEntities } = inventoryConnector();
+        this.updateEntities = updateEntities;
+
+        this.setState({
+            InventoryCmp: InventoryTable
+        })
+    }
+
+    onExpandClick(_cell, row, key) {
+        const { items } = this.state;
+        items.find(item => item.id === key).active = !row.active;
+        // Not ideal, but for the sake of example it's fine
+        row.children.forEach(child => {
+            items.find(item => item.id === child.id).isOpen = !row.active;
+        });
+        this.setState({
+            items
+        });
+        this.context.store.dispatch(this.updateEntities(items));
+    }
+
+    render() {
+        const { InventoryCmp, items } = this.state;
+        return (
+            <InventoryCmp items={items} expandable onExpandClick={this.onExpandClick} />
+        )
+    }
+}
+```
+
+### Refresh on change (for example on filter)
+When user wants to update table, filter data (both trough filter select and textual filter) or you want to update visible items you can either update data in redux or use inventory ref and `onRefreshData` function.
+
+```JSX
+import React from 'react';
+import * as reactRouterDom from 'react-router-dom';
+import * as reactCore from '@patternfly/react-core';
+import * as reactIcons from '@patternfly/react-icons';
+import { PaginationRow } from 'patternfly-react';
+import { registry as registryDecorator } from '@red-hat-insights/insights-frontend-components';
+
+@registryDecorator()
+class SomeCmp extends React.Component {
+    constructor(props, ctx) {
+        super(props, ctx);
+        this.inventory = React.createRef();
+        this.state = {
+            InventoryCmp: () => <div>Loading...</div>,
+            items: [] // some data
+        }
+        this.fetchInventory();
+    }
+
+    async fetchInventory() {
+        // ..
+    }
+
+    onRefresh(options) {
+        // Do something with this.state items and refresh data trough onRefreshData function
+        this.inventory.current && this.inventory.current.onRefreshData();
+    }
+
+    render() {
+        const { InventoryCmp, items } = this.state;
+        return (
+            <InventoryCmp items={items} ref={this.inventory} />
+        )
+    }
+}
+```
+
+### Additional filtering
+Inventory has some basic filters over name, system type and OS version. However if you want to add your own filters you can do that by passing filters. Also if you want to show some extra content in header just pass children and inventory will show them next to filters and refresh.
+
+You will be notified in `onRefresh` function about filter changes.
+```JSX
+import React from 'react';
+import * as reactRouterDom from 'react-router-dom';
+import * as reactCore from '@patternfly/react-core';
+import * as reactIcons from '@patternfly/react-icons';
+import { PaginationRow } from 'patternfly-react';
+import { registry as registryDecorator } from '@red-hat-insights/insights-frontend-components';
+
+@registryDecorator()
+class SomeCmp extends React.Component {
+    constructor(props, ctx) {
+        super(props, ctx);
+        this.inventory = React.createRef();
+        this.state = {
+            InventoryCmp: () => <div>Loading...</div>
+        }
+        this.fetchInventory();
+    }
+
+    async fetchInventory() {
+        // ..
+    }
+
+    // options: { page, per_page, filters }
+    onRefresh(options) {
+        // do something with options
+    }
+
+    render() {
+        const { InventoryCmp } = this.state;
+        return (
+            <InventoryCmp ref={this.inventory} filters={[
+                { title: 'Some filter', value: 'some-filter', items: [{ title: 'First', value: 'first' }] }
+            ]} onRefresh={this.onRefresh}/>
+        )
+    }
+}
+```
+
 ### Changing list of entities
 If you want to change list of entities you should change them in redux store so the changes are reflected in entity table automatically.
 
