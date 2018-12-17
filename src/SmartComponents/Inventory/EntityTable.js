@@ -45,20 +45,26 @@ class EntityTable extends React.Component {
     }
 
     renderCol = (col, key, composed, isTime) => {
-        if (composed) {
-            return (
-                <div className="ins-composed-col">
-                    { composed.map(path => (
-                        <div key={ path } widget="col" data-key={ path }>
-                            { get(col, path, 'unknown') || '\u00A0' }
-                        </div>
-                    )) }
-                </div>
-            );
-        }
+        if (!col.hasOwnProperty('isOpen')) {
+            if (composed) {
+                return (
+                    <div className="ins-composed-col">
+                        {composed.map(path => (
+                            <div key={path}
+                                widget="col"
+                                data-key={path}
+                                onClick={event => this.onRowClick(event, col.id)}
+                            >
+                                {get(col, path, 'unknown') || '\u00A0'}
+                            </div>
+                        ))}
+                    </div>
+                );
+            }
 
-        if (isTime) {
-            return (new Date(get(col, key, 'unknown'))).toLocaleString();
+            if (isTime) {
+                return (new Date(get(col, key, 'unknown'))).toLocaleString();
+            }
         }
 
         return get(col, key, 'unknown');
@@ -91,9 +97,10 @@ class EntityTable extends React.Component {
     }
 
     render() {
-        const { columns, entities, rows, showHealth, loaded } = this.props;
+        const { columns, entities, rows, showHealth, loaded, expandable, onExpandClick } = this.props;
         const filteredData = (entities || rows).filter(oneRow => oneRow.account);
         const data = filteredData.map(oneItem => ({
+            ...oneItem,
             id: oneItem.id,
             selected: oneItem.selected,
             cells: [
@@ -110,6 +117,8 @@ class EntityTable extends React.Component {
         }];
         return <Table
             className="pf-m-compact ins-entity-table"
+            expandable={expandable}
+            onExpandClick={onExpandClick}
             sortBy={ this.state.sortBy }
             header={ columns && {
                 ...mapValues(keyBy(columns, item => item.key), item => item.title),
@@ -122,7 +131,6 @@ class EntityTable extends React.Component {
                 action: ''
             } }
             onSort={ this.onSort }
-            onRowClick={ this.onRowClick }
             onItemSelect={ this.onItemSelect }
             hasCheckbox={ loaded }
             rows={ loaded ? data : loading }
@@ -132,6 +140,8 @@ class EntityTable extends React.Component {
 
 EntityTable.propTypes = {
     history: PropTypes.any,
+    expandable: PropTypes.bool,
+    onExpandClick: PropTypes.func,
     setSort: PropTypes.func,
     rows: PropTypes.arrayOf(PropTypes.any),
     columns: PropTypes.arrayOf(PropTypes.shape({
@@ -149,8 +159,10 @@ EntityTable.propTypes = {
 EntityTable.defaultProps = {
     loaded: false,
     showHealth: false,
+    expandable: false,
     columns: [],
     entities: [],
+    onExpandClick: () => undefined,
     selectEntity: () => undefined,
     onDetailSelect: () => undefined
 };

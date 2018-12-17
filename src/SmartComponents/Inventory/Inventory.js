@@ -5,6 +5,7 @@ import InventoryList from './InventoryList';
 import InventoryDetail from './InventoryDetail';
 import { Filter } from './Filter';
 import Pagination from './Pagination';
+import { updateEntities } from '../../redux/actions/inventory';
 import { Card, CardBody, CardHeader, CardFooter } from '@patternfly/react-core';
 
 export const InventoryContext = createContext('inventory');
@@ -13,8 +14,14 @@ class InventoryTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            onRefreshData: () => undefined
+            onRefreshData: () => undefined,
+            onUpdateData: () => undefined
         };
+    }
+
+    onRefreshData = (options) => {
+        const { onUpdateData } = this.state;
+        onUpdateData(options);
     }
 
     render() {
@@ -22,8 +29,12 @@ class InventoryTable extends Component {
         return (
             <InventoryContext.Provider value={ {
                 onRefreshData: this.state.onRefreshData,
+                onUpdateData: this.state.onUpdateData,
                 setRefresh: (onRefreshData) => this.setState({
                     onRefreshData
+                }),
+                setUpdate: (onUpdateData) => this.setState({
+                    onUpdateData
                 })
             } }>
                 <Card>
@@ -75,6 +86,7 @@ export default routerParams((Inventory));
 
 export function inventoryConnector() {
     return {
+        updateEntities,
         InventoryTable,
         InventoryDetail: InventoryItem
     };

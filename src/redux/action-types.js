@@ -26,6 +26,7 @@ export const ACTION_TYPES = [
 {}
 );
 
+export const UPDATE_ENTITIES = 'UPDATE_ENTITIES';
 export const SELECT_ENTITY = 'SELECT_ENTITY';
 export const CHANGE_SORT = 'CHANGE_SORT';
 export const FILTER_ENTITIES = 'FILTER_ENTITIES';

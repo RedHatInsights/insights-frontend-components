@@ -1,4 +1,12 @@
-import { ACTION_TYPES, SELECT_ENTITY, CHANGE_SORT, FILTER_ENTITIES, SHOW_ENTITIES, FILTER_SELECT } from '../../action-types';
+import {
+    ACTION_TYPES,
+    SELECT_ENTITY,
+    CHANGE_SORT,
+    FILTER_ENTITIES,
+    SHOW_ENTITIES,
+    FILTER_SELECT,
+    UPDATE_ENTITIES
+ } from '../../action-types';
 import { mergeArraysByKey } from '../../../Utilities/helpers';
 import { SortDirection } from '../../../PresentationalComponents/Table';
 import get from 'lodash/get';
@@ -38,10 +46,10 @@ function entitiesLoaded(state, { payload }) {
         loaded: payload.hasOwnProperty('loaded') ? payload.loaded : true,
         rows: entities,
         entities,
-        perPage: payload.per_page,
-        page: payload.page,
-        count: payload.count,
-        total: payload.total
+        perPage: payload.per_page || state.perPage,
+        page: payload.page || state.page,
+        count: payload.count || state.count,
+        total: payload.total || state.total
     };
 }
 
@@ -94,9 +102,10 @@ function selectFilter(state, { payload: { item: { items, ...item }, selected }})
 export default {
     [ACTION_TYPES.LOAD_ENTITIES_PENDING]: entitiesPending,
     [ACTION_TYPES.LOAD_ENTITIES_FULFILLED]: entitiesLoaded,
+    [UPDATE_ENTITIES]: entitiesLoaded,
     [SHOW_ENTITIES]: (state, action) => entitiesLoaded(state, {
         payload: {
-            ...action,
+            ...action.payload,
             loaded: false
         }
     }),
