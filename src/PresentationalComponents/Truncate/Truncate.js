@@ -37,8 +37,8 @@ class Truncate extends React.Component {
 
         const { showText } = this.state;
 
-        const expandButton = <Button className='ins-c-expand-button' variant='link' onClick={ this.toggleText }> { this.props.clipText } </Button>;
-        const collapseButton = <Button className='ins-c-collapse-button' variant='link' onClick={ this.toggleText }> Collapse </Button>;
+        const expandButton = <Button className='ins-c-expand-button' variant='link' onClick={ this.toggleText }> { this.props.expandText } </Button>;
+        const collapseButton = <Button className='ins-c-collapse-button' variant='link' onClick={ this.toggleText }> { this.props.collapseText } </Button>;
 
         if (this.props.inline) {
             return (
@@ -72,11 +72,13 @@ Truncate.propTypes = {
     className: propTypes.string,
     text: propTypes.string,
     length: propTypes.number,
-    clipText: propTypes.string,
+    expandText: propTypes.string,
+    collapseText: propTypes.string,
     inline: propTypes.bool
 };
 
 Truncate.defaultProps = {
     length: 150,
-    clipText: 'Read more'
+    expandText: 'Read more',
+    collapseText: 'Collapse'
 };
