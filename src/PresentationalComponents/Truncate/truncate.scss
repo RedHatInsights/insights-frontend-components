@@ -2,4 +2,4 @@
 
 .ins-c-truncate button, .ins-c-truncate + button { padding: 0; }
 
-.ins-c-truncate.is-inline { margin-right: 10px; }
+.ins-c-truncate.is-inline { @include rem('margin-right', 10px); }
