@@ -6,7 +6,7 @@ import {
     SHOW_ENTITIES,
     FILTER_SELECT,
     UPDATE_ENTITIES
- } from '../../action-types';
+} from '../../action-types';
 import { mergeArraysByKey } from '../../../Utilities/helpers';
 import { SortDirection } from '../../../PresentationalComponents/Table';
 import get from 'lodash/get';
@@ -39,17 +39,18 @@ function filterEntities(state, { payload: { key, filterString }}) {
     };
 }
 
-function entitiesLoaded(state, { payload }) {
-    const entities = mergeArraysByKey([ state.rows, payload.results ]);
+// eslint-disable-next-line camelcase
+function entitiesLoaded(state, { payload: { results, per_page: perPage, page, count, total, loaded }}) {
+    const entities = mergeArraysByKey([ state.rows, results ]);
     return {
         ...state,
-        loaded: payload.hasOwnProperty('loaded') ? payload.loaded : true,
+        loaded: loaded === undefined || loaded,
         rows: entities,
         entities,
-        perPage: payload.per_page || state.perPage,
-        page: payload.page || state.page,
-        count: payload.count || state.count,
-        total: payload.total || state.total
+        perPage: perPage !== undefined ? perPage : state.perPage,
+        page: page !== undefined ? page : state.page,
+        count: count !== undefined ? count : state.count,
+        total: total !== undefined ? total : state.total
     };
 }
 

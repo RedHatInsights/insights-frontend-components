@@ -7,15 +7,13 @@ This component is hot loaded via chrome, so any changes made to it will be autom
 # Notice!
 **When using system detail do not use `Route` set to `exact`. It is designed as partial component and app details of inventory is loaded in same view so it will break if not used in non-exact mode.**
 
-Imagine you have page registerd in router with system information and want to show system detail, to show it DO NOT use it like this:
+You will need to register two routes (one for inventory table the other one for inventory detail) in this way
 ```JSX
-<Route exact path='/systems' component={ ActiveSystem }/>
+<Route exact path={'some/path/:itemId'} component={ItemPage} />
+<Route path={'some/path/:itemId/:inventoryId'} component={InventoryPage} />
 ```
 
-Should be written as:
-```JSX
-<Route path='/systems' component={ ActiveSystem }/>
-```
+Where `ItemPage` contains `InventoryTable` and `InventoryPage` has inventory detail. If back button is not working correctly you might want to consider adding `root` to Inventory detail so it picks correct props and maps them to URL.
 
 **These examples count on using insight's registry, if you are using different make sure that you pass along correct one and don't use `registryDecorator`**
 
@@ -122,7 +120,7 @@ class SomeCmp extends React.Component {
     render() {
         const { InventoryCmp } = this.state;
         return (
-            <InventoryCmp />
+            <InventoryCmp root={'some/url/:someId'}/>
         )
     }
 }

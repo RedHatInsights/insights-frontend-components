@@ -59,9 +59,10 @@ class Pagination extends Component {
             lastIndex = 0;
             firstIndex = 0;
         }
+
         return (
             <div className="special-patternfly" widget-type='InsightsPagination'>
-                <PaginationRow
+                { PaginationRow && <PaginationRow
                     { ...this.props }
                     pageInputValue={ this.props.page || 1 }
                     viewType={ this.props.viewType || 'table' }
@@ -72,12 +73,12 @@ class Pagination extends Component {
                     pageSizeDropUp={ this.props.direction === 'up' }
                     itemsEnd={ lastIndex }
                     onPerPageSelect={ this.props.onPerPageSelect }
-                    onPageInput={event => this.setPage(parseInt(event.target.value, 10), true)}
+                    onPageInput={ event => this.setPage(parseInt(event.target.value, 10), true) }
                     onFirstPage={ this.props.onFirstPage || this.defaultFirstPage }
                     onLastPage={ this.props.onLastPage || this.defaultLastPage }
                     onPreviousPage={ this.props.onPreviousPage || this.defaultPreviousPage }
                     onNextPage={ this.props.onNextPage || this.defaultNextPage }
-                />
+                /> }
             </div>
         );
     }
@@ -95,6 +96,6 @@ Pagination.propTypes = {
 
 Pagination.defaultProps = {
     page: 1
-}
+};
 
 export default Pagination;

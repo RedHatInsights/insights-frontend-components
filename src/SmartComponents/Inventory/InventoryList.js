@@ -6,7 +6,6 @@ import { Grid, GridItem } from '@patternfly/react-core';
 import PropTypes from 'prop-types';
 import './InventoryList.scss';
 import { InventoryContext } from './Inventory';
-import debounce from 'lodash/debounce';
 
 class ContextInventoryList extends React.Component {
     constructor(props) {
@@ -45,7 +44,7 @@ class ContextInventoryList extends React.Component {
             <React.Fragment>
                 <Grid guttter="sm" className="ins-inventory-list">
                     <GridItem span={ 12 }>
-                        <InventoryEntityTable {...props} showHealth={ showHealth } />
+                        <InventoryEntityTable { ...props } showHealth={ showHealth } />
                     </GridItem>
                 </Grid>
             </React.Fragment>
@@ -84,8 +83,8 @@ ContextInventoryList.defaultProps = {
 
 const InventoryList = ({ ...props }) => (
     <InventoryContext.Consumer>
-        {({ setRefresh, setUpdate }) => (
-            <ContextInventoryList {...props} setRefresh={ setRefresh } setUpdate={setUpdate } />
+        { ({ setRefresh, setUpdate }) => (
+            <ContextInventoryList { ...props } setRefresh={ setRefresh } setUpdate={ setUpdate } />
         ) }
     </InventoryContext.Consumer>
 );

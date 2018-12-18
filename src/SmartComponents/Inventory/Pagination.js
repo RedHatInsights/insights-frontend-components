@@ -12,9 +12,9 @@ class ContextFooterPagination extends Component {
         super(props);
         this.state = {
             page: undefined
-        }
+        };
 
-        this.changePage = debounce((pagination) => this.props.onRefreshData(pagination), 600);
+        this.changePage = debounce((pagination) => this.props.onRefreshData(pagination), 800);
     }
 
     onSetPage = (page, debounce) => {
@@ -27,7 +27,7 @@ class ContextFooterPagination extends Component {
                 page
             });
         } else {
-            onRefreshData(pagination)
+            onRefreshData(pagination);
             this.setState({
                 page: undefined
             });

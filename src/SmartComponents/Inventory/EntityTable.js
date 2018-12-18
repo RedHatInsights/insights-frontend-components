@@ -49,15 +49,15 @@ class EntityTable extends React.Component {
             if (composed) {
                 return (
                     <div className="ins-composed-col">
-                        {composed.map(path => (
-                            <div key={path}
+                        { composed.map(path => (
+                            <div key={ path }
                                 widget="col"
-                                data-key={path}
-                                onClick={event => this.onRowClick(event, col.id)}
+                                data-key={ path }
+                                onClick={ event => this.onRowClick(event, col.id) }
                             >
-                                {get(col, path, 'unknown') || '\u00A0'}
+                                { get(col, path, 'unknown') || '\u00A0' }
                             </div>
-                        ))}
+                        )) }
                     </div>
                 );
             }
@@ -98,7 +98,7 @@ class EntityTable extends React.Component {
 
     buildCells = (item) => {
         const { columns, showHealth } = this.props;
-        let actions, health, cells;
+        let actions; let health; let cells;
         if (!item.hasOwnProperty('isOpen')) {
             actions = this.actionsColumn(item);
             health = showHealth && this.healthColumn(item);
@@ -107,13 +107,14 @@ class EntityTable extends React.Component {
             cells = [{
                 title: item.title,
                 colSpan: columns.length + 1 + showHealth
-            }]
+            }];
         }
+
         return [
             ...cells,
             health,
             actions
-        ].filter(Boolean)
+        ].filter(Boolean);
     }
 
     render() {
@@ -133,8 +134,8 @@ class EntityTable extends React.Component {
         }];
         return <Table
             className="pf-m-compact ins-entity-table"
-            expandable={expandable}
-            onExpandClick={onExpandClick}
+            expandable={ expandable }
+            onExpandClick={ onExpandClick }
             sortBy={ this.state.sortBy }
             header={ columns && {
                 ...mapValues(keyBy(columns, item => item.key), item => item.title),
