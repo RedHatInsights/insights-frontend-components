@@ -9,7 +9,23 @@ import mapValues from 'lodash/mapValues';
 import TableActions from './Actions';
 import HealthStatus from './HealthStatus';
 import get from 'lodash/get';
-import { List } from 'react-content-loader';
+import ContentLoader from 'react-content-loader';
+
+const RowLoader = props => (
+    <ContentLoader
+        height={ 20 }
+        width={ 480 }
+        { ...props }
+    >
+        <rect x="30" y="0" rx="3" ry="3" width="250" height="7" />
+        <rect x="300" y="0" rx="3" ry="3" width="70" height="7" />
+        <rect x="385" y="0" rx="3" ry="3" width="95" height="7" />
+        <rect x="50" y="12" rx="3" ry="3" width="80" height="7" />
+        <rect x="150" y="12" rx="3" ry="3" width="200" height="7" />
+        <rect x="360" y="12" rx="3" ry="3" width="120" height="7" />
+        <rect x="0" y="0" rx="0" ry="0" width="20" height="20" />
+    </ContentLoader>
+);
 
 class EntityTable extends React.Component {
     constructor(props) {
@@ -126,12 +142,12 @@ class EntityTable extends React.Component {
             selected: oneItem.selected,
             cells: this.buildCells(oneItem)
         }));
-        const loading = [{
+        const loading = {
             cells: [{
-                title: <List />,
+                title: <RowLoader />,
                 colSpan: columns.length + showHealth + 1
             }]
-        }];
+        };
         return <Table
             className="pf-m-compact ins-entity-table"
             expandable={ expandable }
@@ -150,7 +166,7 @@ class EntityTable extends React.Component {
             onSort={ this.onSort }
             onItemSelect={ this.onItemSelect }
             hasCheckbox={ loaded }
-            rows={ loaded ? data : loading }
+            rows={ loaded ? data : [ ...Array(5) ].map(() => loading) }
         />;
     }
 }

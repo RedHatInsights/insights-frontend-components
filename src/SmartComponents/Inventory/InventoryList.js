@@ -97,7 +97,7 @@ function mapDispatchToProps(dispatch) {
             const itemIds = items.reduce((acc, curr) => (
                 [
                     ...acc,
-                    typeof curr === 'string' ? curr : curr.id
+                    curr && typeof curr === 'string' ? curr : curr.id
                 ]
             ), []).filter(Boolean);
             dispatch(loadEntities(itemIds, config));
