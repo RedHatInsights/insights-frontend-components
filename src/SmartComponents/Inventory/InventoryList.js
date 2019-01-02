@@ -64,10 +64,15 @@ const propTypes = {
     items: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.string),
         PropTypes.shape({
-            id: PropTypes.string
+            id: PropTypes.string.isRequired
+        }),
+        PropTypes.shape({
+            account: PropTypes.any,
+            isOpen: PropTypes.bool,
+            title: PropTypes.node
         })
     ]),
-    entites: PropTypes.arrayOf(PropTypes.any)
+    entities: PropTypes.arrayOf(PropTypes.any)
 };
 
 ContextInventoryList.propTypes = {
@@ -94,6 +99,10 @@ InventoryList.propTypes = propTypes;
 function mapDispatchToProps(dispatch) {
     return {
         loadEntities: (items = [], config) => {
+            if (!Array.isArray(items)) {
+                throw new Error('Wrong shape of items, array with strings or objects with ID property required!');
+            }
+
             const itemIds = items.reduce((acc, curr) => (
                 [
                     ...acc,

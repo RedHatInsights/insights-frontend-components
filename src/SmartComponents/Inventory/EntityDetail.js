@@ -17,7 +17,7 @@ class EntityDetails extends Component {
 
     getFact = (path) => {
         const { entity } = this.props;
-        return get(entity, path, 'unknown');
+        return get(entity, path, undefined);
     }
 
     toggleActions = (collapsed) => {
@@ -61,7 +61,7 @@ class EntityDetails extends Component {
                                 Hostname:
                             </span>
                             <span>
-                                { this.getFact('facts.inventory.hostname') }
+                                { this.getFact('fqdn') || 'Unknown' }
                             </span>
                         </div>
                         <div>
@@ -69,7 +69,10 @@ class EntityDetails extends Component {
                                 UUID:
                             </span>
                             <span>
-                                { this.getFact(`canonical_facts['machine_id']`) }
+                                {
+                                    this.getFact(`id`) ||
+                                    'Unknown'
+                                }
                             </span>
                         </div>
                         <div>
@@ -77,7 +80,11 @@ class EntityDetails extends Component {
                                 System:
                             </span>
                             <span>
-                                { this.getFact('facts.inventory.release') }
+                                {
+                                    this.getFact('facts.inventory.release') ||
+                                    this.getFact('facts.qpc.os_release') ||
+                                    'Unknown'
+                                }
                             </span>
                         </div>
                     </GridItem>
@@ -100,15 +107,17 @@ class EntityDetails extends Component {
                         </div>
                     </GridItem>
                 </Grid>
-                <Grid className="ins-entity-tags">
-                    { entity && entity.tags && Object.values(entity.tags).map((oneTag, key) => (
-                        <GridItem span={ 1 } key={ key } data-key={ key } widget="tag">
-                            <Label isCompact>
-                                <TimesIcon />{ oneTag }
-                            </Label>
-                        </GridItem>
-                    )) }
-                </Grid>
+                { /* Since we do not have tags yet, let's ignore them for now
+                    <Grid className="ins-entity-tags">
+                        { entity && entity.tags && Object.values(entity.tags).map((oneTag, key) => (
+                            <GridItem span={ 1 } key={ key } data-key={ key } widget="tag">
+                                <Label isCompact>
+                                    <TimesIcon />{ oneTag }
+                                </Label>
+                            </GridItem>
+                        )) }
+                    </Grid>
+                 */ }
                 <ApplicationDetails />
             </div>
         );

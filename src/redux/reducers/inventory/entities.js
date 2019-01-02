@@ -15,7 +15,7 @@ import orderBy from 'lodash/orderBy';
 export const defaultState = { loaded: false };
 
 const defaultColumns = [
-    { key: 'display_name', title: 'Name', composed: [ 'display_name', 'facts.inventory.hostname' ]},
+    { key: 'display_name', title: 'Name', composed: [ 'facts.qpc.os_release', 'display_name' ]},
     { key: 'updated', title: 'Last Seen', isTime: true }
 ];
 
