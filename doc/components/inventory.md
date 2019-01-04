@@ -273,6 +273,8 @@ class SomeCmp extends React.Component {
 
 ### InventoryTable as tree
 Since inventory table is regular table you can pass additional data to it to be rendered as tree table with collapsible rows and some specific data in such row.
+
+To access store for dispatching events down to inventory you need to connect your component to redux using `connect` function and set store into context props.
 ```JSX
 import React from 'react';
 import * as reactRouterDom from 'react-router-dom';
@@ -342,6 +344,12 @@ class SomeCmp extends React.Component {
         )
     }
 }
+
+SomeCmp.contextTypes = {
+   store: propTypes.object
+};
+
+export default connect(() => ({}))(SomeCmp);
 ```
 
 ### Refresh on change (for example on filter)

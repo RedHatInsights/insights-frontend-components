@@ -2,15 +2,12 @@ import {
     ACTION_TYPES,
     SELECT_ENTITY,
     CHANGE_SORT,
-    FILTER_ENTITIES,
     SHOW_ENTITIES,
     FILTER_SELECT,
     UPDATE_ENTITIES
 } from '../../action-types';
 import { mergeArraysByKey } from '../../../Utilities/helpers';
 import { SortDirection } from '../../../PresentationalComponents/Table';
-import get from 'lodash/get';
-import orderBy from 'lodash/orderBy';
 
 export const defaultState = { loaded: false };
 
@@ -23,19 +20,9 @@ function entitiesPending(state) {
     return {
         ...state,
         columns: mergeArraysByKey([ state.columns, defaultColumns ], 'key'),
-        entities: [],
         rows: [],
+        activeFilters: [],
         loaded: false
-    };
-}
-
-function filterEntities(state, { payload: { key, filterString }}) {
-    const entities = filterString ?
-        state.rows.filter(item => item[key] && item[key].indexOf(filterString) !== -1) :
-        [ ...state.rows ];
-    return {
-        ...state,
-        entities
     };
 }
 
@@ -46,7 +33,6 @@ function entitiesLoaded(state, { payload: { results, per_page: perPage, page, co
         ...state,
         loaded: loaded === undefined || loaded,
         rows: entities,
-        entities,
         perPage: perPage !== undefined ? perPage : state.perPage,
         page: page !== undefined ? page : state.page,
         count: count !== undefined ? count : state.count,
@@ -55,23 +41,28 @@ function entitiesLoaded(state, { payload: { results, per_page: perPage, page, co
 }
 
 function selectEntity(state, { payload: { id, selected }}) {
-    const ents = [ ...state.entities ];
-    ents.find(entity => entity.id === id).selected = selected;
+    const rows = [ ...state.rows ];
+    const entity = rows.find(entity => entity.id === id);
+    if (entity) {
+        entity.selected = selected;
+    } else {
+        rows.forEach(item => item.selected = selected);
+    }
+
     return {
         ...state,
-        entities: ents
+        rows
     };
 }
 
 function changeSort(state, { payload: { key, direction }}) {
-    const sortedRows = orderBy(
-        state.entities,
-        [ e => get(e, key) ],
-        [ SortDirection.up === direction ? 'asc' : 'desc' ]
-    );
+    const sortBy = {
+        key,
+        direction: SortDirection.up === direction ? 'asc' : 'desc'
+    };
     return {
         ...state,
-        entities: sortedRows
+        sortBy
     };
 }
 
@@ -112,6 +103,5 @@ export default {
     }),
     [FILTER_SELECT]: selectFilter,
     [SELECT_ENTITY]: selectEntity,
-    [CHANGE_SORT]: changeSort,
-    [FILTER_ENTITIES]: filterEntities
+    [CHANGE_SORT]: changeSort
 };

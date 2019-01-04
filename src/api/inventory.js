@@ -52,9 +52,9 @@ function mockData(id) {
     };
 }
 
-const mapData = ({ results, ...data }) => ({
+const mapData = ({ results = [], ...data }) => ({
     ...data,
-    results: results.map(({ facts, ...oneResult }) => ({
+    results: results.map(({ facts = {}, ...oneResult }) => ({
         ...oneResult,
         facts: facts.reduce((acc, curr) => ({
             ...acc,

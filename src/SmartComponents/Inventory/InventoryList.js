@@ -100,7 +100,7 @@ function mapDispatchToProps(dispatch) {
     return {
         loadEntities: (items = [], config) => {
             if (!Array.isArray(items)) {
-                throw new Error('Wrong shape of items, array with strings or objects with ID property required!');
+                console.error('Wrong shape of items, array with strings or objects with ID property required!');
             }
 
             const itemIds = items.reduce((acc, curr) => (

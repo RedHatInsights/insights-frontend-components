@@ -10,6 +10,7 @@ import TableActions from './Actions';
 import HealthStatus from './HealthStatus';
 import get from 'lodash/get';
 import ContentLoader from 'react-content-loader';
+import orderBy from 'lodash/orderBy';
 
 const RowLoader = props => (
     <ContentLoader
@@ -28,13 +29,6 @@ const RowLoader = props => (
 );
 
 class EntityTable extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            sortBy: {}
-        };
-    }
-
     onRowClick = (_event, key, application) => {
         const { match: { url }, history, onDetailSelect, loaded } = this.props;
         if (loaded) {
@@ -51,12 +45,6 @@ class EntityTable extends React.Component {
     onSort = (_event, key, direction) => {
         if (key !== 'action' && key !== 'health') {
             this.props.setSort && this.props.setSort(key, direction);
-            this.setState({
-                sortBy: {
-                    index: key,
-                    direction
-                }
-            });
         }
     }
 
@@ -133,26 +121,37 @@ class EntityTable extends React.Component {
         ].filter(Boolean);
     }
 
-    render() {
-        const { columns, entities, rows, showHealth, loaded, expandable, onExpandClick } = this.props;
-        const filteredData = (entities || rows).filter(oneRow => oneRow.account);
-        const data = filteredData.map((oneItem) => ({
+    createRows = () => {
+        const { sortBy, rows } = this.props;
+        const data = rows
+        .filter(oneRow => oneRow.account)
+        .map((oneItem) => ({
             ...oneItem,
-            id: oneItem.id,
-            selected: oneItem.selected,
             cells: this.buildCells(oneItem)
         }));
-        const loading = {
-            cells: [{
-                title: <RowLoader />,
-                colSpan: columns.length + showHealth + 1
-            }]
-        };
+        return sortBy ?
+            orderBy(
+                data,
+                [ e => get(e, sortBy.key) ],
+                [ sortBy.direction ]
+            ) :
+            data;
+    }
+
+    render() {
+        const { columns, showHealth, loaded, sortBy, expandable, onExpandClick } = this.props;
         return <Table
             className="pf-m-compact ins-entity-table"
             expandable={ expandable }
             onExpandClick={ onExpandClick }
-            sortBy={ this.state.sortBy }
+            sortBy={
+                sortBy ?
+                    {
+                        index: sortBy.key,
+                        direction: sortBy.direction === 'asc' ? 'up' : 'down'
+                    } :
+                    {}
+            }
             header={ columns && {
                 ...mapValues(keyBy(columns, item => item.key), item => item.title),
                 ...showHealth ? {
@@ -166,7 +165,16 @@ class EntityTable extends React.Component {
             onSort={ this.onSort }
             onItemSelect={ this.onItemSelect }
             hasCheckbox={ loaded }
-            rows={ loaded ? data : [ ...Array(5) ].map(() => loading) }
+            rows={
+                loaded ?
+                    this.createRows() :
+                    [ ...Array(5) ].map(() => ({
+                        cells: [{
+                            title: <RowLoader />,
+                            colSpan: columns.length + showHealth + 1
+                        }]
+                    }))
+            }
         />;
     }
 }
@@ -184,7 +192,10 @@ EntityTable.propTypes = {
     showHealth: PropTypes.bool,
     match: PropTypes.any,
     loaded: PropTypes.bool,
-    entities: PropTypes.array,
+    sortBy: PropTypes.shape({
+        key: PropTypes.string,
+        direction: PropTypes.oneOf([ 'asc', 'desc' ])
+    }),
     selectEntity: PropTypes.func,
     onDetailSelect: PropTypes.func
 };
@@ -194,7 +205,7 @@ EntityTable.defaultProps = {
     showHealth: false,
     expandable: false,
     columns: [],
-    entities: [],
+    rows: [],
     onExpandClick: () => undefined,
     selectEntity: () => undefined,
     onDetailSelect: () => undefined
@@ -208,12 +219,12 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
-function mapStateToProps({ entities: { columns, entities, rows, loaded }}) {
+function mapStateToProps({ entities: { columns, rows, loaded, sortBy }}) {
     return {
-        entities,
         columns,
         loaded,
-        rows
+        rows,
+        sortBy
     };
 }
 
