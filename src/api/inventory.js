@@ -1,5 +1,6 @@
 export const INVENTORY_API_BASE = '/r/insights/platform/inventory/api/v1/hosts';
 
+/* eslint camelcase: off */
 const mapData = ({ results = [], ...data }) => ({
     ...data,
     results: results.map(({ facts = {}, ...oneResult }) => ({
