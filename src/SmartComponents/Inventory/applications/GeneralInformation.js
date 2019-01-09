@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -15,12 +14,6 @@ import {
     Level,
     LevelItem
 } from '@patternfly/react-core';
-=======
-import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { TextContent, Text, TextVariants, Grid, GridItem, GutterSize } from '@patternfly/react-core';
->>>>>>> Add General info and get data from correct places
 import { Table } from '../../../PresentationalComponents/Table';
 import { Pagination } from '../../../PresentationalComponents/Pagination';
 import './general-information.scss';
