@@ -96,16 +96,18 @@ function buildQuery({ per_page, page, filters }) {
 export function getEntities(items, { base = INVENTORY_API_BASE, ...rest }) {
     let query = buildQuery(rest);
 
-    return fetch(`${base}${items.length !== 0 ? '/' + items : ''}${query}`).then(r => {
-        if (r.ok) {
-            return r.json().then(mapData);
-        }
+    return insights.chrome.auth.getUser().then(
+        () => fetch(`${base}${items.length !== 0 ? '/' + items : ''}${query}`).then(r => {
+            if (r.ok) {
+                return r.json().then(mapData);
+            }
 
-        // TODO: remove me
-        if (r.status === 404) {
-            return mapData(mockData(items));
-        }
+            // TODO: remove me
+            if (r.status === 404) {
+                return mapData(mockData(items));
+            }
 
-        throw new Error(`Unexpected response code ${r.status}`);
-    });
+            throw new Error(`Unexpected response code ${r.status}`);
+        })
+    );
 }
