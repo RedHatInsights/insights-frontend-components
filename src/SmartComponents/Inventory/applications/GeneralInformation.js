@@ -10,7 +10,9 @@ import {
     TextVariants,
     Grid,
     GridItem,
-    GutterSize
+    GutterSize,
+    Level,
+    LevelItem
 } from '@patternfly/react-core';
 import { Table } from '../../../PresentationalComponents/Table';
 import { Pagination } from '../../../PresentationalComponents/Pagination';

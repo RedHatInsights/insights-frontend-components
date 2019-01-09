@@ -2,17 +2,8 @@
     margin-top: 2em;
 
     .pf-c-content {
-        > div:first-child {
-            border-bottom: solid 0.1em var(--pf-global--primary-color--100)
-        }
-
-        div:not(:first-child) {
-            span:first-child {
-                font-weight: var(--pf-global--FontWeight--bold);
-            }
-            span:not(:first-child) {
-                float: right;
-            }
+        .pf-l-level div:first-child {
+            font-weight: var(--pf-global--FontWeight--bold);
         }
     }
 }
