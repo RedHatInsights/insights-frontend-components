@@ -27,24 +27,24 @@ class GeneralInformation extends Component {
                     <TextContent>
                         <Card>
                             <CardHeader>
-                                <Text component={TextVariants.h1}>System</Text>
+                                <Text component={ TextVariants.h1 }>System</Text>
                             </CardHeader>
                             <CardBody>
                                 <div>
                                     <span>Manufacturer:</span>
-                                    <span>{facts.virtualized_type || 'Unknown'}</span>
+                                    <span>{ facts.virtualized_type || 'Unknown' }</span>
                                 </div>
                                 <div>
                                     <span>Release:</span>
-                                    <span>{facts.os_release || 'Unknown'}</span>
+                                    <span>{ facts.os_release || 'Unknown' }</span>
                                 </div>
                                 <div>
                                     <span>Server Type:</span>
-                                    <span>{facts.infrastructure_type || 'Unknown'}</span>
+                                    <span>{ facts.infrastructure_type || 'Unknown' }</span>
                                 </div>
                                 <div>
                                     <span>Time Zone:</span>
-                                    <span>{timeZone && `${timeZone.slice(0, 3)}:${timeZone.slice(3)}`}</span>
+                                    <span>{ timeZone && `${timeZone.slice(0, 3)}:${timeZone.slice(3)}` }</span>
                                 </div>
                             </CardBody>
                         </Card>
@@ -54,12 +54,12 @@ class GeneralInformation extends Component {
                     <TextContent>
                         <Card>
                             <CardHeader>
-                                <Text component={TextVariants.h1}>Bios</Text>    
+                                <Text component={ TextVariants.h1 }>Bios</Text>
                             </CardHeader>
                             <CardBody>
                                 <div>
                                     <span>UUID:</span>
-                                    <span>{entity.bios_uuid || 'Unknown'}</span>
+                                    <span>{ entity.bios_uuid || 'Unknown' }</span>
                                 </div>
                             </CardBody>
                         </Card>
@@ -69,16 +69,16 @@ class GeneralInformation extends Component {
                     <TextContent>
                         <Card>
                             <CardHeader>
-                                <Text component={TextVariants.h1}>Network</Text>
+                                <Text component={ TextVariants.h1 }>Network</Text>
                             </CardHeader>
                             <CardBody>
-                                <Table rows={[]}
-                                    header={[
+                                <Table rows={ [] }
+                                    header={ [
                                         { title: 'Process Name', hasSort: false },
                                         { title: 'IP Address', hasSort: false },
                                         { title: 'Port', hasSort: false }
-                                    ]}
-                                    footer={<Pagination numberOfItems={0} />}
+                                    ] }
+                                    footer={ <Pagination numberOfItems={ 0 } /> }
                                 />
                             </CardBody>
                         </Card>
