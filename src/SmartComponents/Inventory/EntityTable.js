@@ -9,7 +9,7 @@ import mapValues from 'lodash/mapValues';
 import TableActions from './Actions';
 import HealthStatus from './HealthStatus';
 import get from 'lodash/get';
-import { RowLoader } from '../../../Utilities/helpers';
+import { RowLoader } from '../../Utilities/helpers';
 import orderBy from 'lodash/orderBy';
 
 class EntityTable extends React.Component {
