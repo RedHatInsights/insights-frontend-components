@@ -60,8 +60,15 @@ class InventoryTable extends Component {
     }
 }
 
-const InventoryItem = ({ root, pathPrefix = 0, apiBase, ...props }) => (
-    <InventoryDetail { ...props } root={ root } pathPrefix={ pathPrefix } apiBase={ apiBase } />
+const InventoryItem = ({ root, pathPrefix = 0, apiBase, useCard = false, hideBack = false, ...props }) => (
+    <InventoryDetail
+        {...props}
+        root={root}
+        pathPrefix={pathPrefix}
+        apiBase={apiBase}
+        useCard={useCard}
+        hideBack={hideBack}
+    />
 );
 
 const Inventory = ({ match, noTable = false, items = [], pathPrefix = 0, apiBase }) => {
