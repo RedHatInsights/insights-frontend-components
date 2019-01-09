@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { fetchCveListBySystem } from '../../../../redux/actions/applications';
 import VulnerabilitiesCves from './VulnerabilitiesCves';
+import { Card, CardBody } from '@patternfly/react-core';
 import './vulnerabilities.scss';
 
 const header = [
@@ -17,11 +18,15 @@ class VulnerabilitiesDetail extends Component {
     render() {
         const { entity } = this.props;
         return (
-            <VulnerabilitiesCves
-                header={ header }
-                fetchResource={ params => fetchCveListBySystem({ ...params, system: entity.insights_id }) }
-                showAllCheckbox={ false }
-            />
+            <Card>
+                <CardBody>
+                    <VulnerabilitiesCves
+                        header={header}
+                        fetchResource={params => fetchCveListBySystem({ ...params, system: entity.insights_id })}
+                        showAllCheckbox={false}
+                    />
+                </CardBody>
+            </Card>
         );
     }
 }
