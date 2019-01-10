@@ -117,13 +117,22 @@ class EntityTable extends React.Component {
     }
 
     createRows = () => {
-        const { sortBy, rows } = this.props;
+        const { sortBy, rows, showHealth, columns, items } = this.props;
         const data = rows
         .filter(oneRow => oneRow.account)
         .map((oneItem) => ({
             ...oneItem,
             cells: this.buildCells(oneItem)
         }));
+        if ((items && items.length === 0) || rows.length === 0) {
+            return [{
+                cells: [{
+                    title: 'There are no items in inventory. If that\'s incorrect, contact your administrator!',
+                    colSpan: columns.length + 1 + showHealth
+                }]
+            }];
+        }
+
         return sortBy ?
             orderBy(
                 data,
@@ -187,6 +196,7 @@ EntityTable.propTypes = {
     showHealth: PropTypes.bool,
     match: PropTypes.any,
     loaded: PropTypes.bool,
+    items: PropTypes.array,
     sortBy: PropTypes.shape({
         key: PropTypes.string,
         direction: PropTypes.oneOf([ 'asc', 'desc' ])
