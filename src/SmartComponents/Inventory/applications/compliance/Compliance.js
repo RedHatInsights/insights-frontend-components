@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import propTypes from 'prop-types';
-import { routerParams } from '../../../../index';
+import routerParams from '../../../../Utilities/RouterParams';
 import SystemPolicyCards from './SystemPolicyCards';
 import SystemRulesTable from './SystemRulesTable';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import { ApolloProvider } from 'react-apollo';
 import { ApolloClient, HttpLink, InMemoryCache } from 'apollo-boost';
-import { Card, CardBody } from '@patternfly/react-core';
+import { Card, CardBody, CardHeader } from '@patternfly/react-core';
+import { NotEqualIcon } from '@patternfly/react-icons';
+import './compliance.scss';
 
 const COMPLIANCE_API_ROOT = '/r/insights/platform/compliance';
 
@@ -36,11 +38,6 @@ query System($systemId: String!){
 }
 `;
 
-const client = new ApolloClient({
-    link: new HttpLink({ uri: COMPLIANCE_API_ROOT + '/graphql' }),
-    cache: new InMemoryCache()
-});
-
 const SystemQuery = ({ data, loading }) => (
     <React.Fragment>
         <SystemPolicyCards policies={ data.system && data.system.profiles } loading={ loading } />
@@ -60,16 +57,32 @@ const SystemQuery = ({ data, loading }) => (
 
 class SystemDetails extends Component {
     componentWillUnmount() {
-        client.clearStore();
+        const { client } = this.props;
+        client && client.clearStore && client.clearStore();
+    }
+
+    renderError = (error) => {
+        const errorMsg = `Oops! Error loading System data: ${error}`;
+        return (
+            <Card className="ins-error-card">
+                <CardHeader>
+                    <NotEqualIcon />
+                </CardHeader>
+                <CardBody>
+                    <div>{ errorMsg }</div>
+                </CardBody>
+            </Card>
+        );
     }
 
     render() {
-        const { match: { params: { inventoryId }}} = this.props;
+        const { match: { params: { inventoryId }}, client } = this.props;
         return (
             <ApolloProvider client={ client }>
                 <Query query={ QUERY } variables={ { systemId: inventoryId } }>
                     { ({ data, error, loading }) => (
-                        error ? `Oops! Error loading System data: ${error}` :
+                        error ?
+                            this.renderError(error) :
                             <SystemQuery data={ data } error={ error } loading={ loading } />
                     ) }
                 </Query>
@@ -83,13 +96,18 @@ SystemDetails.propTypes = {
         params: propTypes.shape({
             inventoryId: propTypes.string
         })
-    })
+    }),
+    client: propTypes.object
 };
 
 SystemDetails.defaultProps = {
     match: {
         params: {}
-    }
+    },
+    client: new ApolloClient({
+        link: new HttpLink({ uri: COMPLIANCE_API_ROOT + '/graphql' }),
+        cache: new InMemoryCache()
+    })
 };
 
 SystemQuery.propTypes = {

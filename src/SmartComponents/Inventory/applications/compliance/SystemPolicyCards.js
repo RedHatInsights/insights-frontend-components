@@ -1,6 +1,6 @@
 import React from 'react';
 import { Grid, GridItem, Card, CardBody } from '@patternfly/react-core';
-import { routerParams } from '../../../../index';
+import routerParams from '../../../../Utilities/RouterParams';
 import SystemPolicyCard from './SystemPolicyCard';
 import propTypes from 'prop-types';
 import { Instagram } from 'react-content-loader';
