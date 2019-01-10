@@ -16,7 +16,8 @@ class InventoryRuleList extends Component {
     state = {
         expanded: true,
         inventoryReportFetchStatus: 'pending',
-        inventoryReport: {}
+        inventoryReport: {},
+        kbaDetails: []
     }
 
     componentDidMount() {
@@ -26,10 +27,14 @@ class InventoryRuleList extends Component {
     async fetchEntityRules() {
         const { entity } = this.props;
         try {
-            const inventoryReport = (await fetch(`${SYSTEM_FETCH_URL}${entity.id}/reports`)).data;
-            this.setState({
-                inventoryReport,
-                inventoryReportFetchStatus: 'fulfilled'
+            fetch(`${SYSTEM_FETCH_URL}${entity.id}/reports`).then(({ data }) => {
+                this.setState({
+                    inventoryReport: data,
+                    inventoryReportFetchStatus: 'fulfilled'
+                });
+                const kbaIds = data && data.active_reports.map(report => report.rule.node_id).join(` OR `);
+
+                this.fetchKbaDetails(kbaIds);
             });
         } catch (error) {
             this.props.addNotification({
@@ -44,12 +49,29 @@ class InventoryRuleList extends Component {
         }
     }
 
+    fetchKbaDetails(kbaIds) {
+        try {
+            fetch(`/rs/search?q=id:(${kbaIds})&fl=view_uri,id,publishedTitle`).then(({ data }) => {
+                this.setState({
+                    kbaDetails: data.response.docs
+                });
+            });
+        } catch (error) {
+            this.props.addNotification({
+                variant: 'danger',
+                dismissable: true,
+                title: '',
+                description: 'KBA fetch failed.'
+            });
+        }
+    }
+
     expandAll(expanded) {
         this.setState({ expanded: !expanded });
     }
 
     buildRuleCards = () => {
-        const { inventoryReport, expanded } = this.state;
+        const { inventoryReport, expanded, kbaDetails } = this.state;
         return (
             <Fragment>
                 <div className="pf-u-display-flex pf-u-flex-direction-row-reverse">
@@ -62,7 +84,7 @@ class InventoryRuleList extends Component {
                 </div>
                 {
                     inventoryReport.active_reports.map((report, key) =>
-                        <ExpandableRulesCard key={ key } report={ report } isExpanded={ expanded } />
+                        <ExpandableRulesCard key={ key } report={ report } isExpanded={ expanded } kbaDetails={ kbaDetails }/>
                     ) }
             </Fragment>
         );
