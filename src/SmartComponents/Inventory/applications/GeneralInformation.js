@@ -74,13 +74,19 @@ class GeneralInformation extends Component {
                                 <Text component={ TextVariants.h1 }>Network</Text>
                             </CardHeader>
                             <CardBody>
-                                <Table rows={ [] }
-                                    header={ [
-                                        { title: 'Process Name', hasSort: false },
-                                        { title: 'IP Address', hasSort: false },
-                                        { title: 'Port', hasSort: false }
-                                    ] }
-                                    footer={ <Pagination numberOfItems={ 0 } /> }
+                                <Table rows={ [{
+                                    cells: [{
+                                        title: 'No network data at the moment. Come back later to see more information',
+                                        colSpan: 3,
+                                        className: 'ins-no-data'
+                                    }]
+                                }] }
+                                header={ [
+                                    { title: 'Process Name', hasSort: false },
+                                    { title: 'IP Address', hasSort: false },
+                                    { title: 'Port', hasSort: false }
+                                ] }
+                                footer={ <Pagination numberOfItems={ 0 } /> }
                                 />
                             </CardBody>
                         </Card>

@@ -6,4 +6,10 @@
             font-weight: var(--pf-global--FontWeight--bold);
         }
     }
+
+    table {
+        td.ins-no-data {
+            text-align: center;
+        }
+    }
 }
