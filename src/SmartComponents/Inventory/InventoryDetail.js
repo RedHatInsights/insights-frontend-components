@@ -23,13 +23,13 @@ class InventoryDetail extends React.Component {
     }
 
     render() {
-        const { root, match: { params }, useCard, hideBack} = this.props;
+        const { root, match: { params }, useCard, hideBack } = this.props;
         return (
             <React.Fragment>
-                <Entitydetail useCard={useCard}/>
-                {!hideBack && <Link to={ generatePath(root, params) }>
+                <Entitydetail useCard={ useCard }/>
+                { !hideBack && <Link to={ generatePath(root, params) }>
                     <Button variant='primary'>Back</Button>
-                </Link>}
+                </Link> }
             </React.Fragment>
         );
     }

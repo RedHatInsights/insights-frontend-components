@@ -42,40 +42,40 @@ class EntityDetails extends Component {
         const { isOpen } = this.state;
         return (
             <Grid className="ins-entity-header">
-                <GridItem md={6}>
-                    <Title size='2xl'>{entity && entity.display_name}</Title>
+                <GridItem md={ 6 }>
+                    <Title size='2xl'>{ entity && entity.display_name }</Title>
                 </GridItem>
-                <GridItem md={6}>
+                <GridItem md={ 6 }>
                     <Dropdown
-                        onSelect={this.onSelect}
-                        toggle={<DropdownToggle onToggle={this.toggleActions}>Actions</DropdownToggle>}
-                        isOpen={isOpen}
-                        position={DropdownPosition.right}
-                        dropdownItems={[
+                        onSelect={ this.onSelect }
+                        toggle={ <DropdownToggle onToggle={ this.toggleActions }>Actions</DropdownToggle> }
+                        isOpen={ isOpen }
+                        position={ DropdownPosition.right }
+                        dropdownItems={ [
                             <DropdownItem key="1">Some action</DropdownItem>
-                        ]}
+                        ] }
                     />
                 </GridItem>
             </Grid>
-        )
+        );
     }
 
     generateFacts = () => {
         return (
             <Grid className="ins-entity-facts">
-                <GridItem md={6}>
+                <GridItem md={ 6 }>
                     <div>
                         <span>
                             Hostname:
-                            </span>
+                        </span>
                         <span>
-                            {this.getFact('fqdn') || 'Unknown'}
+                            { this.getFact('fqdn') || 'Unknown' }
                         </span>
                     </div>
                     <div>
                         <span>
                             UUID:
-                            </span>
+                        </span>
                         <span>
                             {
                                 this.getFact(`id`) ||
@@ -86,7 +86,7 @@ class EntityDetails extends Component {
                     <div>
                         <span>
                             System:
-                            </span>
+                        </span>
                         <span>
                             {
                                 this.getFact('facts.inventory.release') ||
@@ -96,26 +96,26 @@ class EntityDetails extends Component {
                         </span>
                     </div>
                 </GridItem>
-                <GridItem md={6}>
+                <GridItem md={ 6 }>
                     <div>
                         <span>
                             Last Check-in:
-                            </span>
+                        </span>
                         <span>
-                            {(new Date(this.getFact('updated'))).toLocaleString()}
+                            { (new Date(this.getFact('updated'))).toLocaleString() }
                         </span>
                     </div>
                     <div>
                         <span>
                             Registered:
-                            </span>
+                        </span>
                         <span>
-                            {(new Date(this.getFact('created'))).toLocaleString()}
+                            { (new Date(this.getFact('created'))).toLocaleString() }
                         </span>
                     </div>
                 </GridItem>
             </Grid>
-        )
+        );
     }
 
     render() {
@@ -130,18 +130,18 @@ class EntityDetails extends Component {
 
         return (
             <div className="ins-entity-detail">
-                {useCard ? 
+                { useCard ?
                     <Card>
                         <CardHeader>
-                            {this.generateTop()}
+                            { this.generateTop() }
                         </CardHeader>
                         <CardBody>
-                            {this.generateFacts()}
+                            { this.generateFacts() }
                         </CardBody>
                     </Card> :
                     <Fragment>
-                        {this.generateTop()}
-                        {this.generateFacts()}
+                        { this.generateTop() }
+                        { this.generateFacts() }
                     </Fragment>
                 }
                 { /* Since we do not have tags yet, let's ignore them for now
