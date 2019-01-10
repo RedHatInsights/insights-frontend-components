@@ -63,7 +63,7 @@ class ExpandableRulesCard extends React.Component {
                             <Card className='pf-t-light  pf-m-opaque-100'>
                                 <CardHeader> <ThumbsUpIcon /> Detected Issues</CardHeader>
                                 <CardBody>
-                                    <div dangerouslySetInnerHTML={ { __html: rule.reason_html } } />
+                                    <div>{ rule.reason }</div>
                                 </CardBody>
                             </Card>
                         </GridItem>
@@ -71,7 +71,7 @@ class ExpandableRulesCard extends React.Component {
                             <Card className='pf-t-light  pf-m-opaque-100'>
                                 <CardHeader> <BullseyeIcon /> Steps to resolve</CardHeader>
                                 <CardBody>
-                                    { report.resolution && (<div dangerouslySetInnerHTML={ { __html: report.resolution.resolution } } />) }
+                                    { report.resolution && <div>{ report.resolution.resolution }</div> }
                                 </CardBody>
                             </Card>
                         </GridItem>
@@ -81,9 +81,9 @@ class ExpandableRulesCard extends React.Component {
                         </GridItem>
                         <div>
                             <List>
-                                { rule.more_info_html && (
+                                { rule.more_info && (
                                     <ListItem>
-                                        <div dangerouslySetInnerHTML={ { __html: rule.more_info_html } } />
+                                        <div>{ rule.more_info }</div>
                                     </ListItem>
                                 ) }
                                 <ListItem>

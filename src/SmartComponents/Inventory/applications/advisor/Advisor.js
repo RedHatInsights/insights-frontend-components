@@ -96,8 +96,7 @@ class InventoryRuleList extends Component {
                             <FrownOpenIcon size='lg' />
                         </CardHeader>
                         <CardBody>
-                            There was an error while trying to fetch rules list for this entity. Please contact your
-                            administrator and show him this screen.
+                            There was an error fetching rules list for this Entity. Please show your administrator this screen.
                         </CardBody>
                     </Card>
                 ) }
