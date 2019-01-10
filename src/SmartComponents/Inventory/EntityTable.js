@@ -102,23 +102,18 @@ class EntityTable extends React.Component {
 
     buildCells = (item) => {
         const { columns, showHealth } = this.props;
-        let actions; let health; let cells;
-        if (!item.hasOwnProperty('isOpen')) {
-            actions = this.actionsColumn(item);
-            health = showHealth && this.healthColumn(item);
-            cells = columns.map(({ key, composed, isTime }) => this.renderCol(item, key, composed, isTime));
-        } else {
-            cells = [{
+        if (item.hasOwnProperty('isOpen')) {
+            return [{
                 title: item.title,
                 colSpan: columns.length + 1 + showHealth
             }];
         }
 
         return [
-            ...cells,
-            health,
-            actions
-        ].filter(Boolean);
+            ...columns.map(({ key, composed, isTime }) => this.renderCol(item, key, composed, isTime)),
+            showHealth && this.healthColumn(item),
+            this.actionsColumn(item)
+        ].filter(cell => cell !== false && cell !== undefined);
     }
 
     createRows = () => {
