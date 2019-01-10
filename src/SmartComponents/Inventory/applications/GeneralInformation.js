@@ -32,22 +32,22 @@ class GeneralInformation extends Component {
                                 <Text component={ TextVariants.h1 }>System</Text>
                             </CardHeader>
                             <CardBody>
-                                <div>
-                                    <span>Manufacturer:</span>
-                                    <span>{ facts.virtualized_type || 'Unknown' }</span>
-                                </div>
-                                <div>
-                                    <span>Release:</span>
-                                    <span>{ facts.os_release || 'Unknown' }</span>
-                                </div>
-                                <div>
-                                    <span>Server Type:</span>
-                                    <span>{ facts.infrastructure_type || 'Unknown' }</span>
-                                </div>
-                                <div>
-                                    <span>Time Zone:</span>
-                                    <span>{ timeZone && `${timeZone.slice(0, 3)}:${timeZone.slice(3)}` }</span>
-                                </div>
+                                <Level>
+                                    <LevelItem>Manufacturer:</LevelItem>
+                                    <LevelItem>{ facts.virtualized_type || 'Unknown' }</LevelItem>
+                                </Level>
+                                <Level>
+                                    <LevelItem>Release:</LevelItem>
+                                    <LevelItem>{ facts.os_release || 'Unknown' }</LevelItem>
+                                </Level>
+                                <Level>
+                                    <LevelItem>Server Type:</LevelItem>
+                                    <LevelItem>{ facts.infrastructure_type || 'Unknown' }</LevelItem>
+                                </Level>
+                                <Level>
+                                    <LevelItem>Time Zone:</LevelItem>
+                                    <LevelItem>{ timeZone && `${timeZone.slice(0, 3)}:${timeZone.slice(3)}` }</LevelItem>
+                                </Level>
                             </CardBody>
                         </Card>
                     </TextContent>
@@ -59,10 +59,10 @@ class GeneralInformation extends Component {
                                 <Text component={ TextVariants.h1 }>Bios</Text>
                             </CardHeader>
                             <CardBody>
-                                <div>
-                                    <span>UUID:</span>
-                                    <span>{ entity.bios_uuid || 'Unknown' }</span>
-                                </div>
+                                <Level>
+                                    <LevelItem>UUID:</LevelItem>
+                                    <LevelItem>{ entity.bios_uuid || 'Unknown' }</LevelItem>
+                                </Level>
                             </CardBody>
                         </Card>
                     </TextContent>
