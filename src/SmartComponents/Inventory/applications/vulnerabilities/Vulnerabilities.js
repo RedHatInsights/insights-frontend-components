@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { fetchCveListBySystem } from '../../../../redux/actions/applications';
 import VulnerabilitiesCves from './VulnerabilitiesCves';
 import { Card, CardBody } from '@patternfly/react-core';
+import { createCveListBySystem } from './DataMapper';
 import './vulnerabilities.scss';
 
 const header = [
@@ -23,6 +24,7 @@ class VulnerabilitiesDetail extends Component {
                     <VulnerabilitiesCves
                         header={ header }
                         fetchResource={ params => fetchCveListBySystem({ ...params, system: entity.insights_id }) }
+                        dataMapper={ createCveListBySystem }
                         showAllCheckbox={ false }
                     />
                 </CardBody>

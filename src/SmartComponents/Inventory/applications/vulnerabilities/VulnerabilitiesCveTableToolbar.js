@@ -1,7 +1,9 @@
+/* eslint-disable camelcase */
 import React, { Component } from 'react';
 import { Checkbox, Form, FormGroup, Select, SelectOption, Toolbar, ToolbarGroup, ToolbarItem } from '@patternfly/react-core';
 import { DownloadIcon } from '@patternfly/react-icons';
-import { routerParams, SimpleTableFilter } from '../../../../';
+import routerParams from '../../../../Utilities/RouterParams';
+import { SimpleTableFilter } from '../../../../PresentationalComponents/SimpleTableFilter';
 import debounce from 'lodash/debounce';
 import propTypes from 'prop-types';
 
@@ -16,9 +18,7 @@ class VulnerabilitiesCveTableToolbar extends Component {
     state = {
         defaultConfig: {
             filter: '',
-            // eslint-disable-next-line camelcase
             cvss_score: 'all',
-            // eslint-disable-next-line camelcase
             show_all: 'False'
         },
         toolbarConfig: {}
@@ -34,18 +34,15 @@ class VulnerabilitiesCveTableToolbar extends Component {
 
     changeCVSSValue = (value, options) => {
         const target = options.find(item => item.value === value);
-        // eslint-disable-next-line camelcase
         this.setState({ toolbarConfig: { ...this.state.toolbarConfig, cvss_from: target.from, cvss_to: target.to }}, this.apply);
     }
 
     changeCheckboxValue = (value) => {
-        // eslint-disable-next-line camelcase
         this.setState({ toolbarConfig: { ...this.state.toolbarConfig, show_all: !value }}, this.apply);
     }
 
     getCVSSValue = (options) => {
         const option = options.find(
-            // eslint-disable-next-line camelcase
             item => item.from === this.state.toolbarConfig.cvss_from && item.to === this.state.toolbarConfig.cvss_to
         );
         return option ? option.value : options[0].value;
@@ -91,8 +88,8 @@ class VulnerabilitiesCveTableToolbar extends Component {
                                         label="Hide CVEs that do not affect my inventory"
                                         isChecked={ !this.state.toolbarConfig.show_all }
                                         onChange={ state => this.changeCheckboxValue(state) }
-                                        aria-label="controlled checkbox example"
-                                        id="check-1"
+                                        aria-label="hide CVEs checkbox"
+                                        id="toolbar-cves-hide-check"
                                     />
                                 </React.Fragment>
                             ) }

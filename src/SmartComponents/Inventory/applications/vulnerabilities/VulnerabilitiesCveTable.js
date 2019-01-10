@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { Bullseye } from '@patternfly/react-core';
-import { Pagination, routerParams, SortDirection, Table } from '../../../../index';
+import { Pagination } from '../../../../PresentationalComponents/Pagination';
+import routerParams from '../../../../Utilities/RouterParams';
+import { SortDirection, Table } from '../../../../PresentationalComponents/Table';
 import findIndex from 'lodash/findIndex';
 import propTypes from 'prop-types';
 import { RowLoader } from '../../../../Utilities/helpers';

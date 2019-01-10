@@ -6,7 +6,6 @@ import propTypes from 'prop-types';
 import { connect } from 'react-redux';
 import VulnerabilitiesCveTable from './VulnerabilitiesCveTable';
 import VulnerabilitiesCveTableToolbar from './VulnerabilitiesCveTableToolbar';
-import { createCveListBySystem } from './DataMapper';
 import { downloadFile } from '../../../../Utilities/helpers';
 
 class VulnerabilitiesCves extends Component {
@@ -36,27 +35,26 @@ class VulnerabilitiesCves extends Component {
     }
 
     render() {
-        const { cveList, header } = this.props;
-        const cves = createCveListBySystem(cveList);
+        const { cveList, header, showAllCheckbox, dataMapper } = this.props;
+        const cves = dataMapper(cveList);
         return (
-            <React.Fragment>
-                <Stack gutter="lg">
-                    <StackItem>
-                        <VulnerabilitiesCveTableToolbar
-                            apply={ this.apply }
-                            totalNumber={ cves.meta.total_items }
-                            downloadReport={ this.downloadReport }
-                        />
-                    </StackItem>
-                    <StackItem>
-                        <VulnerabilitiesCveTable
-                            header={ header }
-                            cves={ cves }
-                            apply={ this.apply }
-                        />
-                    </StackItem>
-                </Stack>
-            </React.Fragment>
+            <Stack gutter="lg">
+                <StackItem>
+                    <VulnerabilitiesCveTableToolbar
+                        apply={ this.apply }
+                        totalNumber={ cves.meta.total_items }
+                        showAllCheckbox={ showAllCheckbox }
+                        downloadReport={ this.downloadReport }
+                    />
+                </StackItem>
+                <StackItem>
+                    <VulnerabilitiesCveTable
+                        header={ header }
+                        cves={ cves }
+                        apply={ this.apply }
+                    />
+                </StackItem>
+            </Stack>
         );
     }
 }
@@ -78,7 +76,12 @@ VulnerabilitiesCves.propTypes = {
     fetchData: propTypes.func,
     fetchResource: propTypes.func,
     header: propTypes.array,
-    showAllCheckbox: propTypes.bool
+    showAllCheckbox: propTypes.bool,
+    dataMapper: propTypes.func
+};
+
+VulnerabilitiesCves.defaultProps = {
+    dataMapper: () => undefined
 };
 
 export default connect(
