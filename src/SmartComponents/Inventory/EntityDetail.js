@@ -90,6 +90,7 @@ class EntityDetails extends Component {
                             {
                                 this.getFact('facts.inventory.release') ||
                                 this.getFact('facts.qpc.os_release') ||
+                                this.getFact('facts.os_release') ||
                                 'Unknown'
                             }
                         </span>
