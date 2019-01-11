@@ -7,7 +7,7 @@ import { Table } from '../../../../PresentationalComponents/Table';
 import { Input } from '../../../../PresentationalComponents/Input';
 import { Pagination } from '../../../../PresentationalComponents/Pagination';
 import { SearchIcon } from '@patternfly/react-icons';
-import { Grid, GridItem } from '@patternfly/react-core';
+import { Grid, GridItem, Text, TextVariants } from '@patternfly/react-core';
 import { RowLoader } from '../../../../Utilities/helpers';
 
 /* eslint camelcase: off */
@@ -39,7 +39,7 @@ class SystemRulesTable extends React.Component {
             {
                 children: [ i * 2 + 1 ],
                 cells: [
-                    rule.title,
+                    <Text key={ i } component={ TextVariants.a }>{ rule.title }</Text>,
                     rule.ref_id,
                     profileRule.profile,
                     rule.severity,
@@ -73,13 +73,15 @@ class SystemRulesTable extends React.Component {
 
     setPage = (page) => {
         this.setState({
-            page
+            page,
+            openNodes: []
         });
     }
 
     setPerPage = (itemsPerPage) => {
         this.setState({
-            itemsPerPage
+            itemsPerPage,
+            openNodes: []
         });
     }
 
@@ -143,6 +145,7 @@ class SystemRulesTable extends React.Component {
 
                     <GridItem span={ 12 }>
                         <Table
+                            variant="large"
                             header={ [ 'Rule', 'Reference ID', 'Policy', 'Severity', 'Passed' ] }
                             hasCheckbox
                             expandable

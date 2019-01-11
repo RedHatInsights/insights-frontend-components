@@ -16,11 +16,11 @@ import {
 class SystemPolicyCard extends React.Component {
     complianceIcon = (compliant) => {
         if (compliant) {
-            return <div style={ { color: '#92d400' } } id='policy_compliant'>
+            return <div style={ { fontSize: 'large', color: '#92d400' } } id='policy_compliant'>
                 <CheckCircleIcon /> Compliant
             </div>;
         } else {
-            return <div style={ { color: '#a30000' } } id='policy_compliant'>
+            return <div style={ { fontSize: 'large', color: '#a30000' } } id='policy_compliant'>
                 <ExclamationCircleIcon/> Noncompliant
             </div>;
         }
@@ -30,15 +30,13 @@ class SystemPolicyCard extends React.Component {
         const { policy } = this.props;
         return (
             <Card>
-                <CardHeader>
-                    <TextContent>
-                        <Text component={ TextVariants.small }>External Policy</Text>
-                        <Text component={ TextVariants.medium }>{ policy.name }</Text>
-                    </TextContent>
-                </CardHeader>
                 <CardBody>
-                    { this.complianceIcon(policy.compliant) }
-                    <TextContent className="chart-title">
+                    <TextContent>
+                        <Text style={ { marginBottom: '0px' } } component={ TextVariants.small }>External Policy</Text>
+                        <Text style={ { marginBottom: '0px' } } component={ TextVariants.medium }>{ policy.name }</Text>
+                    </TextContent>
+                    <TextContent>
+                        { this.complianceIcon(policy.compliant) }
                         <Text component={ TextVariants.small }>
                             { policy.rules_passed } of { policy.rules_passed + policy.rules_failed } passed
                         </Text>
