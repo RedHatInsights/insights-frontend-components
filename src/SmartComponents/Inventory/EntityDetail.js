@@ -10,8 +10,7 @@ import {
     DropdownToggle,
     Card,
     CardBody,
-    CardHeader,
-    CardFooter
+    CardHeader
 } from '@patternfly/react-core';
 import { BulletList } from 'react-content-loader';
 import get from 'lodash/get';
