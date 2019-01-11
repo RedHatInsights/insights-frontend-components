@@ -25,22 +25,22 @@ class DownloadButton extends Component {
         const { extraItems, onSelect, ...props } = this.props;
         return (
             <Dropdown
-                {...props}
-                onSelect={this.onSelect}
+                { ...props }
+                onSelect={ this.onSelect }
                 toggle={
-                    <DropdownToggle onToggle={this.onToggle}>
-                        <DownloadIcon size={IconSize.lg} />
+                    <DropdownToggle onToggle={ this.onToggle }>
+                        <DownloadIcon size={ IconSize.lg } />
                     </DropdownToggle>
                 }
-                isOpen={isOpen}
+                isOpen={ isOpen }
                 isPlain
-                dropdownItems={[
-                    <DropdownItem key="download-csv" component="button" onClick={event => onSelect(event, 'csv')}>CSV</DropdownItem>,
-                    <DropdownItem key="download-json" component="button" onClick={event => onSelect(event, 'json')}>JSON</DropdownItem>,
+                dropdownItems={ [
+                    <DropdownItem key="download-csv" component="button" onClick={ event => onSelect(event, 'csv') }>CSV</DropdownItem>,
+                    <DropdownItem key="download-json" component="button" onClick={ event => onSelect(event, 'json') }>JSON</DropdownItem>,
                     ...extraItems
-                ]}
+                ] }
             />
-        )
+        );
     }
 }
 
@@ -50,7 +50,7 @@ DownloadButton.propTypes = {
 };
 DownloadButton.defaultProps = {
     extraItems: [],
-    onSelect: () => unefined
+    onSelect: () => undefined
 };
 
 export default DownloadButton;
