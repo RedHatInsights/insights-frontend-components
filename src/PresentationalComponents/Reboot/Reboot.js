@@ -7,13 +7,6 @@ import { RebootingIcon } from '@patternfly/react-icons';
 
 import './reboot.scss';
 
-/**
- * This is a dumb component that only recieves properties from a smart component.
- * Dumb components are usually functions and not classes.
- *
- * @param props the props given by the smart component.
- */
-
 const Reboot = ({ red, className, ...props }) => {
 
     const rebootIconClasses = classNames(
