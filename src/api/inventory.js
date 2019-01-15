@@ -1,24 +1,6 @@
 export const INVENTORY_API_BASE = '/r/insights/platform/inventory/api/v1/hosts';
 
 /* eslint camelcase: off */
-const mapData = ({ results = [], ...data }) => ({
-    ...data,
-    results: results.map(({ facts = {}, ...oneResult }) => ({
-        ...oneResult,
-        facts: facts.flatMap(oneFact => Object.values(oneFact))
-        .map((item) => {
-            if (item.release && !item.hasOwnProperty('os_release')) {
-                item.os_release = item.release;
-            }
-
-            return item;
-        })
-        .reduce(
-            (acc, curr) => ({ ...acc, ...(typeof curr !== 'string') ? curr : {}}), {}
-        )
-    }))
-});
-
 function buildQuery({ per_page, page, filters }) {
     const allowedFilters = [ 'display_name', 'fqdn' ];
     let query = [];
@@ -55,7 +37,7 @@ export function getEntities(items, { base = INVENTORY_API_BASE, ...rest }) {
     return insights.chrome.auth.getUser().then(
         () => fetch(`${base}${items.length !== 0 ? '/' + items : ''}${query}`).then(r => {
             if (r.ok) {
-                return r.json().then(mapData);
+                return r.json();
             }
 
             throw new Error(`Unexpected response code ${r.status}`);
