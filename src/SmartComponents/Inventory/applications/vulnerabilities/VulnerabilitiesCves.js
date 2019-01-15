@@ -26,11 +26,12 @@ class VulnerabilitiesCves extends Component {
         fetchData && fetchData(() => this.props.fetchResource(this.state));
     }
 
-    downloadReport = () => {
+    downloadReport = (event, format) => {
         const { fetchResource } = this.props;
-        fetchResource &&
+        const { payload } = fetchResource &&
             // eslint-disable-next-line camelcase
-            fetchResource({ ...this.state, page_size: Number.MAX_SAFE_INTEGER, data_format: 'csv' }).payload.then(({ data }) => downloadFile(data));
+            fetchResource({ ...this.state, page_size: Number.MAX_SAFE_INTEGER, data_format: format });
+        payload.then(({ data }) => downloadFile((format === 'json' && JSON.stringify(data)) || data));
     }
 
     render() {
