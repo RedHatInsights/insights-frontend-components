@@ -6,6 +6,13 @@ const mapData = ({ results = [], ...data }) => ({
     results: results.map(({ facts = {}, ...oneResult }) => ({
         ...oneResult,
         facts: facts.flatMap(oneFact => Object.values(oneFact))
+        .map((item) => {
+            if (item.release && !item.hasOwnProperty('os_release')) {
+                item.os_release = item.release;
+            }
+
+            return item;
+        })
         .reduce(
             (acc, curr) => ({ ...acc, ...(typeof curr !== 'string') ? curr : {}}), {}
         )
@@ -13,7 +20,7 @@ const mapData = ({ results = [], ...data }) => ({
 });
 
 function buildQuery({ per_page, page, filters }) {
-    const allowedFilters = [ 'display_name' ];
+    const allowedFilters = [ 'display_name', 'fqdn' ];
     let query = [];
     const makeValue = (item, keyValue, keyFilter) => (
         allowedFilters.find(allowed => allowed === item[keyValue]) && `${item[keyValue]}=${item[keyFilter]}`

@@ -12,7 +12,7 @@ import { SortDirection } from '../../../PresentationalComponents/Table';
 export const defaultState = { loaded: false };
 
 const defaultColumns = [
-    { key: 'display_name', title: 'Name', composed: [ 'facts.qpc.os_release', 'display_name' ]},
+    { key: 'display_name', title: 'Name', composed: [ 'facts.os_release', 'display_name' ]},
     { key: 'updated', title: 'Last Seen', isTime: true }
 ];
 
