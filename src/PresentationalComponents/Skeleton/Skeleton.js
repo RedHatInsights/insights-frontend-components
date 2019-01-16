@@ -2,6 +2,7 @@ import React from 'react';
 import propTypes from 'prop-types';
 
 import classNames from 'classnames';
+export const SkeletonSize = { xs: 'xs', sm: 'sm', md: 'md', lg: 'lg' };
 
 import './skeleton.scss';
 
