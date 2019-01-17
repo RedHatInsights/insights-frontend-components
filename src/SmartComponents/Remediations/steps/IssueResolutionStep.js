@@ -35,19 +35,17 @@ function IssueResolutionStep (props) {
                             <div className="ins-c-resolution-option" key={ resolution.id }>
                                 <Radio
                                     label={
-                                        <React.Fragment>
-                                            { resolution.description }
-                                            <Stack className='ins-c-resolution-choice__details'>
+                                        <Stack className='ins-c-resolution-choice__details'>
+                                            <StackItem>{ resolution.description }</StackItem>
+                                            <StackItem>
+                                                <Battery label="Risk of Change" severity={ resolution.resolution_risk } />
+                                            </StackItem>
+                                            { resolution.needs_reboot &&
                                                 <StackItem>
-                                                    <Battery label="Risk of Change" severity={ resolution.resolution_risk } />
+                                                    <Reboot red/>
                                                 </StackItem>
-                                                { resolution.needs_reboot &&
-                                                    <StackItem>
-                                                        <Reboot red/>
-                                                    </StackItem>
-                                                }
-                                            </Stack>
-                                        </React.Fragment>
+                                            }
+                                        </Stack>
                                     }
                                     aria-label={ resolution.description }
                                     id={ resolution.id }

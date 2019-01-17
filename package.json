@@ -13,7 +13,7 @@
     "Utilities/"
   ],
   "dependencies": {
-    "@patternfly/react-core": "^1.36.0",
+    "@patternfly/react-core": "^1.39.1",
     "@patternfly/react-icons": "^2.8.0",
     "apollo-boost": "^0.1.23",
     "bootstrap-sass": "^3.3.7",
