@@ -103,7 +103,7 @@ class ContextFilter extends Component {
     }
 
     render() {
-        const { columns, total, children, onRefreshData } = this.props;
+        const { columns, total, children } = this.props;
         const { filterByString, isOpen, filters } = this.state;
         return (
             <Grid guttter="sm" className="ins-inventory-filters">
@@ -141,8 +141,8 @@ class ContextFilter extends Component {
                     { children }
                 </GridItem>
                 <GridItem span={ 1 } className="ins-inventory-total pf-u-display-flex pf-u-align-items-center">
-                    { total && <div>{ total } results</div> }
-                    <Button
+                    { total > 0 && <div>{ total } result{ total > 1 && 's' }</div> }
+                    { /* <Button
                         variant="plain"
                         className="ins-refresh"
                         title="Refresh"
@@ -150,7 +150,7 @@ class ContextFilter extends Component {
                         onClick={ _event => onRefreshData() }
                     >
                         <SyncAltIcon />
-                    </Button>
+                    </Button> */ }
                 </GridItem>
             </Grid>
         );
