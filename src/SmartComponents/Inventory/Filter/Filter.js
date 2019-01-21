@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import { Grid, GridItem, Button, Dropdown, DropdownToggle } from '@patternfly/react-core';
 import { SimpleTableFilter } from '../../../PresentationalComponents/SimpleTableFilter';
 import { connect } from 'react-redux';
-import osVersion  from './filters/os-version';
-import systemType from './filters/system-type';
 import { filterSelect } from '../../../redux/actions/inventory';
 import { SyncAltIcon } from '@patternfly/react-icons';
 import { InventoryContext } from '../Inventory';
@@ -19,9 +17,7 @@ function generateFilters(filters = [], activeFilters) {
     });
 
     const allFilters = [
-        ...filters,
-        systemType,
-        osVersion
+        ...filters
     ];
     return allFilters && flatMap(allFilters, ({ items, ...filter }) => ([
         {
@@ -91,6 +87,15 @@ class ContextFilter extends Component {
     }
 
     filterEntities = (value, selected) => {
+        const { columns } = this.props;
+        const filteredColumns = columns.filter(column => !column.isTime);
+        if (!selected) {
+            selected = filteredColumns && filteredColumns.length > 0 ? {
+                ...filteredColumns[0],
+                value: filteredColumns[0].key
+            } : undefined;
+        }
+
         if (selected) {
             const { onRefreshData } = this.props;
             const textualFilter = { value: selected.value, filter: value };
@@ -105,26 +110,29 @@ class ContextFilter extends Component {
     render() {
         const { columns, total, children } = this.props;
         const { filterByString, isOpen, filters } = this.state;
+        const filteredColumns = columns && columns.filter(column => !column.isTime);
+        const placeholder = filterByString || (filteredColumns && filteredColumns.length > 0 && filteredColumns[0].title);
         return (
             <Grid guttter="sm" className="ins-inventory-filters">
                 <GridItem span={ 4 } className="ins-inventory-text-filter">
                     <SimpleTableFilter
-                        options={ {
-                            items: columns && columns.map(column => (
-                                !column.isTime && {
+                        options={
+                            filteredColumns && filteredColumns.length > 1 ? {
+                                title: columns[0].title,
+                                items: columns.map(column => ({
                                     ...column,
                                     value: column.key
-                                }
-                            )).filter(Boolean)
-                        } }
+                                }))
+                            } : undefined
+                        }
                         onOptionSelect={ this.onFilterByString }
                         onFilterChange={ this.filterEntities }
-                        placeholder={ `Find system by ${filterByString}` }
+                        placeholder={ `Find system by ${placeholder}` }
                         buttonTitle=""
                     />
                 </GridItem>
                 <GridItem span={ 1 } className="ins-inventory-filter">
-                    <Dropdown
+                    { filters && filters.length > 0 && <Dropdown
                         isOpen={ isOpen }
                         dropdownItems={ filters.map((item, key) => (
                             <FilterItem
@@ -135,7 +143,7 @@ class ContextFilter extends Component {
                             />
                         )) }
                         toggle={ <DropdownToggle onToggle={ this.onToggle }>Filter</DropdownToggle> }
-                    />
+                    /> }
                 </GridItem>
                 <GridItem span={ 6 }>
                     { children }
