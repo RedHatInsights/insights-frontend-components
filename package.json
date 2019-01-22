@@ -1,6 +1,6 @@
 {
   "name": "@red-hat-insights/insights-frontend-components",
-  "version": "3.33.16",
+  "version": "3.33.18",
   "main": "dist/index.js",
   "private": false,
   "publishConfig": {
@@ -38,7 +38,8 @@
     "collectCoverage": true,
     "collectCoverageFrom": [
       "src/**/*.{js|jsx}",
-      "!src/**/stories/*"
+      "!src/**/stories/*",
+      "!src/**/index.js"
     ],
     "setupFiles": [
       "<rootDir>/config/setupTests.js"
