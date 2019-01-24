@@ -26,6 +26,7 @@ class VulnerabilitiesDetail extends Component {
                         fetchResource={ params => fetchCveListBySystem({ ...params, system: entity.insights_id }) }
                         dataMapper={ createCveListBySystem }
                         showAllCheckbox={ false }
+                        defaultSort='-public_date'
                     />
                 </CardBody>
             </Card>
