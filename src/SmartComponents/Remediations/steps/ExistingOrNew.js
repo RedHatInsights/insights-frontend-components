@@ -19,7 +19,7 @@ function ExistingOrNewStep(props) {
     return (
         <React.Fragment>
             <h1 className='ins-m-text__bold'>Do you want to modify an existing Remediation or create a new one?</h1>
-            <Form className="ins-c-existing-or-new">
+            <Form className="ins-c-existing-or-new" onSubmit={ e => e.preventDefault() }>
                 <div className="ins-c-existing-or-new__existing">
                     <Radio
                         label="Existing Remediation"
