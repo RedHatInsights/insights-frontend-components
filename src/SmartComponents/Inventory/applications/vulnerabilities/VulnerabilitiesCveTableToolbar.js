@@ -55,7 +55,7 @@ class VulnerabilitiesCveTableToolbar extends Component {
                 <Toolbar className="cvetable-toolbar ">
                     <ToolbarGroup className="filterCVES space-between-toolbar-items">
                         <ToolbarItem>
-                            <SimpleTableFilter onFilterChange={ (value) => this.changeFilterValue(value) } onButtonClick={ this.apply } />
+                            <SimpleTableFilter onFilterChange={ (value) => this.changeFilterValue(value) } buttonTitle={ null } />
                         </ToolbarItem>
                         <ToolbarItem>
                             <Form>
