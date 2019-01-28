@@ -1,5 +1,3 @@
-/*global RELEASE:true*/
-
 import React, { Component } from 'react';
 import keyBy from 'lodash/keyBy';
 import transform from 'lodash/transform';
@@ -7,6 +5,7 @@ import transform from 'lodash/transform';
 import * as api from '../../api/remediations';
 import { Wizard } from '../../PresentationalComponents/Wizard';
 import Deferred from '../../Utilities/Deferred';
+import { remediationUrl } from './utils';
 
 import ExistingOrNew from './steps/ExistingOrNew';
 import ResolutionModeStep from './steps/ResolutionModeStep';
@@ -23,28 +22,13 @@ export function getMountedInstance () {
     return mountedInstance;
 }
 
-function createRemediation (name, add, basePath) {
-    return api.createRemediation({
-        name: name || 'Unnamed remediation',
-        add
-    }, basePath);
-}
-
-function updateRemediation (id, add, basePath) {
-    return api.updateRemediation(id, {
-        add
-    }, basePath);
-}
-
 function createNotification (id, name, isNewSwitch) {
     const verb = isNewSwitch ? 'created' : 'updated';
-    const isBeta = window.location.pathname.includes('insightsbeta');
-    const url = `/insights${ isBeta ? 'beta' : ''}/platform/remediations/${encodeURIComponent(id)}`;
 
     return {
         variant: 'success',
-        title: `Remediation ${verb}`,
-        description: <span><a href={ url } >{ name }</a> has been { verb }</span>,
+        title: `Playbook ${verb}`,
+        description: <span><a href={ remediationUrl(id) } >{ name }</a> has been { verb }</span>,
         dismissDelay: 8000
     };
 }
@@ -145,7 +129,7 @@ class RemediationWizard extends Component {
     }
 
     createRemediation = (add, resolver) => {
-        const name = this.state.name || 'Unnamed remediation';
+        const name = this.state.name || 'Unnamed Playbook';
 
         return api.createRemediation({ name, add, auto_reboot: this.state.autoRebootSwitch }, this.state.open.basePath)
         .then(({ id }) => resolver(id, name, true));
