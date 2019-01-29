@@ -27,6 +27,7 @@ class InventoryRuleList extends Component {
     async fetchEntityRules() {
         const { entity } = this.props;
         try {
+            await insights.chrome.auth.getUser();
             const data = await fetch(`${SYSTEM_FETCH_URL}${entity.id}/reports`).then(data => data.json()).catch(error => {throw error;});
             this.setState({
                 inventoryReport: data,
@@ -80,7 +81,7 @@ class InventoryRuleList extends Component {
                     </a>
                 </div>
                 {
-                    inventoryReport.active_reports.map((report, key) =>
+                    inventoryReport && inventoryReport.active_reports && inventoryReport.active_reports.map((report, key) =>
                         <ExpandableRulesCard key={ key } report={ report } isExpanded={ expanded } kbaDetails={ kbaDetails }/>
                     ) }
             </Fragment>

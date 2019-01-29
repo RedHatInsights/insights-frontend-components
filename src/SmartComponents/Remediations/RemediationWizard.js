@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import keyBy from 'lodash/keyBy';
+import transform from 'lodash/transform';
 
 import * as api from '../../api/remediations';
 import { Wizard } from '../../PresentationalComponents/Wizard';
 import Deferred from '../../Utilities/Deferred';
+import { remediationUrl } from './utils';
 
 import ExistingOrNew from './steps/ExistingOrNew';
 import ResolutionModeStep from './steps/ResolutionModeStep';
@@ -20,25 +22,13 @@ export function getMountedInstance () {
     return mountedInstance;
 }
 
-function createRemediation (name, add, basePath) {
-    return api.createRemediation({
-        name: name || 'Unnamed remediation',
-        add
-    }, basePath);
-}
-
-function updateRemediation (id, add, basePath) {
-    return api.updateRemediation(id, {
-        add
-    }, basePath);
-}
-
-function createNotification (name, isNewSwitch) {
+function createNotification (id, name, isNewSwitch) {
     const verb = isNewSwitch ? 'created' : 'updated';
+
     return {
         variant: 'success',
-        title: `Remediation ${verb}`,
-        description: `Remediation ${name} has been ${verb}`,
+        title: `Playbook ${verb}`,
+        description: <span><a href={ remediationUrl(id) } >{ name }</a> has been { verb }</span>,
         dismissDelay: 8000
     };
 }
@@ -96,21 +86,19 @@ class RemediationWizard extends Component {
     }
 
     loadResolutions = async (issues) => {
-        const errors = [];
+        const result = await api.getResolutionsBatch(issues.map(i => i.id));
 
-        const resolutions = await Promise.all(issues.map(issue => api.getResolutions(issue.id).catch (e => {
-            if (e.statusCode === 404) {
-                errors.push(`Issue ${issue.id} does not have Ansible support`);
-                return null;
+        const [ resolutions, errors ] = transform(result, ([ resolutions, errors ], value, key) => {
+            if (!value) {
+                errors.push(`Issue ${key} does not have Ansible support`);
+            } else {
+                resolutions.push(value);
             }
 
-            throw e;
-        })));
+            return [ resolutions, errors ];
+        }, [ [], [] ]);
 
-        this.setState({
-            resolutions: resolutions.filter(r => r),
-            errors
-        });
+        this.setState({ resolutions, errors });
     }
 
     closeWizard = submitted => {
@@ -141,7 +129,7 @@ class RemediationWizard extends Component {
     }
 
     createRemediation = (add, resolver) => {
-        const name = this.state.name || 'Unnamed remediation';
+        const name = this.state.name || 'Unnamed Playbook';
 
         return api.createRemediation({ name, add, auto_reboot: this.state.autoRebootSwitch }, this.state.open.basePath)
         .then(({ id }) => resolver(id, name, true));
@@ -157,7 +145,7 @@ class RemediationWizard extends Component {
     resolver = deferred => (id, name, isNewSwitch) => {
         deferred.resolve({
             remediation: { id, name },
-            getNotification: () => createNotification(name, isNewSwitch)
+            getNotification: () => createNotification(id, name, isNewSwitch)
         });
     };
 
