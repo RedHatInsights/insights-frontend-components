@@ -108,14 +108,14 @@ class ContextFilter extends Component {
     }
 
     render() {
-        const { columns, total, children, items } = this.props;
+        const { columns, total, children, hasItems } = this.props;
         const { filterByString, isOpen, filters } = this.state;
         const filteredColumns = columns && columns.filter(column => !column.isTime);
         const placeholder = filterByString || (filteredColumns && filteredColumns.length > 0 && filteredColumns[0].title);
         return (
             <Grid guttter="sm" className="ins-inventory-filters">
                 {
-                    (!items || items.length === 0) &&
+                    !hasItems &&
                     <GridItem span={ 4 } className="ins-inventory-text-filter">
                         <SimpleTableFilter
                             options={
@@ -196,7 +196,7 @@ Filter.propTypes = {
         title: PropTypes.string,
         value: PropTypes.string
     })),
-    items: PropTypes.array
+    hasItems: PropTypes.bool
 };
 Filter.defaultProps = {
     filters: [],
