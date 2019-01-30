@@ -151,7 +151,7 @@ class ContextFilter extends Component {
                         />
                     </GridItem>
                 }
-                <GridItem span={ 6 }>
+                <GridItem span={ hasItems ? 10 : 6 }>
                     { children }
                 </GridItem>
                 <GridItem span={ 1 } className="ins-inventory-total pf-u-display-flex pf-u-align-items-center">
