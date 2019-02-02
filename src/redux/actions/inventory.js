@@ -1,14 +1,45 @@
-import { ACTION_TYPES, SELECT_ENTITY, CHANGE_SORT, FILTER_ENTITIES, APPLICATION_SELECTED } from '../action-types';
-import { getEntity, getEntities } from '../../api/inventory';
+import {
+    ACTION_TYPES,
+    SELECT_ENTITY,
+    CHANGE_SORT,
+    FILTER_ENTITIES,
+    APPLICATION_SELECTED,
+    SHOW_ENTITIES,
+    FILTER_SELECT,
+    UPDATE_ENTITIES
+} from '../action-types';
+import { getEntities } from '../../api/inventory';
 
-export const loadEntities = () => ({
+export const loadEntities = (items = [], config) => ({
     type: ACTION_TYPES.LOAD_ENTITIES,
-    payload: getEntities()
+    payload: getEntities(items, config).then(results => ({
+        ...results,
+        page: config.itemsPage || results.page
+    }))
 });
 
-export const loadEntity = id => ({
+export const showEntities = (items = []) => ({
+    type: SHOW_ENTITIES,
+    payload: {
+        results: items
+    }
+});
+
+export const updateEntities = (items = []) => ({
+    type: UPDATE_ENTITIES,
+    payload: {
+        results: items
+    }
+});
+
+export const filterSelect = (selectedItem) => ({
+    type: FILTER_SELECT,
+    payload: selectedItem
+});
+
+export const loadEntity = (id, config) => ({
     type: ACTION_TYPES.LOAD_ENTITY,
-    payload: getEntity(id)
+    payload: getEntities(id, config)
 });
 
 export const selectEntity = (id, selected) => ({

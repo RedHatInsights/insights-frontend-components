@@ -1,20 +1,27 @@
 import ReducerRegistry from './ReducerRegistry';
 export let registry;
 
-function init(initialState = {}, middleware = []) {
+function init(initialState = {}, middleware = [], composeEnhancersDefault) {
     if (!registry) {
-        registry = new ReducerRegistry(initialState, [ ...middleware ]);
+        registry = new ReducerRegistry(initialState, [ ...middleware ], composeEnhancersDefault);
     }
-
+    registry.register({
+        routerData: (state, { type, payload }) => {
+            return ({
+                ...state,
+                ...type === '@@INSIGHTS-CORE/NAVIGATION' ? payload : {}
+            })
+        }
+    })
     return registry;
 }
 
 export default function() {
     return function(target) {
-      target.prototype.getRegistry = () => registry;
+      target.prototype.getRegistry = () => registry
     }
 }
 
-export function getRegistry(initialState = {}, middleware = []) {
-    return init(initialState, middleware);
+export function getRegistry(initialState = {}, middleware = [], composeEnhancersDefault) {
+    return init(initialState, middleware, composeEnhancersDefault);
 }

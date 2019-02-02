@@ -2,37 +2,48 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Button } from '@patternfly/react-core';
 import { loadEntity } from '../../redux/actions/inventory';
-import { withRouter, Link } from 'react-router-dom';
+import { Link, generatePath } from 'react-router-dom';
+import routerParams from '../../Utilities/RouterParams';
 import Entitydetail from './EntityDetail';
 import PropTypes from 'prop-types';
 import './InventoryDetail.scss';
 
 class InventoryDetail extends React.Component {
     componentDidMount() {
-        const { match: { params: { id }}, entity, loaded } = this.props;
-        if (!entity || entity.id !== parseInt(id, 10) || !loaded) {
-            this.props.loadEntity(parseInt(id, 10));
+        const { match: { params: { inventoryId }}, entity, loaded } = this.props;
+        if (!entity || entity.id !== inventoryId || !loaded) {
+            this.props.loadEntity(
+                inventoryId,
+                {
+                    prefix: this.props.pathPrefix,
+                    base: this.props.apiBase
+                }
+            );
         }
     }
 
     render() {
-        const { root } = this.props;
+        const { root, match: { params }, useCard, hideBack } = this.props;
         return (
             <React.Fragment>
-                <Entitydetail />
-                <Link to={ root }>
+                <Entitydetail useCard={ useCard }/>
+                { !hideBack && <Link to={ generatePath(root, params) }>
                     <Button variant='primary'>Back</Button>
-                </Link>
+                </Link> }
             </React.Fragment>
         );
     }
 }
 
 InventoryDetail.propTypes = {
+    useCard: PropTypes.bool,
+    hideBack: PropTypes.bool,
     root: PropTypes.string,
     match: PropTypes.any,
+    pathPrefix: PropTypes.number,
+    apiBase: PropTypes.string,
     entity: PropTypes.shape({
-        id: PropTypes.string
+        id: PropTypes.oneOfType([ PropTypes.string, PropTypes.number ])
     }),
     loaded: PropTypes.bool,
     loadEntity: PropTypes.func
@@ -40,8 +51,8 @@ InventoryDetail.propTypes = {
 
 function mapDispatchToProps(dispatch) {
     return {
-        loadEntity: (id) => dispatch(loadEntity(id))
+        loadEntity: (id, config) => dispatch(loadEntity(id, config))
     };
 }
 
-export default withRouter(connect(({ entityDetails: { entity, loaded }}) => ({ entity, loaded }), mapDispatchToProps)(InventoryDetail));
+export default routerParams(connect(({ entityDetails: { entity, loaded }}) => ({ entity, loaded }), mapDispatchToProps)(InventoryDetail));

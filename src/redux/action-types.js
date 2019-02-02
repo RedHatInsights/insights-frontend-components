@@ -26,7 +26,23 @@ export const ACTION_TYPES = [
 {}
 );
 
+export const UPDATE_ENTITIES = 'UPDATE_ENTITIES';
 export const SELECT_ENTITY = 'SELECT_ENTITY';
 export const CHANGE_SORT = 'CHANGE_SORT';
 export const FILTER_ENTITIES = 'FILTER_ENTITIES';
 export const APPLICATION_SELECTED = 'APPLICATION_SELECTED';
+export const SHOW_ENTITIES = 'SHOW_ENTITIES';
+export const FILTER_SELECT = 'FILTER_SELECT';
+
+/**
+ * Notifications actions
+ */
+const notificationsPrefix = '@@INSIGHTS-CORE/NOTIFICATIONS/';
+export const ADD_NOTIFICATION = `${notificationsPrefix}ADD_NOTIFICATION`;
+export const REMOVE_NOTIFICATION = `${notificationsPrefix}REMOVE_NOTIFICATION`;
+export const CLEAR_NOTIFICATIONS = `${notificationsPrefix}CLEAR_NOTIFICATIONS`;
+
+/**
+ * Application actions
+ */
+export const CVE_FETCH_LIST = 'CVE_FETCH_LIST';

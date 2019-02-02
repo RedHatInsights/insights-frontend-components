@@ -33,8 +33,8 @@ const Table = ({
     ...props
 }) => {
     const onAllRowsSelect = (event, selected) => {
-        Object.keys(rows).forEach((oneRow, key) => {
-            onItemSelect(event, oneRow.hasOwnProperty('id') ? oneRow.id : key, selected);
+        Object.keys(rows).forEach((oneRow) => {
+            onItemSelect(event, rows[oneRow].hasOwnProperty('id') ? rows[oneRow].id : oneRow, selected);
         });
     };
 
@@ -44,12 +44,12 @@ const Table = ({
             className={
                 classnames(
                     'pf-c-table',
+                    'ins-c-table',
                     props.variant !== TableVariant.large && 'pf-m-compact',
                     className
                 )
             }
             widget-type='InsightsTable'
-            wiget-id={ generateID('Table') }
         >
             <caption className="pf-c-table__caption">
             </caption>
@@ -110,7 +110,8 @@ Table.defaulProps = {
     expandable: false,
     onItemSelect: () => undefined,
     onColClick: () => undefined,
-    onRowClick: () => undefined
+    onRowClick: () => undefined,
+    'widget-id': generateID('Table')
 };
 
 export default Table;

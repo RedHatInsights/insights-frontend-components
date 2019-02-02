@@ -17,8 +17,8 @@ class TableBody extends Component {
 
         return (
             <td key={ key }
-                data-label={ current.hasOwnProperty('title') ? current.title : current }
-                role={ this.props.expandable && 'gridcell' }
+                data-label={ current && current.hasOwnProperty('title') ? current.title : current }
+                role={ this.props.expandable ? 'gridcell' : '' }
                 className={ classnames(col.className) }
                 colSpan={ col.colSpan }
                 onClick={ (event) => {
@@ -43,6 +43,7 @@ class TableBody extends Component {
                         'pf-m-expanded': row.active
                     }) }
                     onClick={ event => this.props.onExpandClick && this.props.onExpandClick(event, row, key) }
+                    aria-label={ `Expand row ${key}` }
                 >
                     <AngleDownIcon />
                 </Button> }
@@ -57,7 +58,7 @@ class TableBody extends Component {
                     'pf-c-table__expandable-row': oneRow.hasOwnProperty('isOpen'),
                     'pf-m-expanded': oneRow.isOpen
                 }) }
-                role={ this.props.expandable && 'row' }
+                role={ this.props.expandable ? 'row' : '' }
                 aria-level={ this.props.expandable && (oneRow.hasOwnProperty('isOpen') ? 2 : 1) }
                 onClick={ (event) => this.props.onRowClick && this.props.onRowClick(event, key) }
                 hidden={ oneRow.hasOwnProperty('isOpen') && !oneRow.isOpen }
@@ -66,7 +67,7 @@ class TableBody extends Component {
                 { this.props.hasCheckbox &&
           <td
               className="pf-c-table__check pf-m-shrink"
-              role={ this.props.expandable && 'gridcell' }
+              role={ this.props.expandable ? 'gridcell' : '' }
               onClick={ event => {
                   event.stopPropagation();
                   this.props.onItemSelect && this.props.onItemSelect(event, key, !oneRow.selected);
