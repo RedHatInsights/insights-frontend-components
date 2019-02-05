@@ -10,11 +10,11 @@ import { Table, TableHeader, TableBody, sortable, SortByDirection } from '@patte
 
 class VulnerabilitiesCveTable extends Component {
     handleRedirect = key => {
-        console.log(key);
+        const cve = key.name.title;
         if (location.href.indexOf('vulnerability') !== -1) {
-            this.props.history.push('/cves/' + key);
+            this.props.history.push('/cves/' + cve);
         } else {
-            location.href = `${document.baseURI}platform/vulnerability/cves/${key}`;
+            location.href = `${document.baseURI}platform/vulnerability/cves/${cve}`;
         }
     };
 
@@ -25,7 +25,10 @@ class VulnerabilitiesCveTable extends Component {
 
     sortColumn = (event, key, direction) => {
         let columnName = this.props.header[key].key;
-        if (direction === SortByDirection.desc) {
+        const { cves } = this.props;
+        const currentSort = cves.meta.sort;
+        const useDefault = currentSort && currentSort.substr(1) !== columnName;
+        if (direction === SortByDirection.desc || useDefault) {
             columnName = '-' + columnName;
         }
 
@@ -94,7 +97,7 @@ class VulnerabilitiesCveTable extends Component {
                     onSort={ this.sortColumn }
                 >
                     <TableHeader />
-                    <TableBody rowKey={(row) => row.name.title} onRowClick={ (_event, key) => this.handleRedirect(key) }/>
+                    <TableBody onRowClick={ (_event, key) => this.handleRedirect(key) }/>
                 </Table>
                 { this.createPagination() }
                 { !cves.isLoading && cves.data.length === 0 && this.noCves() }
