@@ -34,9 +34,15 @@ class Wizard extends Component {
         this.setState({ currentStep: 0 });
     }
 
+    handleKeyPress = (event) => {
+        if (event.key === 'Enter' && this.props.isValidated === true) {
+            this.handleNextModalStep();
+        }
+    }
+
     render() {
 
-        const { isLarge, title, className, isOpen, ...props } = this.props;
+        const { isLarge, title, className, isOpen, isValidated, ...props } = this.props;
 
         const wizardClasses = classNames(
             'ins-c-wizard',
@@ -52,13 +58,28 @@ class Wizard extends Component {
                 <Button key="back" action="back" variant="secondary" onClick={ this.handlePreviousModalStep }> Back </Button>,
             // Conditionally render 'confirm' button if on last page
             this.state.currentStep < this.props.content.length - 1
-                ? <Button key="Next" action="next" variant="primary" onClick={ this.handleNextModalStep }> Next </Button>
-                : <Button key="confirm" action="confirm" variant="primary" onClick={ () => this.handleOnClose(true) }> Confirm </Button>
+                ? <Button
+                    key="Next"
+                    action="next"
+                    variant="primary"
+                    isDisabled={ !isValidated }
+                    onClick={ this.handleNextModalStep }>
+                        Next
+                </Button>
+                : <Button
+                    key="confirm"
+                    action="confirm"
+                    variant="primary"
+                    isDisabled={ !isValidated }
+                    onClick={ () => this.handleOnClose(true) }>
+                        Confirm
+                </Button>
         ];
 
         return (
             <Modal
                 { ...props }
+                onKeyPress={ this.handleKeyPress }
                 isLarge = { isLarge }
                 title= { title }
                 className= { wizardClasses }
@@ -72,6 +93,7 @@ class Wizard extends Component {
 }
 
 Wizard.propTypes = {
+    isValidated: PropTypes.bool,
     isLarge: PropTypes.bool,
     title: PropTypes.string,
     className: PropTypes.string,
@@ -81,7 +103,8 @@ Wizard.propTypes = {
 };
 
 Wizard.defaultProps = {
-    onClose: f => f
+    onClose: f => f,
+    isValidated: true
 };
 
 export default Wizard;
