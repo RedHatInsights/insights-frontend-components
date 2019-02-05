@@ -61,6 +61,8 @@ class RemediationWizard extends Component {
 
             issuesById,
 
+            isValidated: true,
+
             isNewSwitch: true,
             name: '',
             existingRemediations: false,
@@ -207,7 +209,9 @@ class RemediationWizard extends Component {
     /*
      * State manipulation
      */
-    onNameChange = name => this.setState({ name });
+    onNameChange = name => this.setState({
+        name
+    });
 
     onIsNewSwitch = isNewSwitch => this.setState({
         isNewSwitch,
