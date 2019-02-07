@@ -5,20 +5,20 @@ import classNames from 'classnames';
 
 import './TableToolbar.scss';
 
+function generateResults(results) {
+    if (results > 1 || results < 1) {
+        return (`${results} Results`);
+    } else {
+        return (`${results} Result`);
+    }
+}
+
 const TableToolbar = ({ results, className, children, ...props }) => {
 
     const tableToolbarClasses = classNames(
         'ins-c-table__toolbar',
         className
     );
-
-    function generateResults(results) {
-        if (results > 1 || results < 1) {
-            return (`${results} Results`);
-        } else {
-            return (`${results} Result`);
-        }
-    }
 
     return (
         <Fragment>
