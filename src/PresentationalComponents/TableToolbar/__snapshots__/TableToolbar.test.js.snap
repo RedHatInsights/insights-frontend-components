@@ -1,11 +1,24 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`TableToolbar component should render 1`] = `
-<div
-  className="ins-c-table__toolbar"
->
-   
-  Some
-   
-</div>
+<Fragment>
+  <div
+    className="ins-c-table__toolbar"
+  >
+     
+    Some
+  </div>
+</Fragment>
+`;
+
+exports[`TableToolbar component should render with results 1`] = `
+<Fragment>
+  <div
+    className="ins-c-table__toolbar"
+    result={3}
+  >
+     
+    Some
+  </div>
+</Fragment>
 `;
