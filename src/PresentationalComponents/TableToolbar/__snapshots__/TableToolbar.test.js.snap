@@ -15,10 +15,14 @@ exports[`TableToolbar component should render with results greater than 1 1`] = 
 <Fragment>
   <div
     className="ins-c-table__toolbar"
-    result={2}
   >
      
     Some
+  </div>
+  <div
+    className="ins-c-table__toolbar-results"
+  >
+    2 Results
   </div>
 </Fragment>
 `;
@@ -27,10 +31,14 @@ exports[`TableToolbar component should render with results of 0 1`] = `
 <Fragment>
   <div
     className="ins-c-table__toolbar"
-    result={0}
   >
      
     Some
+  </div>
+  <div
+    className="ins-c-table__toolbar-results"
+  >
+    0 Results
   </div>
 </Fragment>
 `;
@@ -39,10 +47,14 @@ exports[`TableToolbar component should render with results of 1 1`] = `
 <Fragment>
   <div
     className="ins-c-table__toolbar"
-    result={1}
   >
      
     Some
+  </div>
+  <div
+    className="ins-c-table__toolbar-results"
+  >
+    1 Result
   </div>
 </Fragment>
 `;
