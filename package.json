@@ -42,7 +42,8 @@
     "collectCoverageFrom": [
       "src/**/*.{js|jsx}",
       "!src/**/stories/*",
-      "!src/**/index.js"
+      "!src/**/index.js",
+      "!src/**/*{c|C}ontext*.js"
     ],
     "setupFiles": [
       "<rootDir>/config/setupTests.js"
