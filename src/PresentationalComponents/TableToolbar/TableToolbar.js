@@ -12,12 +12,22 @@ const TableToolbar = ({ results, className, children, ...props }) => {
         className
     );
 
+    function generateResults(results) {
+        if (results > 1 || results < 1) {
+            return (`${results} Results`);
+        } else {
+            return (`${results} Result`);
+        }
+    }
+
     return (
         <Fragment>
             <div className={ tableToolbarClasses } { ...props }> { children }</div>
             {
-                results &&
-                <div className='ins-c-table__toolbar-results'> { results } Result{ results > 1 && 's' } </div>
+                results >= 0 &&
+                <div className='ins-c-table__toolbar-results'>
+                    { generateResults(results) }
+                </div>
             }
         </Fragment>
     );
