@@ -9,8 +9,18 @@ describe('TableToolbar component', () => {
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
-    it('should render with results', () => {
-        const wrapper = shallow(<TableToolbar result={ 3 }>Some</TableToolbar>)
+    it('should render with results of 0', () => {
+        const wrapper = shallow(<TableToolbar result={ 0 }>Some</TableToolbar>)
+        expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
+    it('should render with results of 1', () => {
+        const wrapper = shallow(<TableToolbar result={ 1 }>Some</TableToolbar>)
+        expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
+    it('should render with results greater than 1', () => {
+        const wrapper = shallow(<TableToolbar result={ 2 }>Some</TableToolbar>)
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 })

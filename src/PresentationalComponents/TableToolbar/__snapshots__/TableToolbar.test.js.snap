@@ -11,11 +11,35 @@ exports[`TableToolbar component should render 1`] = `
 </Fragment>
 `;
 
-exports[`TableToolbar component should render with results 1`] = `
+exports[`TableToolbar component should render with results greater than 1 1`] = `
 <Fragment>
   <div
     className="ins-c-table__toolbar"
-    result={3}
+    result={2}
+  >
+     
+    Some
+  </div>
+</Fragment>
+`;
+
+exports[`TableToolbar component should render with results of 0 1`] = `
+<Fragment>
+  <div
+    className="ins-c-table__toolbar"
+    result={0}
+  >
+     
+    Some
+  </div>
+</Fragment>
+`;
+
+exports[`TableToolbar component should render with results of 1 1`] = `
+<Fragment>
+  <div
+    className="ins-c-table__toolbar"
+    result={1}
   >
      
     Some
