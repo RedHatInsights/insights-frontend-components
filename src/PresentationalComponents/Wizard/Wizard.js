@@ -72,7 +72,7 @@ class Wizard extends Component {
                     variant="primary"
                     isDisabled={ !isValidated }
                     onClick={ () => this.handleOnClose(true) }>
-                        Confirm
+                    { this.props.confirmAction }
                 </Button>
         ];
 
@@ -97,6 +97,7 @@ Wizard.propTypes = {
     isLarge: PropTypes.bool,
     title: PropTypes.string,
     className: PropTypes.string,
+    confirmAction: PropTypes.string,
     isOpen: PropTypes.any,
     content: PropTypes.array,
     onClose: PropTypes.func
@@ -104,7 +105,8 @@ Wizard.propTypes = {
 
 Wizard.defaultProps = {
     onClose: f => f,
-    isValidated: true
+    isValidated: true,
+    confirmAction: 'Confirm'
 };
 
 export default Wizard;
