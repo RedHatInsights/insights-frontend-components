@@ -42,7 +42,7 @@ class Wizard extends Component {
 
     render() {
 
-        const { isLarge, title, className, isOpen, isValidated, ...props } = this.props;
+        const { isLarge, title, className, isOpen, isValidated, confirmAction, ...props } = this.props;
 
         const wizardClasses = classNames(
             'ins-c-wizard',
@@ -72,7 +72,7 @@ class Wizard extends Component {
                     variant="primary"
                     isDisabled={ !isValidated }
                     onClick={ () => this.handleOnClose(true) }>
-                    { this.props.confirmAction }
+                    { confirmAction }
                 </Button>
         ];
 
