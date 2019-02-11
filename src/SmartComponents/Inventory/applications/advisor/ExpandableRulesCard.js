@@ -84,7 +84,7 @@ class ExpandableRulesCard extends React.Component {
                     <Section type='icon-group__with-major'>
                         <Battery label='Impact' severity={ rule.impact.impact }/>
                         <Battery label='Likelihood' severity={ rule.likelihood }/>
-                        <Battery label='Total Risk' severity={ rule.severity }/>
+                        <Battery label='Total Risk' severity={ rule.total_risk }/>
                         <Battery label='Risk Of Change' severity={ report.resolution.resolution_risk.risk }/>
                     </Section>
                 </CardHeader>
@@ -93,7 +93,7 @@ class ExpandableRulesCard extends React.Component {
                         <StackItem>
                             <Card className='ins-m-card__flat'>
                                 <CardHeader>
-                                    <ThumbsUpIcon/>
+                                    <BullseyeIcon/>
                                     <strong>Detected Issues</strong>
                                 </CardHeader>
                                 <CardBody>
@@ -104,7 +104,7 @@ class ExpandableRulesCard extends React.Component {
                         <StackItem>
                             <Card className='ins-m-card__flat'>
                                 <CardHeader>
-                                    <BullseyeIcon/>
+                                    <ThumbsUpIcon/>
                                     <strong>Steps to resolve</strong>
                                 </CardHeader>
                                 <CardBody>
