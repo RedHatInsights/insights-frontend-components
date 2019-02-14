@@ -68,7 +68,7 @@ class VulnerabilitiesCveTableToolbar extends Component {
     render() {
         const { showAllCheckbox, downloadReport, totalNumber, showRemediationButton } = this.props;
         return (
-            <TableToolbar>
+            <TableToolbar results={ totalNumber }>
                 <Grid className="cvetable-toolbar" gutter={ 'md' }>
                     <GridItem span={ 3 }>
                         <SimpleTableFilter onFilterChange={ value => this.changeFilterValue(value) } buttonTitle={ null } />
@@ -115,7 +115,7 @@ class VulnerabilitiesCveTableToolbar extends Component {
                     <GridItem span={ 1 } />
                     <GridItem span={ 2 }>
                         <DownloadButton onSelect={ downloadReport } />
-                        <div className="number-of-results">{ totalNumber } Results</div>
+                        { /*<div className="number-of-results">{ totalNumber } Results</div>*/ }
                     </GridItem>
                 </Grid>
             </TableToolbar>
