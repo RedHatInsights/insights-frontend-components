@@ -3,8 +3,8 @@
 exports[`Gauge component Value- 0 - flipped colors 1`] = `
 <div
   className="ins-m-negative ins-c-gauge ins-m-fill-level-4"
-  id="InsightsGauge-1550168368266e220zvc9qys"
-  widget-id="InsightsGauge-1550168368266e220zvc9qys"
+  id="gauge-identifier"
+  widget-id="gauge-identifier"
   widget-type="InsightsGauge"
 />
 `;
@@ -12,8 +12,8 @@ exports[`Gauge component Value- 0 - flipped colors 1`] = `
 exports[`Gauge component Value- 0 1`] = `
 <div
   className="ins-c-gauge ins-m-fill-level-4"
-  id="InsightsGauge-1550168368266e220zvc9qys"
-  widget-id="InsightsGauge-1550168368266e220zvc9qys"
+  id="gauge-identifier"
+  widget-id="gauge-identifier"
   widget-type="InsightsGauge"
 />
 `;
@@ -21,8 +21,8 @@ exports[`Gauge component Value- 0 1`] = `
 exports[`Gauge component Value- 25 - flipped colors 1`] = `
 <div
   className="ins-m-negative ins-c-gauge ins-m-fill-level-3"
-  id="InsightsGauge-1550168368266e220zvc9qys"
-  widget-id="InsightsGauge-1550168368266e220zvc9qys"
+  id="gauge-identifier"
+  widget-id="gauge-identifier"
   widget-type="InsightsGauge"
 />
 `;
@@ -30,8 +30,8 @@ exports[`Gauge component Value- 25 - flipped colors 1`] = `
 exports[`Gauge component Value- 25 1`] = `
 <div
   className="ins-c-gauge ins-m-fill-level-3"
-  id="InsightsGauge-1550168368266e220zvc9qys"
-  widget-id="InsightsGauge-1550168368266e220zvc9qys"
+  id="gauge-identifier"
+  widget-id="gauge-identifier"
   widget-type="InsightsGauge"
 />
 `;
@@ -39,8 +39,8 @@ exports[`Gauge component Value- 25 1`] = `
 exports[`Gauge component Value- 50 - flipped colors 1`] = `
 <div
   className="ins-m-negative ins-c-gauge ins-m-fill-level-2"
-  id="InsightsGauge-1550168368266e220zvc9qys"
-  widget-id="InsightsGauge-1550168368266e220zvc9qys"
+  id="gauge-identifier"
+  widget-id="gauge-identifier"
   widget-type="InsightsGauge"
 />
 `;
@@ -48,8 +48,8 @@ exports[`Gauge component Value- 50 - flipped colors 1`] = `
 exports[`Gauge component Value- 50 1`] = `
 <div
   className="ins-c-gauge ins-m-fill-level-2"
-  id="InsightsGauge-1550168368266e220zvc9qys"
-  widget-id="InsightsGauge-1550168368266e220zvc9qys"
+  id="gauge-identifier"
+  widget-id="gauge-identifier"
   widget-type="InsightsGauge"
 />
 `;
@@ -57,8 +57,8 @@ exports[`Gauge component Value- 50 1`] = `
 exports[`Gauge component Value- 75 - flipped colors 1`] = `
 <div
   className="ins-m-negative ins-c-gauge ins-m-fill-level-1"
-  id="InsightsGauge-1550168368266e220zvc9qys"
-  widget-id="InsightsGauge-1550168368266e220zvc9qys"
+  id="gauge-identifier"
+  widget-id="gauge-identifier"
   widget-type="InsightsGauge"
 />
 `;
@@ -66,8 +66,8 @@ exports[`Gauge component Value- 75 - flipped colors 1`] = `
 exports[`Gauge component Value- 75 1`] = `
 <div
   className="ins-c-gauge ins-m-fill-level-1"
-  id="InsightsGauge-1550168368266e220zvc9qys"
-  widget-id="InsightsGauge-1550168368266e220zvc9qys"
+  id="gauge-identifier"
+  widget-id="gauge-identifier"
   widget-type="InsightsGauge"
 />
 `;
@@ -75,8 +75,8 @@ exports[`Gauge component Value- 75 1`] = `
 exports[`Gauge component Value- 100 - flipped colors 1`] = `
 <div
   className="ins-m-negative ins-c-gauge ins-m-fill-level-1"
-  id="InsightsGauge-1550168368266e220zvc9qys"
-  widget-id="InsightsGauge-1550168368266e220zvc9qys"
+  id="gauge-identifier"
+  widget-id="gauge-identifier"
   widget-type="InsightsGauge"
 />
 `;
@@ -84,8 +84,8 @@ exports[`Gauge component Value- 100 - flipped colors 1`] = `
 exports[`Gauge component Value- 100 1`] = `
 <div
   className="ins-c-gauge ins-m-fill-level-1"
-  id="InsightsGauge-1550168368266e220zvc9qys"
-  widget-id="InsightsGauge-1550168368266e220zvc9qys"
+  id="gauge-identifier"
+  widget-id="gauge-identifier"
   widget-type="InsightsGauge"
 />
 `;
@@ -93,8 +93,8 @@ exports[`Gauge component Value- 100 1`] = `
 exports[`Gauge component should render correctly 1`] = `
 <div
   className="ins-c-gauge ins-m-fill-level-4"
-  id="InsightsGauge-1550168368266e220zvc9qys"
-  widget-id="InsightsGauge-1550168368266e220zvc9qys"
+  id="gauge-identifier"
+  widget-id="gauge-identifier"
   widget-type="InsightsGauge"
 />
 `;
@@ -102,8 +102,8 @@ exports[`Gauge component should render correctly 1`] = `
 exports[`Gauge component should render correctly with added classes 1`] = `
 <div
   className="addedClass ins-c-gauge ins-m-fill-level-4"
-  id="InsightsGauge-1550168368266e220zvc9qys"
-  widget-id="InsightsGauge-1550168368266e220zvc9qys"
+  id="gauge-identifier"
+  widget-id="gauge-identifier"
   widget-type="InsightsGauge"
 />
 `;
@@ -111,8 +111,8 @@ exports[`Gauge component should render correctly with added classes 1`] = `
 exports[`Gauge component should render correctly with identifier 1`] = `
 <div
   className="ins-c-gauge ins-m-fill-level-4"
-  id="gauge identifier"
-  widget-id="gauge identifier"
+  id="gauge-identifier"
+  widget-id="gauge-identifier"
   widget-type="InsightsGauge"
 />
 `;
@@ -120,8 +120,8 @@ exports[`Gauge component should render correctly with identifier 1`] = `
 exports[`Gauge component should render correctly with width and height of 300 1`] = `
 <div
   className="ins-c-gauge ins-m-fill-level-4"
-  id="InsightsGauge-1550168368266e220zvc9qys"
-  widget-id="InsightsGauge-1550168368266e220zvc9qys"
+  id="gauge-identifier"
+  widget-id="gauge-identifier"
   widget-type="InsightsGauge"
 />
 `;

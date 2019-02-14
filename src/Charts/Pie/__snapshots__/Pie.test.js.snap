@@ -3,7 +3,7 @@
 exports[`Pie component should render correctly 1`] = `
 <div
   className="ins-l-pie-wrapper legend-bottom"
-  widget-id="InsightsPie-1550168368412985asjnct8t"
+  widget-id="test-pie"
   widget-type="InsightsPie"
 >
   <div
@@ -11,7 +11,7 @@ exports[`Pie component should render correctly 1`] = `
   >
     <div
       className="ins-c-pie"
-      id="InsightsPie-1550168368412985asjnct8t"
+      id="test-pie"
     />
   </div>
 </div>
@@ -20,7 +20,7 @@ exports[`Pie component should render correctly 1`] = `
 exports[`Pie component should render correctly with custom class 1`] = `
 <div
   className="ins-l-pie-wrapper legend-bottom"
-  widget-id="InsightsPie-1550168368412985asjnct8t"
+  widget-id="test-pie"
   widget-type="InsightsPie"
 >
   <div
@@ -28,7 +28,7 @@ exports[`Pie component should render correctly with custom class 1`] = `
   >
     <div
       className="test pie ins-c-pie"
-      id="InsightsPie-1550168368412985asjnct8t"
+      id="test-pie"
     />
   </div>
 </div>
@@ -37,7 +37,7 @@ exports[`Pie component should render correctly with custom class 1`] = `
 exports[`Pie component should render correctly with legend 1`] = `
 <div
   className="ins-l-pie-wrapper legend-bottom"
-  widget-id="test Pie"
+  widget-id="test-pie"
   widget-type="InsightsPie"
 >
   <div
@@ -45,7 +45,7 @@ exports[`Pie component should render correctly with legend 1`] = `
   >
     <div
       className="ins-c-pie"
-      id="test Pie"
+      id="test-pie"
     />
   </div>
   <div
@@ -178,7 +178,7 @@ exports[`Pie component should render correctly with legend 1`] = `
 exports[`Pie component should render correctly with legend and links 1`] = `
 <div
   className="ins-l-pie-wrapper legend-bottom"
-  widget-id="test Pie"
+  widget-id="test-pie"
   widget-type="InsightsPie"
 >
   <div
@@ -186,7 +186,7 @@ exports[`Pie component should render correctly with legend and links 1`] = `
   >
     <div
       className="ins-c-pie"
-      id="test Pie"
+      id="test-pie"
     />
   </div>
   <div
@@ -323,7 +323,7 @@ exports[`Pie component should render correctly with legend and links 1`] = `
 exports[`Pie component should render correctly with legend on the left 1`] = `
 <div
   className="ins-l-pie-wrapper legend-left"
-  widget-id="test Pie"
+  widget-id="test-pie"
   widget-type="InsightsPie"
 >
   <div
@@ -331,7 +331,7 @@ exports[`Pie component should render correctly with legend on the left 1`] = `
   >
     <div
       className="ins-c-pie"
-      id="test Pie"
+      id="test-pie"
     />
   </div>
   <div
@@ -468,7 +468,7 @@ exports[`Pie component should render correctly with legend on the left 1`] = `
 exports[`Pie component should render correctly with legend on top and links 1`] = `
 <div
   className="ins-l-pie-wrapper legend-top"
-  widget-id="test Pie"
+  widget-id="test-pie"
   widget-type="InsightsPie"
 >
   <div
@@ -476,7 +476,7 @@ exports[`Pie component should render correctly with legend on top and links 1`] 
   >
     <div
       className="ins-c-pie"
-      id="test Pie"
+      id="test-pie"
     />
   </div>
   <div
@@ -613,7 +613,7 @@ exports[`Pie component should render correctly with legend on top and links 1`] 
 exports[`Pie component should render correctly with no legend 1`] = `
 <div
   className="ins-l-pie-wrapper legend-bottom"
-  widget-id="test Pie"
+  widget-id="test-pie"
   widget-type="InsightsPie"
 >
   <div
@@ -621,7 +621,7 @@ exports[`Pie component should render correctly with no legend 1`] = `
   >
     <div
       className="ins-c-pie"
-      id="test Pie"
+      id="test-pie"
     />
   </div>
 </div>
@@ -630,7 +630,7 @@ exports[`Pie component should render correctly with no legend 1`] = `
 exports[`Pie component should render correctly with width and height of 300px, legend on top, with links 1`] = `
 <div
   className="ins-l-pie-wrapper legend-top"
-  widget-id="test Pie"
+  widget-id="test-pie"
   widget-type="InsightsPie"
 >
   <div
@@ -638,7 +638,7 @@ exports[`Pie component should render correctly with width and height of 300px, l
   >
     <div
       className="ins-c-pie"
-      id="test Pie"
+      id="test-pie"
     />
   </div>
   <div

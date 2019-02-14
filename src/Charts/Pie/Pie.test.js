@@ -12,17 +12,17 @@ describe('Pie component', () => {
         ['value4', 40]
     ];
 
-    const identifier = 'test Pie'
+    const identifier = 'test-pie'
 
     it('should render correctly', () => {
         const wrapper = shallow(
-            <Pie values={values} />);
+            <Pie values={values} identifier={identifier}/>);
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
     it('should render correctly with custom class', () => {
         const wrapper = shallow(
-            <Pie values={values} className='test pie'/>);
+            <Pie values={values} className='test pie' identifier={identifier}/>);
         expect(toJson(wrapper)).toMatchSnapshot();
     });
     

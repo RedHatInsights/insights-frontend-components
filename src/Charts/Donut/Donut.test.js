@@ -13,11 +13,11 @@ describe('Donut component', () => {
     ];
 
     const totalLabel = 'label for donut hole';
-    const identifier = 'test donut'
+    const identifier = 'test-donut'
 
     it('should render correctly', () => {
         const wrapper = shallow(
-            <Donut values={values} />);
+            <Donut values={values} identifier={identifier}/>);
         expect(toJson(wrapper)).toMatchSnapshot();
     });
     

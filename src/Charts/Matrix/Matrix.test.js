@@ -5,14 +5,14 @@ import Matrix from './Matrix';
 
 describe('Pie component', () => {
 
-    let matrixData = {
+    const matrixData = {
         topRight: [{position: [2, 2], label: 'First'}],
         topLeft: [{position: [2, 2], label: 'Second'}],
         bottomRight: [{position: [2, 2], label: 'Third'}],
         bottomLeft: [{position: [2, 2], label: 'Fourth'}],
     }
 
-    let matrixLabels = {
+    const matrixLabels = {
         yLabel: 'Y Axis Main Label',
         xLabel: 'X Axis Main Label',
         subLabels: {
@@ -21,7 +21,7 @@ describe('Pie component', () => {
         }
     };
 
-    let matrixConfig = {
+    const matrixConfig = {
         max: 4,
         min: 0,
         size: 2,
@@ -31,27 +31,23 @@ describe('Pie component', () => {
         colors: ['yellow', 'blue', 'red', 'black']
     }
 
+    const identifier= 'test-matrix';
+
     it('should render correctly', () => {
         const wrapper = shallow(
-            <Matrix data={matrixData} />);
+            <Matrix data={matrixData} identifier={identifier}/>);
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
     it('should render with labels', () => {
         const wrapper = shallow(
-            <Matrix data={matrixData} label={matrixLabels}/>);
-        expect(toJson(wrapper)).toMatchSnapshot();
-    });
-
-    it('should render with identifier', () => {
-        const wrapper = shallow(
-            <Matrix data={matrixData} label={matrixLabels} identifier='test matrix'/>);
+            <Matrix data={matrixData} label={matrixLabels} identifier={identifier}/>);
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
     it('should render with config', () => {
         const wrapper = shallow(
-            <Matrix data={matrixData} label={matrixLabels} config={matrixConfig}/>);
+            <Matrix data={matrixData} label={matrixLabels} config={matrixConfig} identifier={identifier}/>);
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 });

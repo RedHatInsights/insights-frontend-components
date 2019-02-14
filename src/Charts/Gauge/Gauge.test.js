@@ -6,23 +6,23 @@ import Gauge from './Gauge';
 describe('Gauge component', () => {
 
     const label = 'gauge label';
-    const identifier = 'gauge identifier'
+    const identifier = 'gauge-identifier'
 
     it('should render correctly', () => {
-        const wrapper = shallow(<Gauge value={10} label={label}/>);
+        const wrapper = shallow(<Gauge value={10} label={label} identifier={identifier}/>);
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
     [0, 25, 50, 75, 100].forEach(value => {
         it(`Value- ${value}`, () => {
-            const wrapper = shallow(<Gauge value={value} label={label}/>);
+            const wrapper = shallow(<Gauge value={value} identifier={identifier} label={label}/>);
             expect(toJson(wrapper)).toMatchSnapshot();
         });
     });
 
     [0, 25, 50, 75, 100].forEach(value => {
         it(`Value- ${value} - flipped colors`, () => {
-            const wrapper = shallow(<Gauge value={value} label={label} flipFullColors/>);
+            const wrapper = shallow(<Gauge value={value} identifier={identifier} label={label} flipFullColors/>);
             expect(toJson(wrapper)).toMatchSnapshot();
         });
     });
@@ -33,12 +33,12 @@ describe('Gauge component', () => {
     });
 
     it('should render correctly with width and height of 300', () => {
-        const wrapper = shallow(<Gauge value={10} height={300} width={300} label={label}/>);
+        const wrapper = shallow(<Gauge value={10} height={300} width={300} identifier={identifier} label={label}/>);
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
     it('should render correctly with added classes', () => {
-        const wrapper = shallow(<Gauge value={10} className='addedClass' label={label}/>);
+        const wrapper = shallow(<Gauge value={10} className='addedClass' identifier={identifier} label={label}/>);
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
