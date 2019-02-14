@@ -6,9 +6,10 @@ import '@patternfly/patternfly-next/utilities/Display/display.css';
 import '@patternfly/patternfly-next/utilities/Flex/flex.css';
 import { List } from 'react-content-loader';
 import ExpandableRulesCard from './ExpandableRulesCard';
-import { Card, CardBody, CardHeader } from '@patternfly/react-core';
+import { Card, CardBody, CardHeader, Level, LevelItem } from '@patternfly/react-core';
 import { CommentSlashIcon, FrownOpenIcon } from '@patternfly/react-icons';
 import { withRouter } from 'react-router-dom';
+import RemediationButton from '../../../Remediations/RemediationButton';
 
 import './advisor.scss';
 
@@ -20,11 +21,20 @@ class InventoryRuleList extends Component {
         inventoryReportFetchStatus: 'pending',
         inventoryReport: {},
         activeReports: [],
-        kbaDetails: []
+        kbaDetails: [],
+        remediation: false
     };
 
     componentDidMount () {
         this.fetchEntityRules();
+    }
+
+    processRemediation (systemId, reports) {
+        const issues = reports.filter(r => r.rule.has_playbook).map(r => ({ id: `advisor:${r.rule.rule_id}`, description: r.rule.description }));
+
+        return issues.length ?
+            { issues, systems: [ systemId ]} :
+            false;
     }
 
     async fetchEntityRules () {
@@ -36,7 +46,8 @@ class InventoryRuleList extends Component {
             this.setState({
                 inventoryReport: data,
                 activeReports: this.sortActiveReports(data.active_reports),
-                inventoryReportFetchStatus: 'fulfilled'
+                inventoryReportFetchStatus: 'fulfilled',
+                remediation: this.processRemediation(entity.id, data.active_reports)
             });
             const kbaIds = data && data.active_reports.map(report => report.rule.node_id).join(` OR `);
             this.fetchKbaDetails(kbaIds);
@@ -82,18 +93,26 @@ class InventoryRuleList extends Component {
     }
 
     buildRuleCards = () => {
-        const { activeReports, expanded, kbaDetails } = this.state;
+        const { activeReports, expanded, kbaDetails, remediation } = this.state;
 
         return (
             <Fragment>
-                <div className="pf-u-display-flex pf-u-flex-row-reverse">
-                    <a onClick={ e => {
-                        e.preventDefault();
-                        this.expandAll(expanded);
-                    } } rel="noopener">
-                        { (expanded ? `Collapse All` : `Expand All`) }
-                    </a>
-                </div>
+                <Level>
+                    <LevelItem>
+                        <a onClick={ e => {
+                            e.preventDefault();
+                            this.expandAll(expanded);
+                        } } rel="noopener">
+                            { (expanded ? `Collapse All` : `Expand All`) }
+                        </a>
+                    </LevelItem>
+                    <LevelItem>
+                        <RemediationButton
+                            isDisabled={ !remediation }
+                            dataProvider={ () => remediation }
+                            onRemediationCreated={ result => this.props.addNotification(result.getNotification()) } />
+                    </LevelItem>
+                </Level>
                 {
                     activeReports && activeReports.map((report, key) =>
                         <ExpandableRulesCard key={ key } report={ report } isExpanded={ expanded } kbaDetails={ kbaDetails }/>
