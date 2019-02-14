@@ -115,8 +115,7 @@ class VulnerabilitiesCveTableToolbar extends Component {
                     <GridItem span={ 1 } />
                     <GridItem span={ 2 }>
                         <DownloadButton onSelect={ downloadReport } />
-                        <div className="number-of-results">{ totalNumber }</div>
-                        Results
+                        <div className="number-of-results">{ totalNumber } Results</div>
                     </GridItem>
                 </Grid>
             </TableToolbar>
