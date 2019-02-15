@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PaginationNav from './PaginationNav';
 import PaginationMenu from './PaginationMenu';
-import '@patternfly/patternfly-next/components/Pagination/pagination.scss';
-import '@patternfly/patternfly-next/components/OptionsMenu/options-menu.scss';
+import './pagination-next.scss';
 
 class PaginationNext extends Component {
     render() {
@@ -20,6 +19,11 @@ class PaginationNext extends Component {
             perPageOptions,
             dropDirection,
             amountOfPages,
+            onFirstPage,
+            onLastPage,
+            onPreviousPage,
+            onNextPage,
+            perPage,
             ...props
         } = this.props;
         return (
@@ -31,9 +35,17 @@ class PaginationNext extends Component {
                     dropDirection={ dropDirection }
                     onSetPerPage={ onSetPerPage }
                     itemCount={ itemCount }
+                    perPage={ perPage }
                     perPageOptions={ perPageOptions }
                 />
-                <PaginationNav lastPage={ lastPage } page={ page } setPage={ setPage } />
+                <PaginationNav lastPage={lastPage}
+                    page={page}
+                    setPage={setPage}
+                    onFirstPage={onFirstPage}
+                    onLastPage={onLastPage}
+                    onPreviousPage={onPreviousPage}
+                    onNextPage={onNextPage}
+                />
             </div>
         );
     }
@@ -48,12 +60,17 @@ PaginationNext.propTypes = {
     widtgetId: PropTypes.string,
     dropDirection: PropTypes.string,
     onSetPerPage: PropTypes.func,
+    perPage: PropTypes.number,
     perPageOptions: PropTypes.arrayOf(PropTypes.shape({
         title: PropTypes.node,
         value: PropTypes.number
     })),
     lastPage: PropTypes.number,
-    setPage: PropTypes.func
+    setPage: PropTypes.func,
+    onFirstPage: PropTypes.func,
+    onLastPage: PropTypes.func,
+    onPreviousPage: PropTypes.func,
+    onNextPage: PropTypes.func
 };
 
 export default PaginationNext;

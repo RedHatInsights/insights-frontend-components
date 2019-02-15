@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { PaginationRow } from 'patternfly-react';
 import PaginationNext from './PaginationNext';
 import PropTypes from 'prop-types';
 
@@ -40,7 +39,19 @@ class Pagination extends Component {
     }
 
     render() {
-        let { page, onSetPage, numberOfItems, useNext, itemsPerPage, perPageOptions, onPerPageSelect, ...props } = this.props;
+        let {
+            page,
+            onSetPage,
+            numberOfItems,
+            itemsPerPage,
+            perPageOptions,
+            onPerPageSelect,
+            onFirstPage,
+            onLastPage,
+            onPreviousPage,
+            onNextPage,
+            ...props
+        } = this.props;
         const pagerOptions = perPageOptions || pager;
         const perPage = itemsPerPage || pagerOptions[0];
         const lastPage = Math.ceil(numberOfItems / perPage);
@@ -48,44 +59,26 @@ class Pagination extends Component {
         let firstIndex = numberOfItems === 0 ? 0 : (page - 1) * perPage + 1;
 
         return (
-            <React.Fragment>
-                {
-                    !useNext && typeof PaginationRow !== 'undefined' ?
-                        <div className="special-patternfly" widget-type='InsightsPagination'>
-                            <PaginationRow
-                                { ...this.props }
-                                pageInputValue={ this.props.page || 1 }
-                                viewType={ this.props.viewType || 'table' }
-                                pagination={ { perPage, page, perPageOptions: pagerOptions } }
-                                amountOfPages={ lastPage || 1 }
-                                itemCount={ this.props.numberOfItems }
-                                itemsStart={ firstIndex }
-                                pageSizeDropUp={ this.props.direction === 'up' }
-                                itemsEnd={ lastIndex }
-                                onPerPageSelect={ onPerPageSelect }
-                                onPageInput={ event => this.setPage(parseInt(event.target.value, 10), true) }
-                                onFirstPage={ this.props.onFirstPage || this.defaultFirstPage }
-                                onLastPage={ this.props.onLastPage || this.defaultLastPage }
-                                onPreviousPage={ this.props.onPreviousPage || this.defaultPreviousPage }
-                                onNextPage={ this.props.onNextPage || this.defaultNextPage }
-                            />
-                        </div> :
-                        <PaginationNext { ...props }
-                            itemCount={ this.props.numberOfItems }
-                            itemsStart={ firstIndex }
-                            itemsEnd={ lastIndex }
-                            lastPage={ lastPage || 1 }
-                            dropDirection={ this.props.direction }
-                            onSetPerPage={ (event, value) => this.props.onPerPageSelect(value) }
-                            page={ this.props.page || 1 }
-                            setPage={ (event, page) => this.setPage(page, event.target.tagName.toUpperCase() === 'INPUT') }
-                            perPageOptions={ pagerOptions.map(value => ({
-                                title: value,
-                                value
-                            })) }
-                        />
-                }
-            </React.Fragment>
+            <PaginationNext {...props}
+                itemCount={this.props.numberOfItems}
+                className="ins-c-pagination-next"
+                itemsStart={firstIndex}
+                itemsEnd={lastIndex}
+                lastPage={lastPage || 1}
+                dropDirection={this.props.direction}
+                onFirstPage={onFirstPage}
+                onLastPage={onLastPage}
+                onPreviousPage={onPreviousPage}
+                onNextPage={onNextPage}
+                perPage={perPage}
+                onSetPerPage={(_event, value) => this.props.onPerPageSelect(value)}
+                page={this.props.page || 1}
+                setPage={(event, page) => this.setPage(page, event === undefined)}
+                perPageOptions={pagerOptions.map(value => ({
+                    title: value,
+                    value
+                }))}
+            />
         );
     }
 }
@@ -101,13 +94,11 @@ Pagination.propTypes = {
     onFirstPage: PropTypes.func,
     onLastPage: PropTypes.func,
     onPreviousPage: PropTypes.func,
-    onNextPage: PropTypes.func,
-    useNext: PropTypes.bool
+    onNextPage: PropTypes.func
 };
 
 Pagination.defaultProps = {
-    page: 1,
-    useNext: false
+    page: 1
 };
 
 export default Pagination;

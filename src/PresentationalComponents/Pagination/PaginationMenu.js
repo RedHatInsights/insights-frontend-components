@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { CaretDownIcon, CaretUpIcon } from '@patternfly/react-icons';
+import { CaretDownIcon, CaretUpIcon, CheckIcon } from '@patternfly/react-icons';
 import { Dropdown, DropdownItem, DropdownToggle } from '@patternfly/react-core';
 
 class PaginationNav extends Component {
@@ -31,6 +31,7 @@ class PaginationNav extends Component {
             itemCount,
             perPageOptions,
             className,
+            perPage,
             ...props
         } = this.props;
         const { isOpen } = this.state;
@@ -43,7 +44,10 @@ class PaginationNav extends Component {
                         isOpen={ isOpen }
                         onSelect={ this.onSelect }
                         dropdownItems={ perPageOptions.map(({ title, value }) => (
-                            <DropdownItem onClick={ event => onSetPerPage(event, value) } key={ value } component="button">{ title }</DropdownItem>
+                            <DropdownItem onClick={ event => value !== perPage && onSetPerPage(event, value) } key={ value } component="button">
+                                { title }
+                                { value === perPage && <CheckIcon className="pf-c-options-menu__menu-item-icon" size="md" /> }
+                            </DropdownItem>
                         )) }
                         toggle={
                             <DropdownToggle onToggle={ this.onToggle } iconComponent={ null } className="pf-c-options-menu__toggle-button">
@@ -68,6 +72,7 @@ PaginationNav.propTypes = {
     widtgetId: PropTypes.string,
     onSetPerPage: PropTypes.func,
     itemCount: PropTypes.number.isRequired,
+    perPage: PropTypes.number,
     perPageOptions: PropTypes.arrayOf(PropTypes.shape({
         title: PropTypes.node,
         value: PropTypes.number
@@ -76,7 +81,8 @@ PaginationNav.propTypes = {
 
 PaginationNav.defaultProps = {
     itemsTitle: 'items',
-    dropDirection: 'up'
+    dropDirection: 'up',
+    className: ''
 };
 
 export default PaginationNav;
