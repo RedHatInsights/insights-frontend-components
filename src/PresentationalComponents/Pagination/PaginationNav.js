@@ -23,7 +23,7 @@ const PaginationNav = ({
             onClick={ event => {
                 onFirstPage(event);
                 setPage(event, 1);
-            }}
+            } }
         >
             <AngleDoubleLeftIcon />
         </Button>
@@ -34,21 +34,22 @@ const PaginationNav = ({
             onClick={ event => {
                 onPreviousPage(event, page - 1);
                 setPage(event, page - 1);
-            }}
+            } }
         >
             <AngleLeftIcon />
         </Button>
-        <div className="pf-c-pagination__nav-page-select" aria-label={`Current page ${page} of ${lastPage}`}>
+        <div className="pf-c-pagination__nav-page-select" aria-label={ `Current page ${page} of ${lastPage}` }>
             <TextInput className="pf-c-form-control"
                 aria-label="Current page"
                 type="number"
                 min="1"
                 data-action="set-page"
                 max={ amountOfPages }
-                size="2"
-                isReadOnly={ amountOfPages === 1}
+                style={ { width: `${lastPage.toString().length}rem` } }
+                isReadOnly={ amountOfPages === 1 }
                 value={ page }
-                onChange={ value => setPage(undefined, Number(value)) }
+                onChange={ (value, event) => {
+                    setPage(event, value === '' ? NaN : Number(value)); } }
             />
             <span aria-hidden="true">of { lastPage } { pageTitle }</span>
         </div>
@@ -59,7 +60,7 @@ const PaginationNav = ({
             onClick={ event => {
                 onNextPage(event, page + 1);
                 setPage(event, page + 1);
-            }}
+            } }
         >
             <AngleRightIcon />
         </Button>
@@ -70,7 +71,7 @@ const PaginationNav = ({
             onClick={ event => {
                 onLastPage(event);
                 setPage(event, lastPage);
-            }}
+            } }
         >
             <AngleDoubleRightIcon />
         </Button>

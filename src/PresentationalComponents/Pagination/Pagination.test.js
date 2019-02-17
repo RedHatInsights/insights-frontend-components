@@ -49,6 +49,7 @@ describe('Pagination component', () => {
                 const wrapper = mount(<Pagination numberOfItems={30} onSetPage={onSetPage} page={2} />);
                 wrapper.find('[data-action="first-page"]').first().simulate('click');
                 expect(onSetPage.mock.calls[0][0]).toBe(1);
+                expect(onSetPage.mock.calls[0][1]).toBe(false);
             });
 
             it('last page', () => {
@@ -56,6 +57,7 @@ describe('Pagination component', () => {
                 const wrapper = mount(<Pagination numberOfItems={30} onSetPage={onSetPage} page={2} />);
                 wrapper.find('[data-action="last-page"]').first().simulate('click');
                 expect(onSetPage.mock.calls[0][0]).toBe(3);
+                expect(onSetPage.mock.calls[0][1]).toBe(false);
             });
 
             it('previous page', () => {
@@ -63,6 +65,7 @@ describe('Pagination component', () => {
                 const wrapper = mount(<Pagination numberOfItems={30} onSetPage={onSetPage} page={2} />);
                 wrapper.find('[data-action="previous-page"]').first().simulate('click');
                 expect(onSetPage.mock.calls[0][0]).toBe(1);
+                expect(onSetPage.mock.calls[0][1]).toBe(false);
             });
 
             it('next page', () => {
@@ -70,35 +73,48 @@ describe('Pagination component', () => {
                 const wrapper = mount(<Pagination numberOfItems={30} onSetPage={onSetPage} page={2} />);
                 wrapper.find('[data-action="next-page"]').first().simulate('click');
                 expect(onSetPage.mock.calls[0][0]).toBe(3);
+                expect(onSetPage.mock.calls[0][1]).toBe(false);
             });
 
             describe('input', () => {
                 it('number', () => {
                     const onSetPage = jest.fn();
-                    const wrapper = mount(<Pagination numberOfItems={30} onSetPage={onSetPage} page={2} />);
-                    wrapper.find('input[data-action="set-page"]').first().simulate('change', { target: { value: 1 } });
+                    const wrapper = mount(<Pagination numberOfItems={30} onSetPage={onSetPage} page={3} />);
+                    const input = wrapper.find('input[data-action="set-page"]').first();
+                    input.getDOMNode().value = 1;
+                    input.simulate('change');
                     expect(onSetPage.mock.calls[0][0]).toBe(1);
+                    expect(onSetPage.mock.calls[0][1]).toBe(true);
                 });
 
                 it('large', () => {
                     const onSetPage = jest.fn();
                     const wrapper = mount(<Pagination numberOfItems={30} onSetPage={onSetPage} page={2} />);
-                    wrapper.find('input[data-action="set-page"]').first().simulate('change', { target: { value: '150' } });
+                    const input = wrapper.find('input[data-action="set-page"]').first();
+                    input.getDOMNode().value = 150;
+                    input.simulate('change');
                     expect(onSetPage.mock.calls[0][0]).toBe(3);
+                    expect(onSetPage.mock.calls[0][1]).toBe(true);
                 });
 
                 it('string', () => {
                     const onSetPage = jest.fn();
                     const wrapper = mount(<Pagination numberOfItems={30} onSetPage={onSetPage} page={2} />);
-                    wrapper.find('input[data-action="set-page"]').first().simulate('change', { target: { value: 'bad' } });
+                    const input = wrapper.find('input[data-action="set-page"]').first();
+                    input.getDOMNode().value = 'bad';
+                    input.simulate('change');
                     expect(onSetPage.mock.calls[0][0]).toBe(2);
+                    expect(onSetPage.mock.calls[0][1]).toBe(true);
                 });
 
                 it('negative page', () => {
                     const onSetPage = jest.fn();
                     const wrapper = mount(<Pagination numberOfItems={30} onSetPage={onSetPage} page={2} />);
-                    wrapper.find('input[data-action="set-page"]').first().simulate('change', { target: { value: '-1' } });
-                    expect(onSetPage.mock.calls[0][0]).toBe(2);
+                    const input = wrapper.find('input[data-action="set-page"]').first();
+                    input.getDOMNode().value = -1;
+                    input.simulate('change');
+                    expect(onSetPage.mock.calls[0][0]).toBe(0);
+                    expect(onSetPage.mock.calls[0][1]).toBe(true);
                 });
             });
         });

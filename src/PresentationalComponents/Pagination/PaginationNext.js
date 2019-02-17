@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PaginationNav from './PaginationNav';
 import PaginationMenu from './PaginationMenu';
-import './pagination-next.scss';
 
 class PaginationNext extends Component {
     render() {
@@ -38,13 +37,13 @@ class PaginationNext extends Component {
                     perPage={ perPage }
                     perPageOptions={ perPageOptions }
                 />
-                <PaginationNav lastPage={lastPage}
-                    page={page}
-                    setPage={setPage}
-                    onFirstPage={onFirstPage}
-                    onLastPage={onLastPage}
-                    onPreviousPage={onPreviousPage}
-                    onNextPage={onNextPage}
+                <PaginationNav lastPage={ lastPage }
+                    page={ page }
+                    setPage={ setPage }
+                    onFirstPage={ onFirstPage }
+                    onLastPage={ onLastPage }
+                    onPreviousPage={ onPreviousPage }
+                    onNextPage={ onNextPage }
                 />
             </div>
         );
