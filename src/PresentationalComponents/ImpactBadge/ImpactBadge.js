@@ -43,23 +43,18 @@ class ImpactBadge extends React.Component {
         };
     }
 
-    getColoredBadgeByImpact(impact) {
-        const iconSize = this.props.size || 'md';
-        let badge;
-
-        if (Object.keys(this.impactList).includes(impact)) {
-            badge = {
-                icon: <SecurityIcon size={ iconSize } color={ this.impactList[impact].color } />,
-                title: this.impactList[impact].title
+    getColoredBadgeByImpact() {
+        if (this.impactList.hasOwnProperty(this.props.impact)) {
+            return {
+                icon: <SecurityIcon size={ this.props.size } color={ this.impactList[this.props.impact].color } />,
+                title: this.impactList[this.props.impact].title
             };
         } else {
-            badge = {
-                icon: <QuestionIcon size={ iconSize } color={ this.colorList.default } />,
+            return {
+                icon: <QuestionIcon size={ this.props.size } color={ this.colorList.default } />,
                 title: 'Unknown'
             };
         }
-
-        return badge;
     }
 
     render() {
@@ -67,7 +62,7 @@ class ImpactBadge extends React.Component {
         return (
             <React.Fragment>
                 <div>
-                    <Tooltip position="right" content={ <div>Impact: { badge.title }</div> }>
+                    <Tooltip position={this.props.tooltip_position} content={ <div>Impact: { badge.title }</div> }>
                         { badge.icon }
                     </Tooltip>
                 </div>
@@ -76,9 +71,17 @@ class ImpactBadge extends React.Component {
     }
 }
 
+ImpactBadge.defaultProps = {
+    impact: 'N/A',
+    hastooltip: false,
+    tooltip_position: 'right',
+    size: 'md'
+};
+
 ImpactBadge.propTypes = {
     impact: propTypes.string,
     hastooltip: propTypes.bool,
+    tooltip_position: propTypes.string,
     size: propTypes.string // sm, md, lg and xl
 };
 
