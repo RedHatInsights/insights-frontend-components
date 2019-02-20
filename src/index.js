@@ -2,7 +2,7 @@ export {
     default as ReducerRegistry,
     applyReducerHash,
     dispatchActionsToStore,
-    reduxRegistry,
+    reduxRegistry
 } from './Utilities/ReducerRegistry';
 export { default as MiddlewareListener } from './Utilities/MiddlewareListener';
 export { default as registry, getRegistry } from './Utilities/Registry';
@@ -13,6 +13,7 @@ export * from './PresentationalComponents/Ansible';
 export * from './PresentationalComponents/Main';
 export * from './PresentationalComponents/Pagination';
 export * from './PresentationalComponents/SimpleTableFilter';
+export * from './PresentationalComponents/ImpactBadge';
 export * from './PresentationalComponents/Input';
 export * from './PresentationalComponents/Table';
 export * from './PresentationalComponents/Dropdown';
