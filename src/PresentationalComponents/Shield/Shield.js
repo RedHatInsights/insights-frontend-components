@@ -30,7 +30,7 @@ class Shield extends React.Component {
                 { this.props.hasTooltip === true ? (
                     <Tooltip
                         position={ this.props.tooltipPosition }
-                        content={ <div>{ this.props.tooltipPrefix + badge.title }</div> }
+                        content={ <div>{ this.props.tooltipPrefix + (this.props.title || badge.title) }</div> }
                     >
                         { badge.icon }
                     </Tooltip>
@@ -47,6 +47,7 @@ Shield.defaultProps = {
     hasTooltip: false,
     tooltipPosition: 'right',
     tooltipPrefix: '',
+    title: '',
     size: 'md'
 };
 
@@ -55,6 +56,7 @@ Shield.propTypes = {
     hasTooltip: propTypes.bool,
     tooltipPosition: propTypes.string,
     tooltipPrefix: propTypes.string,
+    title: propTypes.string,
     size: propTypes.string // sm, md, lg and xl
 };
 
