@@ -4,7 +4,7 @@ import propTypes from 'prop-types';
 import React from 'react';
 import { impactList, colorList } from './consts';
 
-class ImpactBadge extends React.Component {
+class Shield extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -24,7 +24,7 @@ class ImpactBadge extends React.Component {
     }
 
     render() {
-        const badge = this.getColoredBadgeByImpact(this.props.impact);
+        const badge = this.getColoredBadgeByImpact();
         return (
             <React.Fragment>
                 { this.props.hasTooltip === true ? (
@@ -42,7 +42,7 @@ class ImpactBadge extends React.Component {
     }
 }
 
-ImpactBadge.defaultProps = {
+Shield.defaultProps = {
     impact: 'N/A',
     hasTooltip: false,
     tooltipPosition: 'right',
@@ -50,7 +50,7 @@ ImpactBadge.defaultProps = {
     size: 'md'
 };
 
-ImpactBadge.propTypes = {
+Shield.propTypes = {
     impact: propTypes.string,
     hasTooltip: propTypes.bool,
     tooltipPosition: propTypes.string,
@@ -58,4 +58,4 @@ ImpactBadge.propTypes = {
     size: propTypes.string // sm, md, lg and xl
 };
 
-export default ImpactBadge;
+export default Shield;
