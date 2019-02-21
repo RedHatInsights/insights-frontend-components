@@ -30,8 +30,13 @@ export const impactList = {
     Low: {
         title: 'Low',
         color: colorList.default
+    },
+    Unknown: {
+        title: 'N/A',
+        color: colorList.default
     }
 };
 
 impactList.maximum = impactList.Critical;
 impactList.minimum = impactList.Low;
+impactList.default = impactList.Unknown;
