@@ -32,3 +32,6 @@ export const impactList = {
         color: colorList.default
     }
 };
+
+impactList.maximum = impactList.Critical;
+impactList.minimum = impactList.Low;
