@@ -8,19 +8,19 @@ class SkeletonTable extends React.Component {
         const { colSize } = this.props;
         return [
             ...Array(colSize)
-        ].map(() => ({ title: <Skeleton size={SkeletonSize.sm} /> }))
+        ].map(() => ({ title: <Skeleton size={ SkeletonSize.sm } /> }));
     }
 
     createRows = () => {
         const { colSize, rowSize } = this.props;
         return [
             ...Array(rowSize)
-        ].map(() => [...Array(colSize)].map(() => ({ title: <Skeleton size={SkeletonSize.md} /> })))
+        ].map(() => [ ...Array(colSize) ].map(() => ({ title: <Skeleton size={ SkeletonSize.md } /> })));
     }
 
     render() {
         return (
-            <Table cells={this.createColumns()} rows={this.createRows()} aria-label="Loading">
+            <Table cells={ this.createColumns() } rows={ this.createRows() } aria-label="Loading">
                 <TableHeader />
                 <TableBody />
             </Table>
@@ -31,11 +31,10 @@ class SkeletonTable extends React.Component {
 SkeletonTable.propTypes = {
     colSize: PropTypes.number.isRequired,
     rowSize: PropTypes.number
-}
+};
 
 SkeletonTable.defaultProps = {
     rowSize: 0
-}
-
+};
 
 export default SkeletonTable;

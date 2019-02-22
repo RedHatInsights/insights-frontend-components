@@ -5,6 +5,7 @@ import { SimpleTableFilter } from '../../../PresentationalComponents/SimpleTable
 import { connect } from 'react-redux';
 import { filterSelect } from '../../../redux/actions/inventory';
 import { InventoryContext } from '../Inventory';
+import Pagination from '../Pagination';
 import FilterItem from './FilterItem';
 import flatMap from 'lodash/flatMap';
 import debounce from 'lodash/debounce';
@@ -108,7 +109,7 @@ class ContextFilter extends Component {
     }, 800)
 
     render() {
-        const { columns, total, children, hasItems } = this.props;
+        const { columns, children, hasItems, totalItems, page, onRefresh, perPage } = this.props;
         const { filterByString, isOpen, filters } = this.state;
         const filteredColumns = columns && columns.filter(column => !column.isTime);
         const placeholder = filterByString || (filteredColumns && filteredColumns.length > 0 && filteredColumns[0].title);
@@ -116,7 +117,7 @@ class ContextFilter extends Component {
             <Grid guttter="sm" className="ins-inventory-filters">
                 {
                     !hasItems &&
-                    <GridItem span={ 4 } className="ins-inventory-text-filter">
+                    <GridItem span={ 3 } className="ins-inventory-text-filter">
                         <SimpleTableFilter
                             options={
                                 filteredColumns && filteredColumns.length > 1 ? {
@@ -151,20 +152,16 @@ class ContextFilter extends Component {
                         />
                     </GridItem>
                 }
-                <GridItem span={ hasItems ? 10 : 6 }>
+                <GridItem span={ hasItems ? 5 : 2 }>
                     { children }
                 </GridItem>
-                <GridItem span={ 1 } className="ins-inventory-total pf-u-display-flex pf-u-align-items-center">
-                    { total > 0 && <div>{ total } result{ total > 1 && 's' }</div> }
-                    { /* <Button
-                        variant="plain"
-                        className="ins-refresh"
-                        title="Refresh"
-                        aria-label="Refresh"
-                        onClick={ _event => onRefreshData() }
-                    >
-                        <SyncAltIcon />
-                    </Button> */ }
+                <GridItem span={ 7 }>
+                    <Pagination
+                        totalItems={ totalItems }
+                        page={ page }
+                        onRefresh={ onRefresh }
+                        perPage={ perPage }
+                    />
                 </GridItem>
             </Grid>
         );
@@ -204,10 +201,9 @@ Filter.defaultProps = {
     onFilterSelect: () => undefined
 };
 
-function mapStateToProps({ entities: { columns, total, activeFilters }}, { totalItems }) {
+function mapStateToProps({ entities: { columns, activeFilters }}) {
     return {
         columns,
-        total: totalItems || total,
         activeFilters
     };
 }
