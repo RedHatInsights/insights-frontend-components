@@ -1,14 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import routerParams from '../../Utilities/RouterParams';
-import { selectEntity, setSort, detailSelect } from '../../redux/actions/inventory';
+import { selectEntity, setSort, detailSelect, onUpdateEntity } from '../../redux/actions/inventory';
 import { connect } from 'react-redux';
 import get from 'lodash/get';
 import { Table as PfTable, TableBody, TableHeader, TableGridBreakpoint, cellWidth, TableVariant } from '@patternfly/react-table';
 import { SkeletonTable } from '../../PresentationalComponents/SkeletonTable';
 import { EmptyTable } from '../../PresentationalComponents/EmptyTable';
+import RenameDialog from './RenameDialog';
 
 class EntityTable extends React.Component {
+    state = {}
     onRowClick = (_event, key, application) => {
         const { match: { url }, history, onDetailSelect, loaded } = this.props;
         if (loaded) {
@@ -16,6 +18,14 @@ class EntityTable extends React.Component {
             history.push(`${url}${dilimeter}${key}/${application ? application : ''}`);
             onDetailSelect && onDetailSelect(application);
         }
+    }
+
+    confirmedRename = (value) => {
+        const { onUpdateEntity } = this.props;
+        const { activeEntity } = this.state;
+        // eslint-disable-next-line camelcase
+        onUpdateEntity({ ...activeEntity, display_name: value });
+        this.setState({ activeEntity: undefined });
     }
 
     onItemSelect = (_event, checked, rowId) => {
@@ -106,8 +116,24 @@ class EntityTable extends React.Component {
         }));
     }
 
+    generateActions = () => {
+        const { actions, onSingleExport, rows } = this.props;
+        return [
+            {
+                title: 'Rename',
+                onClick: (_event, rowId) => this.setState({ activeEntity: rows[rowId] })
+            },
+            ...onSingleExport ? {
+                title: 'Export',
+                onClick: (event, rowId) => onSingleExport(event, rowId)
+            } : {},
+            ...actions
+        ];
+    }
+
     render() {
-        const { columns, loaded, expandable, onExpandClick, hasCheckbox, actions, variant } = this.props;
+        const { columns, loaded, expandable, onExpandClick, hasCheckbox, showActions, variant } = this.props;
+        const { activeEntity } = this.state;
         return (
             <React.Fragment>
                 { loaded ?
@@ -121,7 +147,7 @@ class EntityTable extends React.Component {
                         { ...{
                             ...hasCheckbox ? { onSelect: this.onItemSelect } : {},
                             ...expandable ? { onCollapse: onExpandClick } : {},
-                            ...actions ? { actions } : {}
+                            ...showActions ? { actions: this.generateActions() } : {}
                         } }
                     >
                         <TableHeader />
@@ -129,6 +155,7 @@ class EntityTable extends React.Component {
                     </PfTable> :
                     <SkeletonTable colSize={ 2 } rowSize={ 15 } />
                 }
+                <RenameDialog entity={ activeEntity } onUpdateEntity={ this.confirmedRename }/>
             </React.Fragment>
         );
     }
@@ -136,10 +163,10 @@ class EntityTable extends React.Component {
 
 EntityTable.propTypes = {
     variant: PropTypes.oneOf(Object.values(TableVariant)),
+    actions: PropTypes.arrayOf(PropTypes.node),
     history: PropTypes.any,
     expandable: PropTypes.bool,
     onExpandClick: PropTypes.func,
-    setSort: PropTypes.func,
     hasCheckbox: PropTypes.bool,
     showActions: PropTypes.bool,
     rows: PropTypes.arrayOf(PropTypes.any),
@@ -147,26 +174,24 @@ EntityTable.propTypes = {
         key: PropTypes.string,
         composed: PropTypes.arrayOf(PropTypes.string)
     })),
-    showHealth: PropTypes.bool,
     match: PropTypes.any,
     loaded: PropTypes.bool,
+    onSingleExport: PropTypes.func,
     items: PropTypes.array,
-    sortBy: PropTypes.shape({
-        key: PropTypes.string,
-        direction: PropTypes.oneOf([ 'asc', 'desc' ])
-    }),
     selectEntity: PropTypes.func,
-    onDetailSelect: PropTypes.func
+    onDetailSelect: PropTypes.func,
+    updateEntity: PropTypes.func
 };
 
 EntityTable.defaultProps = {
     loaded: false,
-    showHealth: false,
     expandable: false,
     hasCheckbox: true,
     showActions: false,
+    showExport: false,
     columns: [],
     rows: [],
+    actions: [],
     onExpandClick: () => undefined,
     selectEntity: () => undefined,
     onDetailSelect: () => undefined
@@ -176,7 +201,8 @@ function mapDispatchToProps(dispatch) {
     return {
         selectEntity: (id, isSelected) => dispatch(selectEntity(id, isSelected)),
         setSort: (id, isSelected) => dispatch(setSort(id, isSelected)),
-        onDetailSelect: (name) => dispatch(detailSelect(name))
+        onDetailSelect: (name) => dispatch(detailSelect(name)),
+        onUpdateEntity: (item) => dispatch(onUpdateEntity(item))
     };
 }
 

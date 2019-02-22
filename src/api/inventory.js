@@ -77,3 +77,29 @@ export function getEntities(items, { base = INVENTORY_API_BASE, controller, ...r
         })
     );
 }
+
+export function updateEntity({ id, display_name, insights_id, fqdn }, { base = INVENTORY_API_BASE }) {
+    return insights.chrome.auth.getUser().then(
+        (user) => fetch(`${base}`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                insights_id,
+                fqdn,
+                account: user.account_number,
+                id,
+                display_name
+            })
+        }).then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+
+            throw new Error(`Unexpected response code ${response.status}`);
+        })
+    );
+}

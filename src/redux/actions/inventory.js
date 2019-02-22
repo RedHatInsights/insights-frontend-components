@@ -9,7 +9,7 @@ import {
     UPDATE_ENTITIES,
     ENTITIES_LOADING
 } from '../action-types';
-import { getEntities } from '../../api/inventory';
+import { getEntities, updateEntity } from '../../api/inventory';
 
 export const loadEntities = (items = [], config) => ({
     type: ACTION_TYPES.LOAD_ENTITIES,
@@ -24,6 +24,11 @@ export const showEntities = (items = []) => ({
     payload: {
         results: items
     }
+});
+
+export const onUpdateEntity = (item, config = {}) => ({
+    type: ACTION_TYPES.UPDATE_ENTITY,
+    payload: updateEntity(item, config)
 });
 
 export const updateEntities = (items = []) => ({

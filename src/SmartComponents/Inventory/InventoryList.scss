@@ -51,6 +51,12 @@
     }
 }
 
+.ins-c-dialog__host-rename {
+    input{
+        width: 30rem;
+    }
+}
+
 .ins-c-entity-table.pf-c-table {
     margin-bottom: 15px;
     .ins-composed-col div:nth-child(2) {

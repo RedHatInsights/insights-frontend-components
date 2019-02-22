@@ -40,6 +40,16 @@ function entitiesLoaded(state, { payload: { results, per_page: perPage, page, co
     };
 }
 
+function entityUpdated({ rows, ...state }, { payload }) {
+    const updatedRow = rows.findIndex(row => row.id === payload.id);
+    rows[updatedRow] = payload;
+    console.log(rows, 'ffff');
+    return {
+        ...state,
+        rows
+    };
+}
+
 function selectEntity(state, { payload: { id, selected }}) {
     const rows = [ ...state.rows ];
     const entity = rows.find(entity => entity.id === id);
@@ -94,6 +104,7 @@ function selectFilter(state, { payload: { item: { items, ...item }, selected }})
 export default {
     [ACTION_TYPES.LOAD_ENTITIES_PENDING]: entitiesPending,
     [ACTION_TYPES.LOAD_ENTITIES_FULFILLED]: entitiesLoaded,
+    [ACTION_TYPES.UPDATE_ENTITY_FULFILLED]: entityUpdated,
     [UPDATE_ENTITIES]: entitiesLoaded,
     [SHOW_ENTITIES]: (state, action) => entitiesLoaded(state, {
         payload: {
