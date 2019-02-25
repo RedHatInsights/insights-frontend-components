@@ -7,17 +7,29 @@ import { impactList, colorList } from './consts';
 class Shield extends React.Component {
     constructor(props) {
         super(props);
+
+        this.title = this.props.tooltipPrefix + (this.props.title || this.getColoredBadgeByImpact().title);
     }
 
     getColoredBadgeByImpact() {
         if (impactList.hasOwnProperty(this.props.impact)) {
             return {
-                icon: <SecurityIcon size={ this.props.size } color={ impactList[this.props.impact].color } />,
+                icon: <SecurityIcon
+                    aria-hidden="false"
+                    aria-label={ this.title }
+                    size={ this.props.size }
+                    color={ impactList[this.props.impact].color }
+                />,
                 title: impactList[this.props.impact].title
             };
         } else {
             return {
-                icon: <QuestionIcon size={ this.props.size } color={ colorList.default } />,
+                icon: <QuestionIcon
+                    aria-hidden="false"
+                    aria-label={ this.title }
+                    size={ this.props.size }
+                    color={ colorList.default }
+                />,
                 title: 'Unknown'
             };
         }
@@ -25,12 +37,13 @@ class Shield extends React.Component {
 
     render() {
         const badge = this.getColoredBadgeByImpact();
+
         return (
             <React.Fragment>
                 { this.props.hasTooltip === true ? (
                     <Tooltip
                         position={ this.props.tooltipPosition }
-                        content={ <div>{ this.props.tooltipPrefix + (this.props.title || badge.title) }</div> }
+                        content={ <div>{ this.title }</div> }
                     >
                         { badge.icon }
                     </Tooltip>
@@ -45,7 +58,7 @@ class Shield extends React.Component {
 Shield.defaultProps = {
     impact: 'N/A',
     hasTooltip: false,
-    tooltipPosition: 'right',
+    tooltipPosition: 'top',
     tooltipPrefix: '',
     title: '',
     size: 'md'
