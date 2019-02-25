@@ -7,16 +7,15 @@ import { impactList, colorList } from './consts';
 class Shield extends React.Component {
     constructor(props) {
         super(props);
-
-        this.title = this.props.tooltipPrefix + (this.props.title || this.getColoredBadgeByImpact().title);
     }
 
     getColoredBadgeByImpact() {
+        const unknownLabel = 'Unknown';
         if (impactList.hasOwnProperty(this.props.impact)) {
             return {
                 icon: <SecurityIcon
                     aria-hidden="false"
-                    aria-label={ this.title }
+                    aria-label={ this.props.tooltipPrefix + (this.props.title || impactList[this.props.impact].title) }
                     size={ this.props.size }
                     color={ impactList[this.props.impact].color }
                 />,
@@ -26,11 +25,11 @@ class Shield extends React.Component {
             return {
                 icon: <QuestionIcon
                     aria-hidden="false"
-                    aria-label={ this.title }
+                    aria-label={ this.props.tooltipPrefix + (this.props.title || unknownLabel) }
                     size={ this.props.size }
                     color={ colorList.default }
                 />,
-                title: 'Unknown'
+                title: unknownLabel
             };
         }
     }
@@ -43,7 +42,7 @@ class Shield extends React.Component {
                 { this.props.hasTooltip === true ? (
                     <Tooltip
                         position={ this.props.tooltipPosition }
-                        content={ <div>{ this.title }</div> }
+                        content={ <div>{ this.props.tooltipPrefix + (this.props.title || badge.title) }</div> }
                     >
                         { badge.icon }
                     </Tooltip>
