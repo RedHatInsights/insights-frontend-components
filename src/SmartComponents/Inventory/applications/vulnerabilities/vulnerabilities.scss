@@ -28,9 +28,16 @@
 #download-report {
   cursor: pointer;
 }
+
 .number-of-results {
   display: inline-block;
   min-width: 55px;
   text-align: right;
   margin-right: 5px;
+}
+
+.table-header-icon {
+  svg {
+    margin-right: 5px;
+  }
 }
