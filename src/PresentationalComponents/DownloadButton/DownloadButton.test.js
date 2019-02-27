@@ -6,7 +6,7 @@ import { DropdownItem } from '@patternfly/react-core';
 
 const extraItems = [
     <DropdownItem key="extra-1" component="button"></DropdownItem>
-]
+];
 
 describe('DownloadButton component', () => {
     describe('should render', () => {
@@ -16,21 +16,21 @@ describe('DownloadButton component', () => {
         });
 
         it('custom items', () => {
-            const wrapper = shallow(<DownloadButton extraItems={extraItems} />);
+            const wrapper = shallow(<DownloadButton extraItems={ extraItems } />);
             expect(toJson(wrapper)).toMatchSnapshot();
         });
     });
 
     describe('API', () => {
         it('clicking should open dropdown', () => {
-            const wrapper = mount(<DownloadButton extraItems={extraItems} />);
+            const wrapper = mount(<DownloadButton extraItems={ extraItems } />);
             wrapper.find('button').first().simulate('click');
             expect(toJson(wrapper)).toMatchSnapshot();
         });
 
         it('onSelect should be called with CSV', () => {
             const onSelect = jest.fn();
-            const wrapper = mount(<DownloadButton extraItems={extraItems} onSelect={onSelect} />);
+            const wrapper = mount(<DownloadButton extraItems={ extraItems } onSelect={ onSelect } />);
             wrapper.find('button').first().simulate('click');
             wrapper.find('ul button').first().simulate('click');
             expect(onSelect.mock.calls.length).toBe(1);
@@ -39,7 +39,7 @@ describe('DownloadButton component', () => {
 
         it('onSelect should be called with JSON', () => {
             const onSelect = jest.fn();
-            const wrapper = mount(<DownloadButton extraItems={extraItems} onSelect={onSelect} />);
+            const wrapper = mount(<DownloadButton extraItems={ extraItems } onSelect={ onSelect } />);
             wrapper.find('button').first().simulate('click');
             wrapper.find('ul button').at(1).simulate('click');
             expect(onSelect.mock.calls.length).toBe(1);
@@ -48,10 +48,10 @@ describe('DownloadButton component', () => {
 
         it('shouldn\'t call onSelect', () => {
             const onSelect = jest.fn();
-            const wrapper = mount(<DownloadButton extraItems={extraItems} />);
+            const wrapper = mount(<DownloadButton extraItems={ extraItems } />);
             wrapper.find('button').first().simulate('click');
             wrapper.find('ul button').at(1).simulate('click');
             expect(onSelect.mock.calls.length).toBe(0);
-        })
+        });
     });
 });
