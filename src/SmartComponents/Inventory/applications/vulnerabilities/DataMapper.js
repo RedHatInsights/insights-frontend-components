@@ -19,9 +19,8 @@ export function createCveListBySystem({ isLoading, ...rest }) {
                     row.attributes.synopsis,
                     <LongTextTooltip
                         content={ row.attributes.description }
-                        maxLength={ 200 }
-                        tooltipPosition={ 'top' }
                         tooltipMaxWidth={ '50vw' }
+                        entryDelay="1200"
                         key={ row.id.toString() }
                     />,
                     parseCvssScore(row.attributes.cvss2_score, row.attributes.cvss3_score),
