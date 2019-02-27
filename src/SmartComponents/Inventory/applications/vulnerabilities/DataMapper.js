@@ -1,15 +1,7 @@
 import React from 'react';
-import { SecurityIcon } from '@patternfly/react-icons';
-import { parseCvssScore } from '../../../../Utilities/helpers';
-
-const colorToImpact = {
-    High: 'var(--pf-global--danger-color--100)',
-    Important: 'var(--pf-global--danger-color--100)',
-    Medium: 'var(--pf-global--warning-color--100)',
-    Moderate: 'var(--pf-global--warning-color--100)',
-    Critical: 'var(--pf-global--danger-color--100)',
-    Low: 'var(--pf-global--BackgroundColor--disabled)'
-};
+import { Shield } from '../../../../PresentationalComponents/Shield';
+import { LongTextTooltip } from '../../../../PresentationalComponents/LongTextTooltip';
+import { parseCvssScore, processDate } from '../../../../Utilities/helpers';
 
 export function createCveListBySystem({ isLoading, ...rest }) {
     if (!isLoading) {
@@ -18,13 +10,22 @@ export function createCveListBySystem({ isLoading, ...rest }) {
             data: data.map(row => ({
                 id: row.id,
                 cells: [
-                    <span key={ row.id }>
-                        <SecurityIcon size="md" color={ colorToImpact[row.attributes.impact] } />
-                    </span>,
+                    <Shield
+                        impact={ row.attributes.impact }
+                        hasTooltip={ true }
+                        tooltipPosition={ 'right' }
+                        key={ row.id.toString() }
+                    />,
                     row.attributes.synopsis,
-                    <span key={ `title-${row.id}` } title={ row.attributes.description }>{ row.attributes.description.substr(0, 199) }...</span>,
+                    <LongTextTooltip
+                        content={ row.attributes.description }
+                        maxLength={ 250 }
+                        tooltipPosition={ 'top' }
+                        tooltipMaxWidth={ '50vw' }
+                        key={ row.id.toString() }
+                    />,
                     parseCvssScore(row.attributes.cvss2_score, row.attributes.cvss3_score),
-                    new Date(row.attributes.public_date).toLocaleString()
+                    processDate(row.attributes.public_date)
                 ]
             })),
             meta,
