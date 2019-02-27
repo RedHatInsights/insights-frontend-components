@@ -19,7 +19,7 @@ export function createCveListBySystem({ isLoading, ...rest }) {
                     row.attributes.synopsis,
                     <LongTextTooltip
                         content={ row.attributes.description }
-                        maxLength={ 250 }
+                        maxLength={ 200 }
                         tooltipPosition={ 'top' }
                         tooltipMaxWidth={ '50vw' }
                         key={ row.id.toString() }
