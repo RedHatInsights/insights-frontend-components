@@ -22,9 +22,7 @@ const header = [
                     position="top"
                     content={ <div>{ cvssBaseDescription }</div> }
                 >
-                    <span className="table-header-icon">
-                        <InfoCircleIcon arial-label={ cvssBaseDescription } aria-hidden="false" />
-                    </span>
+                    <InfoCircleIcon className={ 'table-header-icon' } arial-label={ cvssBaseDescription } aria-hidden="false" />
                 </Tooltip>
                 { 'CVSS Base ' }
             </React.Fragment>
