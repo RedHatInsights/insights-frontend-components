@@ -11,12 +11,20 @@ export const impactList = {
         title: 'Critical',
         color: colorList.danger
     },
+    4: {
+        title: 'Critical',
+        color: colorList.danger
+    },
     High: {
         title: 'High',
         color: colorList.orange
     },
     Important: {
         title: 'Important',
+        color: colorList.orange
+    },
+    3: {
+        title: 'High',
         color: colorList.orange
     },
     Medium: {
@@ -27,6 +35,10 @@ export const impactList = {
         title: 'Moderate',
         color: colorList.warning
     },
+    2: {
+        title: 'Medium',
+        color: colorList.warning
+    },
     Low: {
         title: 'Low',
         color: colorList.default
@@ -34,17 +46,5 @@ export const impactList = {
     1: {
         title: 'Low',
         color: colorList.default
-    },
-    2: {
-        title: 'Medium',
-        color: colorList.warning
-    },
-    3: {
-        title: 'High',
-        color: colorList.orange
-    },
-    4: {
-        title: 'Critical',
-        color: colorList.danger
     }
 };
