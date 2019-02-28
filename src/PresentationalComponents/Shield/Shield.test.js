@@ -29,6 +29,11 @@ describe('Shield component', () => {
         expect(toJson(wrapper)).toMatchSnapshot();
     });
 
+    it('should render where impact value is 4', () => {
+        const wrapper = shallow(<Shield impact={ 4 } />);
+        expect(toJson(wrapper)).toMatchSnapshot();
+    });
+
     it('should render where impact value is NonExist', () => {
         const wrapper = shallow(<Shield impact={ 'NonExist' } />);
         expect(toJson(wrapper)).toMatchSnapshot();

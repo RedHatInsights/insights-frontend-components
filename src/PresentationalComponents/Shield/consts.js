@@ -30,16 +30,21 @@ export const impactList = {
     Low: {
         title: 'Low',
         color: colorList.default
+    },
+    1: {
+        title: 'Low',
+        color: colorList.default
+    },
+    2: {
+        title: 'Medium',
+        color: colorList.warning
+    },
+    3: {
+        title: 'High',
+        color: colorList.orange
+    },
+    4: {
+        title: 'Critical',
+        color: colorList.danger
     }
-};
-
-impactList.minimal = impactList.Medium;
-impactList.maximal = impactList.Critical;
-impactList.important = impactList.Important;
-impactList.default = impactList.Low;
-impactList.numerically = {
-    1: 'Low',
-    2: 'Medium',
-    3: 'High',
-    4: 'Critical'
 };
