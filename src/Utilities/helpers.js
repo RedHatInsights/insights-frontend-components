@@ -34,7 +34,7 @@ export function parseCvssScore(cvssV2, cvssV3) {
 export function processDate(dateString) {
     const date = new Date(dateString);
     const dateFormat = require('dateformat');
-    return (date instanceof Date && !isNaN(date) && dateFormat(date, 'd mmm yyyy')) || 'N/A';
+    return (date instanceof Date && !isNaN(date) && dateFormat(date, 'dd mmm yyyy')) || 'N/A';
 }
 
 export const RowLoader = props => (
