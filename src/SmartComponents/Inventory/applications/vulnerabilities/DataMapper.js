@@ -2,6 +2,7 @@ import React from 'react';
 import { Shield } from '../../../../PresentationalComponents/Shield';
 import { LongTextTooltip } from '../../../../PresentationalComponents/LongTextTooltip';
 import { parseCvssScore, processDate } from '../../../../Utilities/helpers';
+import { Link } from 'react-router-dom';
 
 export function createCveListBySystem({ isLoading, ...rest }) {
     if (!isLoading) {
@@ -16,7 +17,7 @@ export function createCveListBySystem({ isLoading, ...rest }) {
                         tooltipPosition={ 'right' }
                         key={ row.id.toString() }
                     />,
-                    row.attributes.synopsis,
+                    <span key={ row.id }>{ handleCVELink(row.attributes.synopsis) }</span>,
                     <LongTextTooltip
                         content={ row.attributes.description }
                         tooltipMaxWidth={ '50vw' }
@@ -33,4 +34,13 @@ export function createCveListBySystem({ isLoading, ...rest }) {
     }
 
     return { data: [], meta: (rest.payload && rest.payload.meta) || {}, isLoading };
+}
+
+function handleCVELink(synopsis) {
+
+    if (location.href.indexOf('vulnerability') !== -1) {
+        return <Link to={ '/cves/' + synopsis }>{ synopsis }</Link>;
+    } else {
+        return <a href={ `${document.baseURI}platform/vulnerability/cves/${synopsis}` }>{ synopsis }</a>;
+    }
 }
