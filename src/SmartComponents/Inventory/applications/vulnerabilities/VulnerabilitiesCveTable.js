@@ -76,7 +76,7 @@ class VulnerabilitiesCveTable extends Component {
             cells: [{
                 title: <RowLoader />,
                 props: {
-                    colSpan: header.length - 1 }
+                    colSpan: header.length }
             }]
         }));
         return (
