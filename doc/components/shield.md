@@ -23,11 +23,14 @@ class YourCmp extends React.Component {
 
 ## Props
 
-Shield
+You can also use all the props from Patternfly Tooltip component - [Documentation](http://patternfly-react.surge.sh/patternfly-4/components/tooltip)
 
 ```javascript
 {
-    impact: propTypes.string,
+    impact: propTypes.oneOfType([
+        propTypes.string,
+        propTypes.number
+    ]),
     hasTooltip: propTypes.bool,
     tooltipPosition: propTypes.string, // top, (right), bottom, left
     tooltipPrefix: propTypes.string,
