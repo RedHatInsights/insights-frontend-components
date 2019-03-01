@@ -1,3 +1,5 @@
+@import '../../../../Utilities/mixins';
+
 .ins-active-app-vulnerabilities {
     padding-top: 2em;
 }
@@ -37,5 +39,5 @@
 }
 
 .table-header-icon {
-  margin-right: .3rem;
+  @include rem('margin-right', 5px);
 }
