@@ -29,6 +29,7 @@ class SystemRulesTable extends React.Component {
             ],
             page: 1,
             itemsPerPage: 10,
+            hidePassedChecked: false,
             rows: [],
             currentRows: [],
             refIds: {},
@@ -38,7 +39,7 @@ class SystemRulesTable extends React.Component {
 
     setInitialCurrentRows() {
         const { itemsPerPage } = this.state;
-        const { profileRules } = this.props;
+        const { hidePassed, profileRules } = this.props;
         const rowsRefIds = this.rulesToRows(profileRules);
         this.currentRows(1, itemsPerPage, rowsRefIds).then((currentRows) => {
             this.setState(() => (
@@ -48,6 +49,9 @@ class SystemRulesTable extends React.Component {
                     refIds: rowsRefIds.refIds
                 }
             ));
+            if (hidePassed) {
+                this.hidePassed(true);
+            }
         });
     }
 
@@ -101,7 +105,7 @@ class SystemRulesTable extends React.Component {
 
         const firstIndex = (page - 1) * itemsPerPage * 2;
         const lastIndex = page * itemsPerPage * 2;
-        const newRows = rows.slice(firstIndex, lastIndex).flatMap(({ parent, ...row }) => ({
+        const newRows = flatMap(rows.slice(firstIndex, lastIndex), ({ parent, ...row }) => ({
             ...row,
             ...((parent || parent === 0) ? parent > itemsPerPage ? { parent: parent % (itemsPerPage * 2) } : { parent } : {})
         }));
@@ -199,7 +203,12 @@ class SystemRulesTable extends React.Component {
 
     selectedRules = () => {
         const { rows, refIds } = this.state;
-        return rows.filter(row => row.selected).map(row => refIds[row.cells[0]]);
+        return rows.filter(row => row.selected).map(row => ({
+            // We want to match this response with a similar response from GraphQL
+            // eslint-disable-next-line camelcase
+            ref_id: refIds[row.cells[0]],
+            title: row.cells[0] // This is the rule title, the description is too long
+        }));
     }
 
     // This takes both the row and its children (collapsible rows) and puts them into
@@ -286,21 +295,23 @@ class SystemRulesTable extends React.Component {
                 this.setState(() => ({
                     currentRows,
                     originalRows: rows,
-                    rows: onlyPassedRows
+                    rows: onlyPassedRows,
+                    hidePassedChecked: checked
                 }));
             });
         } else {
             this.currentRows(page, itemsPerPage, { rows: originalRows, refIds }).then((currentRows) => {
                 this.setState(() => ({
                     currentRows,
-                    rows: originalRows
+                    rows: originalRows,
+                    hidePassedChecked: checked
                 }));
             });
         }
     }
 
     render() {
-        const { sortBy, rows, currentRows, columns, page, itemsPerPage } = this.state;
+        const { sortBy, hidePassedChecked, rows, currentRows, columns, page, itemsPerPage } = this.state;
         const { loading } = this.props;
         if (loading) {
             return (
@@ -322,10 +333,10 @@ class SystemRulesTable extends React.Component {
                     <TableToolbar>
                         <Level gutter='md'>
                             <LevelItem>
-                                <Checkbox onChange={ this.hidePassed } label={ 'Hide Passed Rules' } />
+                                <Checkbox checked={ hidePassedChecked } onChange={ this.hidePassed } label={ 'Hide Passed Rules' } />
                             </LevelItem>
                             <LevelItem>
-                                { rows.length } results
+                                { rows.length / 2 } results
                             </LevelItem>
                             <LevelItem>
                                 <ComplianceRemediationButton selectedRules={ this.selectedRules() } />
@@ -343,7 +354,7 @@ class SystemRulesTable extends React.Component {
                         <TableBody />
                     </Table>
                     <Pagination
-                        numberOfItems={ rows.length }
+                        numberOfItems={ rows.length / 2 }
                         onPerPageSelect={ this.setPerPage }
                         page={ page }
                         onSetPage={ this.setPage }
@@ -357,7 +368,8 @@ class SystemRulesTable extends React.Component {
 
 SystemRulesTable.propTypes = {
     profileRules: propTypes.array,
-    loading: propTypes.bool
+    loading: propTypes.bool,
+    hidePassed: propTypes.bool
 };
 
 SystemRulesTable.defaultProps = {
