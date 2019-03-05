@@ -12,15 +12,16 @@ class SkeletonTable extends React.Component {
     }
 
     createRows = () => {
-        const { colSize, rowSize } = this.props;
+        const { colSize, rowSize, columns } = this.props;
+        const numberOfCols = columns ? columns.length : colSize;
         return [
             ...Array(rowSize)
-        ].map(() => [ ...Array(colSize) ].map(() => ({ title: <Skeleton size={ SkeletonSize.md } /> })));
+        ].map(() => [ ...Array(numberOfCols) ].map(() => ({ title: <Skeleton size={ SkeletonSize.md } /> })));
     }
 
     render() {
         return (
-            <Table cells={ this.createColumns() } rows={ this.createRows() } aria-label="Loading">
+            <Table cells={ this.props.columns || this.createColumns() } rows={ this.createRows() } aria-label="Loading">
                 <TableHeader />
                 <TableBody />
             </Table>
@@ -29,8 +30,9 @@ class SkeletonTable extends React.Component {
 }
 
 SkeletonTable.propTypes = {
-    colSize: PropTypes.number.isRequired,
-    rowSize: PropTypes.number
+    colSize: PropTypes.number,
+    rowSize: PropTypes.number,
+    columns: PropTypes.array
 };
 
 SkeletonTable.defaultProps = {
