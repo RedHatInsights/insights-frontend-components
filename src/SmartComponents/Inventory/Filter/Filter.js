@@ -120,7 +120,7 @@ class ContextFilter extends Component {
         const filteredColumns = columns && columns.filter(column => !column.isTime).map(this.textualFilter);
         const placeholder = filterByString || (filteredColumns && filteredColumns.length > 0 && filteredColumns[0].title);
         return (
-            <Grid guttter="sm" className="ins-inventory-filters">
+            <Grid gutter="sm" className="ins-inventory-filters">
                 {
                     (!hasItems && (total !== 0 || activeFilters.length !== 0)) &&
                     <GridItem span={ 4 } className="ins-inventory-text-filter">
@@ -158,20 +158,8 @@ class ContextFilter extends Component {
                         />
                     </GridItem>
                 }
-                <GridItem span={ hasItems ? 10 : 6 }>
+                <GridItem span={ 12 }>
                     { children }
-                </GridItem>
-                <GridItem span={ 1 } className="ins-inventory-total pf-u-display-flex pf-u-align-items-center">
-                    { total > 0 && <div>{ total } result{ total > 1 && 's' }</div> }
-                    { /* <Button
-                        variant="plain"
-                        className="ins-refresh"
-                        title="Refresh"
-                        aria-label="Refresh"
-                        onClick={ _event => onRefreshData() }
-                    >
-                        <SyncAltIcon />
-                    </Button> */ }
                 </GridItem>
             </Grid>
         );

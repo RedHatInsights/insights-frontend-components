@@ -55,7 +55,7 @@ class ContextInventoryList extends React.Component {
         const { showHealth, ...props } = this.props;
         return (
             <React.Fragment>
-                <Grid guttter="sm" className="ins-inventory-list">
+                <Grid gutter="sm" className="ins-inventory-list">
                     <GridItem span={ 12 }>
                         <InventoryEntityTable { ...props } showHealth={ showHealth } />
                     </GridItem>
