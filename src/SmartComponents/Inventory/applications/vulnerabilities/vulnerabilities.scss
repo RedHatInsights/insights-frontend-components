@@ -11,21 +11,15 @@
   }
 }
 .space-between-toolbar-items {
+  justify-content: space-between;
   > div {
-    margin-right: 5;
-    align-self: flex-end;
-    > form {
-      width: 150px;
-    }
+    width: 55%;
+  }
+  > form {
+    width: 40%;
   }
 }
 
-.filterCVES {
-  min-width: 25%;
-  > div {
-    align-self: flex-end;
-  }
-}
 
 #download-report {
   cursor: pointer;
