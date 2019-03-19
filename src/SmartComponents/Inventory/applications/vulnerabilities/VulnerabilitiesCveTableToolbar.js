@@ -21,7 +21,7 @@ const CVSSOptions = [
 
 class VulnerabilitiesCveTableToolbar extends Component {
     state = {};
-    
+
     changeFilterValue = debounce(
         value =>
             this.setState(
@@ -66,8 +66,10 @@ class VulnerabilitiesCveTableToolbar extends Component {
 
     render() {
         const { showAllCheckbox, downloadReport, totalNumber, showRemediationButton, cves } = this.props;
+        const selectedCvesCount =
+            this.props.showRemediationButton === true ? (this.props.selectedCves && this.props.selectedCves.size) || 0 : undefined;
         return (
-            <TableToolbar className="pf-u-justify-content-space-between" results={ totalNumber }>
+            <TableToolbar className="pf-u-justify-content-space-between" results={ totalNumber } selected={ selectedCvesCount }>
                 <ToolbarGroup className="space-between-toolbar-items">
                     <SimpleTableFilter onFilterChange={ value => this.changeFilterValue(value) } buttonTitle={ null } placeholder="Find a CVE…" />
 
