@@ -17,7 +17,7 @@ class VulnerabilitiesCves extends Component {
 
     apply = (config = {}) => {
         const toBeReset = [ 'filter', 'page_size', 'show_all' ];
-        if (some(toBeReset.map(item => config.hasOwnProperty(item)), item => item === true)) {
+        if (some(toBeReset, item => config.hasOwnProperty(item) && config[item] !== this.state[item])) {
             config.page = 1;
         }
 
