@@ -7,6 +7,7 @@ import findIndex from 'lodash/findIndex';
 import propTypes from 'prop-types';
 import { RowLoader } from '../../../../Utilities/helpers';
 import { Table, TableHeader, TableBody, sortable, SortByDirection } from '@patternfly/react-table';
+import { TableToolbar } from '../../../../PresentationalComponents/TableToolbar';
 
 class VulnerabilitiesCveTable extends Component {
     state = { selectedCves: new Set() };
@@ -109,7 +110,9 @@ class VulnerabilitiesCveTable extends Component {
                     <TableHeader />
                     <TableBody/>
                 </Table>
-                { this.createPagination() }
+                <TableToolbar isFooter>
+                    { this.createPagination() }
+                </TableToolbar>
                 { !cves.isLoading && cves.data.length === 0 && this.noCves() }
             </Fragment>
         );
