@@ -1,6 +1,18 @@
 /* eslint-disable camelcase */
 import React, { Component } from 'react';
-import { Checkbox, Form, FormGroup, FormSelect, FormSelectOption, Grid, GridItem, ToolbarGroup } from '@patternfly/react-core';
+import {
+    Checkbox,
+    Form,
+    FormGroup,
+    FormSelect,
+    FormSelectOption,
+    Grid,
+    GridItem,
+    ToolbarGroup,
+    Dropdown,
+    KebabToggle,
+    DropdownItem
+} from '@patternfly/react-core';
 import routerParams from '../../../../Utilities/RouterParams';
 import { SimpleTableFilter } from '../../../../PresentationalComponents/SimpleTableFilter';
 import { DownloadButton } from '../../../../PresentationalComponents/DownloadButton';
@@ -20,7 +32,7 @@ const CVSSOptions = [
 ];
 
 class VulnerabilitiesCveTableToolbar extends Component {
-    state = {};
+    state = { isKebabOpen: false };
 
     changeFilterValue = debounce(
         value =>
@@ -33,6 +45,18 @@ class VulnerabilitiesCveTableToolbar extends Component {
             ),
         400
     );
+
+    onKebabToggle = isKebabOpen => {
+        this.setState({
+            isKebabOpen
+        });
+    };
+
+    onKebabSelect = event => {
+        this.setState({
+            isKebabOpen: !this.state.isKebabOpen
+        });
+    };
 
     changePage = page => this.setState({ ...this.state, page }, this.apply);
     setPageSize = pageSize => this.setState({ ...this.state, page_size: pageSize }, this.apply);
@@ -71,25 +95,39 @@ class VulnerabilitiesCveTableToolbar extends Component {
         return (
             <TableToolbar className="pf-u-justify-content-space-between" results={ totalNumber } selected={ selectedCvesCount }>
                 <ToolbarGroup className="space-between-toolbar-items">
-                    <SimpleTableFilter onFilterChange={ value => this.changeFilterValue(value) } buttonTitle={ null } placeholder="Find a CVE…" />
-
-                    <Form>
-                        <FormGroup fieldId="cvssScore">
-                            <FormSelect
-                                id="cvssScore"
-                                onChange={ value => this.changeCVSSValue(value, CVSSOptions) }
-                                value={ this.getCVSSValue(CVSSOptions) }
-                            >
-                                { CVSSOptions.map((option, index) => (
-                                    <FormSelectOption isDisabled={ option.disabled } key={ index } value={ option.value } label={ option.label } />
-                                )) }
-                            </FormSelect>
-                        </FormGroup>
-                    </Form>
+                    <div>
+                        <SimpleTableFilter onFilterChange={ value => this.changeFilterValue(value) } buttonTitle={ null } placeholder="Find a CVE…" />
+                    </div>
+                    <div>
+                        <FormSelect
+                            id="cvssScore"
+                            onChange={ value => this.changeCVSSValue(value, CVSSOptions) }
+                            value={ this.getCVSSValue(CVSSOptions) }
+                        >
+                            { CVSSOptions.map((option, index) => (
+                                <FormSelectOption isDisabled={ option.disabled } key={ index } value={ option.value } label={ option.label } />
+                            )) }
+                        </FormSelect>
+                    </div>
+                    <div>
+                        <Dropdown
+                            onSelect={ this.onKebabSelect }
+                            toggle={ <KebabToggle onToggle={ this.onKebabToggle } /> }
+                            isOpen={ this.state.isKebabOpen }
+                            isPlain
+                            dropdownItems={ [
+                                <DropdownItem key="json" component="button" onClick={ () => downloadReport('json') }>
+                                    Export as JSON
+                                </DropdownItem>,
+                                <DropdownItem key="csv" component="button" onClick={ () => downloadReport('csv') }>
+                                    Export as CSV
+                                </DropdownItem>
+                            ] }
+                        />
+                    </div>
                 </ToolbarGroup>
                 { showAllCheckbox && (
-                    <React.Fragment>
-                        <br />
+                    <ToolbarGroup>
                         <Checkbox
                             label="Hide CVEs that do not affect my inventory"
                             isChecked={ !this.state.show_all }
@@ -97,14 +135,16 @@ class VulnerabilitiesCveTableToolbar extends Component {
                             aria-label="hide CVEs checkbox"
                             id="toolbar-cves-hide-check"
                         />
-                    </React.Fragment>
+                    </ToolbarGroup>
                 ) }
                 { showRemediationButton && (
-                    <RemediationButton
-                        dataProvider={ this.remediationProvider }
-                        isDisabled={ this.remediationProvider() === false }
-                        onRemediationCreated={ result => this.props.addNotification(result.getNotification()) }
-                    />
+                    <ToolbarGroup>
+                        <RemediationButton
+                            dataProvider={ this.remediationProvider }
+                            isDisabled={ this.remediationProvider() === false }
+                            onRemediationCreated={ result => this.props.addNotification(result.getNotification()) }
+                        />
+                    </ToolbarGroup>
                 ) }
                 <ToolbarGroup>
                     <Pagination

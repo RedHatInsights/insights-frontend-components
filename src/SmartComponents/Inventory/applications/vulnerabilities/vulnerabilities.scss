@@ -1,4 +1,4 @@
-@import '../../../../Utilities/mixins';
+@import "../../../../Utilities/mixins";
 
 .ins-active-app-vulnerabilities {
   padding-top: 2em;
@@ -12,19 +12,21 @@
 }
 .space-between-toolbar-items {
   justify-content: space-between;
-  > div {
-    width: 55%;
+  > div:nth-child(1) {
+    flex:1.5;
+    padding-right: var(--pf-global--spacer--sm);
   }
-  > form {
-    width: 40%;
+  > div:nth-child(2) {
+    padding-left: var(--pf-global--spacer--sm);
+    flex: 1;
+  }
+  > div:nth-child(3) {
   }
 }
 
-.pf-c-pagination.pf-m-footer.ins-c-pagination-next
-{
+.pf-c-pagination.pf-m-footer.ins-c-pagination-next {
   margin-left: auto;
 }
-
 
 #download-report {
   cursor: pointer;
@@ -38,7 +40,7 @@
 }
 
 .table-header-icon {
-  @include rem('margin-right', 5px);
+  @include rem("margin-right", 5px);
 }
 
 .status-dropdown-column {
