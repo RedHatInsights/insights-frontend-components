@@ -59,7 +59,7 @@ class VulnerabilitiesCveTableToolbar extends Component {
     };
 
     changePage = page => this.setState({ ...this.state, page }, this.apply);
-    
+
     setPageSize = pageSize => this.setState({ ...this.state, page_size: pageSize }, this.apply);
 
     apply = () => this.props.apply(this.state);
