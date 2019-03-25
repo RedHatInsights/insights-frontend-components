@@ -47,8 +47,8 @@ class ContextInventoryList extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        const { items } = this.props;
-        if (items && items.length !== 0 && JSON.stringify(items) !== JSON.stringify(prevProps.items)) {
+        const { items, hasItems } = this.props;
+        if (hasItems && JSON.stringify(items) !== JSON.stringify(prevProps.items)) {
             this.loadEntities({}, false);
         }
     }
