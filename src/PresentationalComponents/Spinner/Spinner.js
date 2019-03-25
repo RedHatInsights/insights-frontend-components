@@ -13,7 +13,9 @@ const Spinner = ({ centered, className, ...props }) => {
     );
 
     return (
-        <span className={ spinnerClasses } { ...props } />
+        <div role='status' className={ spinnerClasses } { ...props }>
+            <span className="pf-u-screen-reader">Loading...</span>
+        </div>
     );
 };
 
