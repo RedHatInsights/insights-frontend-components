@@ -1,6 +1,6 @@
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 import flatMap from 'lodash/flatMap';
-export const INVENTORY_API_BASE = '/r/insights/platform/inventory/api/v1/hosts';
+export const INVENTORY_API_BASE = '/api/inventory/v1/hosts';
 
 /* eslint camelcase: off */
 export const mapData = ({ facts = {}, ...oneResult }) => ({
@@ -52,28 +52,34 @@ function buildQuery({ per_page, page, filters }) {
     return query ? `?${query.join('&')}` : '';
 }
 
-export function getEntities(items, { base = INVENTORY_API_BASE, controller, ...rest }) {
+export function getEntities(items, { base = INVENTORY_API_BASE, controller, hasItems, ...rest }) {
     let query = buildQuery(rest);
 
     return insights.chrome.auth.getUser().then(
-        () => fetch(
-            `${base}${items.length !== 0 ? '/' + items : ''}${query}`,
-            {
-                credentials: 'include',
-                signal: controller && controller.signal
-            }
-        ).then(r => {
-            if (r.ok) {
-                return r.json().then(({ results = [], ...data }) => ({
-                    ...data,
-                    results: results.map(result => mapData({
-                        ...result,
-                        display_name: result.display_name || result.fqdn || result.id
-                    }))
-                }));
+        () => {
+            if (hasItems && items / length === 0) {
+                return {};
             }
 
-            throw new Error(`Unexpected response code ${r.status}`);
-        })
+            return fetch(
+                `${base}${items.length !== 0 ? '/' + items : ''}${query}`,
+                {
+                    credentials: 'include',
+                    signal: controller && controller.signal
+                }
+            ).then(r => {
+                if (r.ok) {
+                    return r.json().then(({ results = [], ...data }) => ({
+                        ...data,
+                        results: results.map(result => mapData({
+                            ...result,
+                            display_name: result.display_name || result.fqdn || result.id
+                        }))
+                    }));
+                }
+
+                throw new Error(`Unexpected response code ${r.status}`);
+            });
+        }
     );
 }

@@ -7,8 +7,10 @@ import findIndex from 'lodash/findIndex';
 import propTypes from 'prop-types';
 import { RowLoader } from '../../../../Utilities/helpers';
 import { Table, TableHeader, TableBody, sortable, SortByDirection } from '@patternfly/react-table';
+import { TableToolbar } from '../../../../PresentationalComponents/TableToolbar';
 
 class VulnerabilitiesCveTable extends Component {
+    state = { selectedCves: new Set() };
 
     changePage = page => this.props.apply({ page });
 
@@ -16,7 +18,8 @@ class VulnerabilitiesCveTable extends Component {
     setPageSize = pageSize => this.props.apply({ page_size: pageSize });
 
     sortColumn = (event, key, direction) => {
-        let columnName = this.props.header[key].key;
+        let columnMapping = this.props.isSelectable ? [{ key: 'checkbox' }, ...this.props.header ] : this.props.header;
+        let columnName = columnMapping[key].key;
         const { cves } = this.props;
         const currentSort = cves.meta.sort;
         const useDefault = currentSort && currentSort.substr(1) !== columnName;
@@ -44,9 +47,10 @@ class VulnerabilitiesCveTable extends Component {
 
     createSortBy = (value) => {
         if (value) {
+            let columnMapping = this.props.isSelectable ? [{ key: 'checkbox' }, ...this.props.header ] : this.props.header;
             let direction = value[0] === '+' ? SortByDirection.asc : SortByDirection.desc;
             value = value.replace(/^(-|\+)/, '');
-            const index = findIndex(this.props.header, item => item.key === value);
+            const index = findIndex(columnMapping, item => item.key === value);
             let sort = {
                 index,
                 direction
@@ -70,8 +74,24 @@ class VulnerabilitiesCveTable extends Component {
         );
     };
 
+    onSelect = (event, isSelected, rowId) => {
+        const { cves } = this.props;
+        const { selectedCves } = this.state;
+        if (rowId === -1) {
+            isSelected ? cves.data.forEach(cve => selectedCves.add(cve.id)) : cves.data.forEach(cve => selectedCves.delete(cve.id));
+        }
+        else {
+            const cveName = cves.data[rowId] && cves.data[rowId].id;
+            isSelected ? selectedCves.add(cveName) : selectedCves.delete(cveName);
+        }
+
+        this.setState(selectedCves, () => this.props.selectorHandler(selectedCves));
+    }
+
     render() {
         const { cves, header } = this.props;
+        const { selectedCves } = this.state;
+        const rows = cves.data.map(cve => (selectedCves.has(cve.id) && { ...cve, selected: true }) || cve);
         const loader = [ ...Array(3) ].map(() => ({
             cells: [{
                 title: <RowLoader />,
@@ -82,17 +102,20 @@ class VulnerabilitiesCveTable extends Component {
         return (
             <Fragment>
                 <Table
-
+                    aria-label={ 'Vulnerability CVE table' }
+                    onSelect={ (this.props.isSelectable && this.onSelect) || undefined }
                     variant={ TableVariant.compact }
                     cells={ header }
-                    rows={ cves.isLoading ? loader : cves.data.map(row => row.cells) }
+                    rows={ cves.isLoading ? loader : rows }
                     sortBy={ this.createSortBy(cves.meta.sort) }
                     onSort={ this.sortColumn }
                 >
                     <TableHeader />
                     <TableBody/>
                 </Table>
-                { this.createPagination() }
+                <TableToolbar isFooter>
+                    { this.createPagination() }
+                </TableToolbar>
                 { !cves.isLoading && cves.data.length === 0 && this.noCves() }
             </Fragment>
         );
@@ -103,6 +126,8 @@ VulnerabilitiesCveTable.propTypes = {
     cves: propTypes.any,
     header: propTypes.array,
     history: propTypes.object,
-    apply: propTypes.func
+    apply: propTypes.func,
+    selectorHandler: propTypes.func,
+    isSelectable: propTypes.bool
 };
 export default routerParams(VulnerabilitiesCveTable);
