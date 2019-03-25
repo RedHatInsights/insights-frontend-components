@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TableToolbar component should render 1`] = `
+<span
+  className="ins-c-spinner"
+/>
+`;
+
+exports[`TableToolbar component should render center Spinner 1`] = `
+<span
+  className="ins-c-spinner ins-m-center"
+/>
+`;

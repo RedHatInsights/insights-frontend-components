@@ -13,7 +13,7 @@ const Spinner = ({ centered, className, ...props }) => {
     );
 
     return (
-        <span className={spinnerClasses} {...props} />
+        <span className={ spinnerClasses } {...props} />
     );
 };
 
