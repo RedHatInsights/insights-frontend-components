@@ -3,7 +3,7 @@ import { shallow, mount } from 'enzyme';
 import toJson from 'enzyme-to-json';
 import Spinner from './Spinner';
 
-describe('TableToolbar component', () => {
+describe('Spinner component', () => {
     it('should render', () => {
         const wrapper = shallow(<Spinner/>)
         expect(toJson(wrapper)).toMatchSnapshot();
