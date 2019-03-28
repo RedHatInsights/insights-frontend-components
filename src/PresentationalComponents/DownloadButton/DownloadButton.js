@@ -25,7 +25,6 @@ class DownloadButton extends Component {
         const { extraItems, onSelect, ...props } = this.props;
         return (
             <Dropdown
-                { ...props }
                 onSelect={ this.onSelect }
                 toggle={
                     <DropdownToggle onToggle={ this.onToggle } iconComponent={ null } >
@@ -39,6 +38,7 @@ class DownloadButton extends Component {
                     <DropdownItem key="download-json" component="button" onClick={ event => onSelect(event, 'json') }>JSON</DropdownItem>,
                     ...extraItems
                 ] }
+                { ...props }
             />
         );
     }
