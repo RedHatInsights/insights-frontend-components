@@ -142,7 +142,7 @@ class InventoryRuleList extends Component {
                                 <CommentSlashIcon size='lg'/>
                             </CardHeader>
                             <CardBody>
-                                No data available for configuration assessment at the moment.
+                                No data available for Insights at the moment.
                             </CardBody>
                         </Card>
                 ) }
