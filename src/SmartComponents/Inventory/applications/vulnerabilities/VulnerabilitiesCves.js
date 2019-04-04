@@ -78,7 +78,6 @@ class VulnerabilitiesCves extends Component {
         const { cveList, header, showAllCheckbox, dataMapper, showRemediationButton } = this.props;
         const cves = dataMapper(cveList);
         const { meta, errors } = cves;
-        console.log(errors);
         if (!errors) {
             return (
                 <Stack>

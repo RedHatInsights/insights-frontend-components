@@ -1,13 +1,14 @@
 import React, { Component, Fragment } from 'react';
-import { Bullseye } from '@patternfly/react-core';
+import { Bullseye, EmptyState, EmptyStateIcon, Title, EmptyStateBody } from '@patternfly/react-core';
 import { Pagination } from '../../../../PresentationalComponents/Pagination';
 import routerParams from '../../../../Utilities/RouterParams';
-import { SortDirection, TableVariant } from '../../../../PresentationalComponents/Table';
+import { TableVariant } from '../../../../PresentationalComponents/Table';
 import findIndex from 'lodash/findIndex';
 import propTypes from 'prop-types';
 import { RowLoader } from '../../../../Utilities/helpers';
-import { Table, TableHeader, TableBody, sortable, SortByDirection } from '@patternfly/react-table';
+import { Table, TableHeader, TableBody, SortByDirection } from '@patternfly/react-table';
 import { TableToolbar } from '../../../../PresentationalComponents/TableToolbar';
+import { CubesIcon } from '@patternfly/react-icons';
 
 class VulnerabilitiesCveTable extends Component {
     state = { selectedCves: new Set() };
@@ -45,7 +46,7 @@ class VulnerabilitiesCveTable extends Component {
         );
     };
 
-    createSortBy = (value) => {
+    createSortBy = value => {
         if (value) {
             let columnMapping = this.props.isSelectable ? [{ key: 'checkbox' }, ...this.props.header ] : this.props.header;
             let direction = value[0] === '+' ? SortByDirection.asc : SortByDirection.desc;
@@ -65,11 +66,41 @@ class VulnerabilitiesCveTable extends Component {
         const { cves } = this.props;
         return (
             <Bullseye>
-                <b>
-                    { cves.meta.filter
-                        ? `None of your systems are currently exposed to any CVE matching filter " ${cves.meta.filter}"`
-                        : 'You are not exposed to any CVEss.' }
-                </b>
+                { cves.meta.filter ? (
+                    <EmptyState>
+                        <Title headingLevel="h5" size="lg">
+                            No matching CVEs found
+                        </Title>
+                        <Title headingLevel="h4" size="sm">
+                                This may be for one of the following reasons:
+                        </Title>
+                        <EmptyStateBody>
+                            <ul>
+                                <li> The criteria/filters you’ve specified result in no/zero CVEs being reported in your environment</li>
+                                <li>If you think a CVE that matches this criteria does apply to Red Hat, or would like more information,
+                                 please contact the Security Response Team</li>
+                                <li>In addition, the MITRE CVE dictionary may provide information about your CVE</li>
+                            </ul>
+                        </EmptyStateBody>
+                    </EmptyState>
+                ) : (
+                    <EmptyState>
+                        <Title headingLevel="h5" size="lg">
+                                No CVEs reported for this system
+                        </Title>
+                        <Title headingLevel="h4" size="sm">
+                                This may be for one of the following reasons:
+                        </Title>
+                        <EmptyStateBody>
+                            <ul>
+                                <li>No published CVEs affect this system</li>
+                                <li>You have opted out of reporting on a reported CVE</li>
+                                <li>If you think this system has applicable CVEs, or would like more information,
+                                 please contact the Security Response Team.</li>
+                            </ul>
+                        </EmptyStateBody>
+                    </EmptyState>
+                ) }
             </Bullseye>
         );
     };
@@ -79,25 +110,27 @@ class VulnerabilitiesCveTable extends Component {
         const { selectedCves } = this.state;
         if (rowId === -1) {
             isSelected ? cves.data.forEach(cve => selectedCves.add(cve.id)) : cves.data.forEach(cve => selectedCves.delete(cve.id));
-        }
-        else {
+        } else {
             const cveName = cves.data[rowId] && cves.data[rowId].id;
             isSelected ? selectedCves.add(cveName) : selectedCves.delete(cveName);
         }
 
         this.setState(selectedCves, () => this.props.selectorHandler(selectedCves));
-    }
+    };
 
     render() {
         const { cves, header } = this.props;
         const { selectedCves } = this.state;
         const rows = cves.data.map(cve => (selectedCves.has(cve.id) && { ...cve, selected: true }) || cve);
         const loader = [ ...Array(3) ].map(() => ({
-            cells: [{
-                title: <RowLoader />,
-                props: {
-                    colSpan: header.length }
-            }]
+            cells: [
+                {
+                    title: <RowLoader />,
+                    props: {
+                        colSpan: header.length
+                    }
+                }
+            ]
         }));
         return (
             <Fragment>
@@ -110,13 +143,16 @@ class VulnerabilitiesCveTable extends Component {
                     sortBy={ this.createSortBy(cves.meta.sort) }
                     onSort={ this.sortColumn }
                 >
-                    <TableHeader />
-                    <TableBody/>
+                    { (!cves.isLoading && cves.data.length === 0 && this.noCves()) || (
+                        <div>
+                            <TableHeader />
+                            <TableBody />
+                            <TableToolbar isFooter>{ this.createPagination() }</TableToolbar>
+                        </div>
+
+                    ) }
+
                 </Table>
-                <TableToolbar isFooter>
-                    { this.createPagination() }
-                </TableToolbar>
-                { !cves.isLoading && cves.data.length === 0 && this.noCves() }
             </Fragment>
         );
     }
