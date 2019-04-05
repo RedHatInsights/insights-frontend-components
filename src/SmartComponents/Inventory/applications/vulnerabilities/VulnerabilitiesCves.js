@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import { Stack, StackItem, EmptyState, EmptyStateIcon, Title, EmptyStateBody, Button, Bullseye } from '@patternfly/react-core';
+import { Stack, StackItem } from '@patternfly/react-core';
 import some from 'lodash/some';
 import propTypes from 'prop-types';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { downloadFile } from '../../../../Utilities/helpers';
+import { GenericError, NoVulnerabilityData } from './EmptyStates';
+import StatusDropdown from './StatusDropdown';
 import VulnerabilitiesCveTable from './VulnerabilitiesCveTable';
 import VulnerabilitiesCveTableToolbar from './VulnerabilitiesCveTableToolbar';
-import { downloadFile } from '../../../../Utilities/helpers';
-import StatusDropdown from './StatusDropdown';
-import { CubesIcon } from '@patternfly/react-icons';
 
 class VulnerabilitiesCves extends Component {
     componentDidMount() {
@@ -18,28 +18,11 @@ class VulnerabilitiesCves extends Component {
 
     processError = error => {
         const { status, title, detail } = error;
-        switch (parseInt(status)) {
-            case 404:
-                return (
-                    <Bullseye>
-                        <EmptyState>
-                            <EmptyStateIcon icon={ CubesIcon } />
-                            <Title headingLevel="h5" size="lg">
-                                No vulnerability data
-                            </Title>
-                            <EmptyStateBody>Activate the Insights client for this system to report for vulnerabilities</EmptyStateBody>
-                            <Button variant="primary">Learn about the insights client</Button>
-                        </EmptyState>
-                    </Bullseye>
-                );
-            default:
-                return (
-                    <Bullseye>
-                        <Title headingLevel="h5" size="lg">
-                            There was an error loading resources
-                        </Title>
-                    </Bullseye>
-                );
+        const statusCode = parseInt(status);
+        if (statusCode === 404 && this.props.entity) {
+            return NoVulnerabilityData;
+        } else {
+            return GenericError;
         }
     };
 
@@ -100,11 +83,14 @@ class VulnerabilitiesCves extends Component {
                             selectorHandler={ this.selectorHandler }
                             isSelectable={ this.props.isSelectable }
                             apply={ this.apply }
+                            entity={ this.props.entity }
                         />
                     </StackItem>
                 </Stack>
             );
-        } else {return this.processError(errors);}
+        } else {
+            return this.processError(errors);
+        }
     }
 }
 

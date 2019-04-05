@@ -1,14 +1,13 @@
-import React, { Component, Fragment } from 'react';
-import { Bullseye, EmptyState, EmptyStateIcon, Title, EmptyStateBody } from '@patternfly/react-core';
-import { Pagination } from '../../../../PresentationalComponents/Pagination';
-import routerParams from '../../../../Utilities/RouterParams';
-import { TableVariant } from '../../../../PresentationalComponents/Table';
+import { SortByDirection, Table, TableBody, TableHeader } from '@patternfly/react-table';
 import findIndex from 'lodash/findIndex';
 import propTypes from 'prop-types';
-import { RowLoader } from '../../../../Utilities/helpers';
-import { Table, TableHeader, TableBody, SortByDirection } from '@patternfly/react-table';
+import React, { Component, Fragment } from 'react';
+import { Pagination } from '../../../../PresentationalComponents/Pagination';
+import { TableVariant } from '../../../../PresentationalComponents/Table';
 import { TableToolbar } from '../../../../PresentationalComponents/TableToolbar';
-import { CubesIcon } from '@patternfly/react-icons';
+import { RowLoader } from '../../../../Utilities/helpers';
+import routerParams from '../../../../Utilities/RouterParams';
+import { EmptyCVEList, EmptyCVEListForSystem, FilterNotFoundForCVE } from './EmptyStates';
 
 class VulnerabilitiesCveTable extends Component {
     state = { selectedCves: new Set() };
@@ -63,46 +62,15 @@ class VulnerabilitiesCveTable extends Component {
     };
 
     noCves = () => {
-        const { cves } = this.props;
-        return (
-            <Bullseye>
-                { cves.meta.filter ? (
-                    <EmptyState>
-                        <Title headingLevel="h5" size="lg">
-                            No matching CVEs found
-                        </Title>
-                        <Title headingLevel="h4" size="sm">
-                                This may be for one of the following reasons:
-                        </Title>
-                        <EmptyStateBody>
-                            <ul>
-                                <li> The criteria/filters you’ve specified result in no/zero CVEs being reported in your environment</li>
-                                <li>If you think a CVE that matches this criteria does apply to Red Hat, or would like more information,
-                                 please contact the Security Response Team</li>
-                                <li>In addition, the MITRE CVE dictionary may provide information about your CVE</li>
-                            </ul>
-                        </EmptyStateBody>
-                    </EmptyState>
-                ) : (
-                    <EmptyState>
-                        <Title headingLevel="h5" size="lg">
-                                No CVEs reported for this system
-                        </Title>
-                        <Title headingLevel="h4" size="sm">
-                                This may be for one of the following reasons:
-                        </Title>
-                        <EmptyStateBody>
-                            <ul>
-                                <li>No published CVEs affect this system</li>
-                                <li>You have opted out of reporting on a reported CVE</li>
-                                <li>If you think this system has applicable CVEs, or would like more information,
-                                 please contact the Security Response Team.</li>
-                            </ul>
-                        </EmptyStateBody>
-                    </EmptyState>
-                ) }
-            </Bullseye>
-        );
+        const { cves, entity } = this.props;
+
+        if (cves.meta.filter) {
+            return FilterNotFoundForCVE;
+        } else if (entity) {
+            return EmptyCVEListForSystem;
+        } else if (cves.data.length === 0) {
+            return EmptyCVEList;
+        }
     };
 
     onSelect = (event, isSelected, rowId) => {
@@ -149,9 +117,7 @@ class VulnerabilitiesCveTable extends Component {
                             <TableBody />
                             <TableToolbar isFooter>{ this.createPagination() }</TableToolbar>
                         </div>
-
                     ) }
-
                 </Table>
             </Fragment>
         );
@@ -164,6 +130,7 @@ VulnerabilitiesCveTable.propTypes = {
     history: propTypes.object,
     apply: propTypes.func,
     selectorHandler: propTypes.func,
-    isSelectable: propTypes.bool
+    isSelectable: propTypes.bool,
+    entity: propTypes.object
 };
 export default routerParams(VulnerabilitiesCveTable);
