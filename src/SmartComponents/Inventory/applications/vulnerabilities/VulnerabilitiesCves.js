@@ -4,7 +4,7 @@ import propTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { downloadFile } from '../../../../Utilities/helpers';
-import { GenericError, NoVulnerabilityData } from './EmptyStates';
+import { GenericError, NoVulnerabilityData } from './constants';
 import StatusDropdown from './StatusDropdown';
 import VulnerabilitiesCveTable from './VulnerabilitiesCveTable';
 import VulnerabilitiesCveTableToolbar from './VulnerabilitiesCveTableToolbar';

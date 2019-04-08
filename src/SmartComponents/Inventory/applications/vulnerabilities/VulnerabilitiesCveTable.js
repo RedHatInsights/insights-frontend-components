@@ -7,7 +7,7 @@ import { TableVariant } from '../../../../PresentationalComponents/Table';
 import { TableToolbar } from '../../../../PresentationalComponents/TableToolbar';
 import { RowLoader } from '../../../../Utilities/helpers';
 import routerParams from '../../../../Utilities/RouterParams';
-import { EmptyCVEList, EmptyCVEListForSystem, FilterNotFoundForCVE } from './EmptyStates';
+import { EmptyCVEList, EmptyCVEListForSystem, FilterNotFoundForCVE } from './constants';
 
 class VulnerabilitiesCveTable extends Component {
     state = { selectedCves: new Set() };
