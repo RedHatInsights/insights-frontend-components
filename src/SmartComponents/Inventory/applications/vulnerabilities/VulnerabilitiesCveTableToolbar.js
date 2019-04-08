@@ -1,38 +1,20 @@
 /* eslint-disable camelcase */
-import React, { Component } from 'react';
-import {
-    Checkbox,
-    Form,
-    FormGroup,
-    FormSelect,
-    FormSelectOption,
-    Grid,
-    GridItem,
-    ToolbarGroup,
-    Dropdown,
-    KebabToggle,
-    DropdownItem
-} from '@patternfly/react-core';
-import routerParams from '../../../../Utilities/RouterParams';
-import { SimpleTableFilter } from '../../../../PresentationalComponents/SimpleTableFilter';
-import { DownloadButton } from '../../../../PresentationalComponents/DownloadButton';
-import { TableToolbar } from '../../../../PresentationalComponents/TableToolbar';
+import { Dropdown, DropdownItem, KebabToggle, ToolbarGroup } from '@patternfly/react-core';
 import debounce from 'lodash/debounce';
 import propTypes from 'prop-types';
-import RemediationButton from '../../../Remediations/RemediationButton';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addNotification } from '../../../Notifications';
+import { FilterDropdown } from '../../../../PresentationalComponents/Filters/';
 import { Pagination } from '../../../../PresentationalComponents/Pagination';
-
-const CVSSOptions = [
-    { value: 'all', label: 'CVSS Base Score: All', disabled: false, from: '', to: '' },
-    { value: 'from0less3', label: 'CVSS < 3.0', disabled: false, from: '', to: 2.999 },
-    { value: 'from3less7', label: 'CVSS >= 3.0 and CVSS < 7.0', disabled: false, from: 3, to: 6.999 },
-    { value: 'from7to10', label: 'CVSS >= 7.0 and CVSS <= 10.0', disabled: false, from: 7, to: 10 }
-];
+import { SimpleTableFilter } from '../../../../PresentationalComponents/SimpleTableFilter';
+import { TableToolbar } from '../../../../PresentationalComponents/TableToolbar';
+import routerParams from '../../../../Utilities/RouterParams';
+import { addNotification } from '../../../Notifications';
+import RemediationButton from '../../../Remediations/RemediationButton';
+import { filtersCVSSScore, filtersPublishDate, filtersSeverity, filtersShowAll } from './constants';
 
 class VulnerabilitiesCveTableToolbar extends Component {
-    state = { isKebabOpen: false };
+    state = { isKebabOpen: false, show_all: 'true', publish_date: 'all', cvss_filter: 'all' };
 
     changeFilterValue = debounce(
         value =>
@@ -56,6 +38,33 @@ class VulnerabilitiesCveTableToolbar extends Component {
         this.setState({
             isKebabOpen: !this.state.isKebabOpen
         });
+    };
+
+    addFilter = (param, value, type) => {
+        let newFilter;
+        if (type === 'radio' || param === 'show_all') {
+            newFilter = { [param]: value };
+        } else {
+            newFilter = this.state[param] ? { [param]: `${this.state[param]},${value}` } : { [param]: value };
+        }
+
+        this.setState({ ...this.state, ...newFilter }, this.apply);
+    };
+
+    removeFilter = (key, value) => {
+        const newFilter = {
+            [key]: this.state[key]
+            .split(',')
+            .filter(item => Number(item) !== Number(value))
+            .join(',')
+        };
+
+        if (Array.isArray(newFilter)) {
+            this.setState({ ...this.state, ...newFilter }, this.apply);
+        } else {
+            const filter = { ...this.state, [key]: undefined };
+            this.setState({ ...this.state, ...filter }, this.apply);
+        }
     };
 
     changePage = page => this.setState({ ...this.state, page }, this.apply);
@@ -100,15 +109,14 @@ class VulnerabilitiesCveTableToolbar extends Component {
                         <SimpleTableFilter onFilterChange={ value => this.changeFilterValue(value) } buttonTitle={ null } placeholder="Find a CVE…" />
                     </div>
                     <div>
-                        <FormSelect
-                            id="cvssScore"
-                            onChange={ value => this.changeCVSSValue(value, CVSSOptions) }
-                            value={ this.getCVSSValue(CVSSOptions) }
-                        >
-                            { CVSSOptions.map((option, index) => (
-                                <FormSelectOption isDisabled={ option.disabled } key={ index } value={ option.value } label={ option.label } />
-                            )) }
-                        </FormSelect>
+                        <FilterDropdown
+                            addFilter={ this.addFilter }
+                            removeFilter={ this.removeFilter }
+                            filters={ this.state }
+                            filterCategories={ [ showAllCheckbox && filtersShowAll, filtersCVSSScore, filtersSeverity, filtersPublishDate ].filter(
+                                Boolean
+                            ) }
+                        />
                     </div>
                     <div>
                         <Dropdown
@@ -127,17 +135,6 @@ class VulnerabilitiesCveTableToolbar extends Component {
                         />
                     </div>
                 </ToolbarGroup>
-                { showAllCheckbox && (
-                    <ToolbarGroup>
-                        <Checkbox
-                            label="Hide CVEs that do not affect my inventory"
-                            isChecked={ !this.state.show_all }
-                            onChange={ state => this.changeCheckboxValue(state) }
-                            aria-label="hide CVEs checkbox"
-                            id="toolbar-cves-hide-check"
-                        />
-                    </ToolbarGroup>
-                ) }
                 { showRemediationButton && (
                     <ToolbarGroup>
                         <RemediationButton
