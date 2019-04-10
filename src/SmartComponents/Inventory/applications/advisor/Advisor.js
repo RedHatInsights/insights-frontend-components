@@ -13,7 +13,7 @@ import RemediationButton from '../../../Remediations/RemediationButton';
 
 import './advisor.scss';
 
-const SYSTEM_FETCH_URL = '/r/insights/platform/advisor/v1/system/';
+const SYSTEM_FETCH_URL = '/api/insights/v1/system/';
 
 class InventoryRuleList extends Component {
     state = {
@@ -30,7 +30,9 @@ class InventoryRuleList extends Component {
     }
 
     processRemediation (systemId, reports) {
-        const issues = reports.filter(r => r.rule.has_playbook).map(r => ({ id: `advisor:${r.rule.rule_id}`, description: r.rule.description }));
+        const issues = reports.filter(r => r.resolution.has_playbook).map(
+            r => ({ id: `advisor:${r.rule.rule_id}`, description: r.rule.description })
+        );
 
         return issues.length ?
             { issues, systems: [ systemId ]} :
@@ -41,21 +43,21 @@ class InventoryRuleList extends Component {
         const { entity } = this.props;
         try {
             await insights.chrome.auth.getUser();
-            const data = await fetch(`${SYSTEM_FETCH_URL}${entity.id}/reports`, { credentials: 'include' })
+            const data = await fetch(`${SYSTEM_FETCH_URL}${entity.id}/reports/`, { credentials: 'include' })
             .then(data => data.json()).catch(error => { throw error; });
             this.setState({
                 inventoryReport: data,
-                activeReports: this.sortActiveReports(data.active_reports),
+                activeReports: this.sortActiveReports(data),
                 inventoryReportFetchStatus: 'fulfilled',
-                remediation: this.processRemediation(entity.id, data.active_reports)
+                remediation: this.processRemediation(entity.id, data)
             });
-            const kbaIds = data && data.active_reports.map(report => report.rule.node_id).join(` OR `);
+            const kbaIds = data.map(report => report.rule.node_id).join(` OR `);
             this.fetchKbaDetails(kbaIds);
         } catch (error) {
             this.props.addNotification({
                 variant: 'danger',
                 dismissable: true,
-                title: '',
+                title: 'Rules Error',
                 description: 'Inventory item rule fetch failed.'
             });
             this.setState({
@@ -66,7 +68,7 @@ class InventoryRuleList extends Component {
 
     async fetchKbaDetails (kbaIds) {
         try {
-            const data = await fetch(`/rs/search?q=id:(${kbaIds})&fl=view_uri,id,publishedTitle`, { credentials: 'include' })
+            const data = await fetch(`https://access.redhat.com/rs/search?q=id:(${kbaIds})&fl=view_uri,id,publishedTitle`, { credentials: 'include' })
             .then(data => data.json());
             this.setState({
                 kbaDetails: data.response.docs
@@ -134,13 +136,13 @@ class InventoryRuleList extends Component {
                     </Card>
                 ) }
                 { inventoryReportFetchStatus === 'fulfilled' && (
-                    activeReports ? this.buildRuleCards() :
+                    activeReports.length > 0 ? this.buildRuleCards() :
                         <Card className="ins-empty-rule-cards">
                             <CardHeader>
                                 <CommentSlashIcon size='lg'/>
                             </CardHeader>
                             <CardBody>
-                                No data available for configuration assessment at the moment.
+                                No data available for Insights at the moment.
                             </CardBody>
                         </Card>
                 ) }

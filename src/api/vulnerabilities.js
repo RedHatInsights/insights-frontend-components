@@ -1,4 +1,4 @@
-const BASE_ROUTE = '/r/insights/platform/vulnerability/';
+const BASE_ROUTE = '/api/vulnerability/';
 const API_VERSION = 'v1';
 
 /* eslint-disable camelcase */
@@ -35,6 +35,10 @@ export function getCveListBySystem({
             }
 
             return res.json();
+        }).catch(error => {
+            return error.json().then(error => {
+                throw { title: 'Vulnerability Error', ...error.errors[0] };
+            });
         });
     }
 }
@@ -49,6 +53,10 @@ export async function fetchStatusList() {
         }
 
         return res.json();
+    }).catch(error => {
+        return error.json().then(error => {
+            throw { title: 'Vulnerability Error', ...error.errors[0] };
+        });
     });
 }
 

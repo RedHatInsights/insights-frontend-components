@@ -25,7 +25,7 @@ import {
 import { NotEqualIcon } from '@patternfly/react-icons';
 import './compliance.scss';
 
-const COMPLIANCE_API_ROOT = '/r/insights/platform/compliance';
+const COMPLIANCE_API_ROOT = '/api/compliance';
 
 const QUERY = gql`
 query System($systemId: String!){
@@ -56,17 +56,13 @@ const SystemQuery = ({ data, loading, hidePassed }) => (
     <React.Fragment>
         <SystemPolicyCards policies={ data.system && data.system.profiles } loading={ loading } />
         <br/>
-        <Card>
-            <CardBody>
-                <SystemRulesTable hidePassed={ hidePassed }
-                    profileRules={ data.system && data.system.profiles.map((profile) => ({
-                        profile: profile.name,
-                        rules: profile.rules
-                    })) }
-                    loading={ loading }
-                />
-            </CardBody>
-        </Card>
+        <SystemRulesTable hidePassed={ hidePassed }
+            profileRules={ data.system && data.system.profiles.map((profile) => ({
+                profile: profile.name,
+                rules: profile.rules
+            })) }
+            loading={ loading }
+        />
     </React.Fragment>
 );
 

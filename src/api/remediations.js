@@ -1,6 +1,6 @@
 import URI from 'urijs';
 
-const API_BASE = '/r/insights/platform/remediations/v1';
+const API_BASE = '/api/remediations/v1';
 
 function checkResponse (r) {
     if (!r.ok) {
@@ -42,7 +42,7 @@ export function patchRemediation (id, data, base = API_BASE) {
 }
 
 export function getRemediations (basePath = API_BASE) {
-    const uri = new URI(API_BASE).segment('remediations').toString();
+    const uri = new URI(API_BASE).segment('remediations').query({ limit: 200 }).toString();
     return fetch(uri, { credentials: 'include' }).then(json);
 }
 
