@@ -25,12 +25,12 @@ class GeneralInformation extends Component {
         modalTitle: ''
     };
 
-    onSort = (_event, index, direction) => {
+    onSort = (_event, index, direction, customRows) => {
         const { rows } = this.state;
-        const sorted = rows.sort((a, b) => {
-            const aSortBy = a[index].hasOwnProperty('sortValue') ? a[index].sortValue : a[index];
-            const bSortBy = b[index].hasOwnProperty('sortValue') ? b[index].sortValue : b[index];
-            return (aSortBy < bSortBy ? -1 : aSortBy > bSortBy ? 1 : 0);
+        const sorted = (customRows || rows).sort((a, b) => {
+            const aSortBy = (a[index].hasOwnProperty('sortValue') ? a[index].sortValue : a[index]).toLocaleLowerCase();
+            const bSortBy = (b[index].hasOwnProperty('sortValue') ? b[index].sortValue : b[index]).toLocaleLowerCase();
+            return (aSortBy > bSortBy) - (aSortBy < bSortBy);
         });
         this.setState({
             rows: direction === SortByDirection.asc ? sorted : sorted.reverse()
@@ -38,11 +38,11 @@ class GeneralInformation extends Component {
     }
 
     handleModalToggle = (modalTitle = '', { cells, rows } = {}) => {
+        rows && this.onSort(undefined, 0, SortByDirection.asc, rows);
         this.setState(({ isModalOpen }) => ({
             isModalOpen: !isModalOpen,
             modalTitle,
-            cells,
-            rows
+            cells
         }));
     };
 
@@ -77,13 +77,15 @@ class GeneralInformation extends Component {
                     isOpen={ isModalOpen }
                     onClose={ this.handleModalToggle }
                     className="ins-c-inventory__detail--dialog"
-                    actions={ [
-                        <Button key="cancel" variant="secondary" onClick={ () => this.handleModalToggle() }>
-                            Close
-                        </Button>
-                    ] }
                 >
-                    <InfoTable cells={ cells } rows={ rows } onSort={ this.onSort } />
+                    <InfoTable
+                        cells={ cells }
+                        rows={ rows }
+                        onSort={ this.onSort }
+                        sortBy={
+                            { index: 0, direction: SortByDirection.asc }
+                        }
+                    />
                 </Modal>
             </Grid>
         );

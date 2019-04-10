@@ -5,13 +5,24 @@ import LoadingCard from './LoadingCard';
 import { repositoriesMapper, productsMapper } from './dataMapper';
 import { subscriptionsSelector } from './selectors';
 
+function enabledRepos(repositories) {
+    if (repositories) {
+        return [
+            repositories.enabled.length > 0 && `${repositories.enabled.length} enabled`,
+            repositories.disabled.length > 0 && `${repositories.disabled.length} disabled`
+        ].filter(Boolean).join(' / ');
+    }
+
+    return 0;
+}
+
 const SubscriptionCard = ({ detailLoaded, subscriptions, handleClick }) => (<LoadingCard
     title="Subscriptions"
     isLoading={ !detailLoaded }
     items={ [
         {
             title: 'Red Hat products',
-            value: subscriptions.rhProducts ? `${subscriptions.rhProducts.length} products` : 'None',
+            value: subscriptions.rhProducts ? `${subscriptions.rhProducts.length} products` : 0,
             target: 'red_hat_products',
             onClick: () => handleClick(
                 'Red Hat products',
@@ -23,7 +34,7 @@ const SubscriptionCard = ({ detailLoaded, subscriptions, handleClick }) => (<Loa
         { title: 'Katello agent', value: '' },
         {
             title: 'Repositories',
-            value: subscriptions.repositories ? `${subscriptions.repositories.length} enabled` : 'None',
+            value: enabledRepos(subscriptions.repositories),
             target: 'repositories',
             onClick: () => {
                 handleClick(
@@ -42,7 +53,10 @@ SubscriptionCard.propTypes = {
         rhProducts: PropTypes.array,
         status: PropTypes.string,
         autoAttached: PropTypes.string,
-        repositories: PropTypes.array
+        repositories: PropTypes.shape({
+            enabled: PropTypes.array,
+            disabled: PropTypes.array
+        })
     })
 };
 SubscriptionCard.defaultProps = {

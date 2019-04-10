@@ -20,6 +20,15 @@ function entityDetailPending(state) {
     };
 }
 
+function systemProfilePending(state) {
+    return {
+        ...state,
+        systemProfile: {
+            loaded: false
+        }
+    };
+}
+
 function entityDetailLoaded(state, { payload }) {
     return {
         ...state,
@@ -43,7 +52,15 @@ function onSystemProfile(state, { payload: { results }}) {
             loaded: true,
             ...systemProfile,
             ramSize: formatBytes(systemProfile.system_memory_bytes),
-            network: systemProfile.network_interfaces.reduce((acc, curr) => ({
+            repositories: systemProfile.yum_repos && systemProfile.yum_repos.reduce((acc, curr) => ({
+                ...acc,
+                ...curr.enabled ? {
+                    enabled: [ ...acc.enabled, curr ]
+                } : {
+                    disabled: [ ...acc.disabled, curr ]
+                }
+            }), { enabled: [], disabled: []}),
+            network: systemProfile.network_interfaces && systemProfile.network_interfaces.reduce((acc, curr) => ({
                 interfaces: [ ...acc.interfaces, curr ],
                 ipv4: [ ...acc.ipv4, ...curr.ipv4_addresses || [] ].filter(Boolean),
                 ipv6: [ ...acc.ipv6, ...curr.ipv6_addresses || [] ].filter(Boolean)
@@ -57,5 +74,6 @@ export default {
     [ACTION_TYPES.LOAD_ENTITY_PENDING]: entityDetailPending,
     [ACTION_TYPES.LOAD_ENTITY_FULFILLED]: entityDetailLoaded,
     [APPLICATION_SELECTED]: onApplicationSelected,
-    [ACTION_TYPES.LOAD_SYSTEM_PROFILE_FULFILLED]: onSystemProfile
+    [ACTION_TYPES.LOAD_SYSTEM_PROFILE_FULFILLED]: onSystemProfile,
+    [ACTION_TYPES.LOAD_SYSTEM_PROFILE_PENDING]: systemProfilePending
 };

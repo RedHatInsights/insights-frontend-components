@@ -11,7 +11,7 @@ const ConfigurationCard = ({ detailLoaded, configuration, handleClick }) => (<Lo
     items={ [
         {
             title: 'Installed packages',
-            value: configuration.packages ? `${configuration.packages.length} packages` : 'None',
+            value: configuration.packages ? `${configuration.packages.length} packages` : 0,
             target: 'installed_packages',
             onClick: () => {
                 handleClick(
@@ -22,7 +22,7 @@ const ConfigurationCard = ({ detailLoaded, configuration, handleClick }) => (<Lo
         },
         {
             title: 'Services',
-            value: configuration.services ? `${configuration.services.length} services` : 'None',
+            value: configuration.services ? `${configuration.services.length} services` : 0,
             target: 'services',
             onClick: () => {
                 handleClick(
@@ -33,7 +33,7 @@ const ConfigurationCard = ({ detailLoaded, configuration, handleClick }) => (<Lo
         },
         {
             title: 'Running processes',
-            value: configuration.processes ? `${configuration.processes.length} processes` : 'None',
+            value: configuration.processes ? `${configuration.processes.length} processes` : 0,
             target: 'running_processes',
             onClick: () => {
                 handleClick(

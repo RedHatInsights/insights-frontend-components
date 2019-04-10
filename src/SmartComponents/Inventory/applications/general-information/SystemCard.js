@@ -16,7 +16,7 @@ const SystemCard = ({ detailLoaded, entity, properties, handleClick }) => (<Load
         { title: 'Ram', value: properties.ramSize },
         {
             title: 'Storage',
-            value: properties.storage ? `${properties.storage.lengh} disks` : 'None',
+            value: properties.storage ? `${properties.storage.lengh} disks` : 0,
             target: 'storage',
             onClick: () => {
                 handleClick('Storage', diskMapper(properties.storage));

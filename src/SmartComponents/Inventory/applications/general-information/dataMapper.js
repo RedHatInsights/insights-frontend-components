@@ -101,7 +101,7 @@ export const interfaceMapper = (data = []) => ({
     ]))
 });
 
-export const repositoriesMapper = (repositories = []) => ({
+export const repositoriesMapper = ({ enabled, disabled } = {}) => ({
     cells: [
         {
             title: 'Name',
@@ -110,7 +110,7 @@ export const repositoriesMapper = (repositories = []) => ({
         'Enabled',
         'GPG check'
     ],
-    rows: repositories.map(repository => ([
+    rows: [ ...enabled, ...disabled ].map(repository => ([
         {
             title: <a href={ repository.base_url } target="_blank" rel="noopener noreferrer">{ repository.name }</a>,
             sortValue: repository.name

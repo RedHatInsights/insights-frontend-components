@@ -18,12 +18,12 @@ export const subscriptionsSelector = ({
     installed_products,
     subscription_status,
     subscription_auto_attach,
-    yum_repos
+    repositories
 } = {}) => ({
     rhProducts: installed_products,
     status: subscription_status,
     autoAttached: subscription_auto_attach,
-    repositories: yum_repos
+    repositories
 });
 
 export const biosSelector = ({
@@ -34,7 +34,7 @@ export const biosSelector = ({
 } = {}) => ({
     vendor: bios_vendor,
     version: bios_version,
-    releaseDate: Date(bios_release_date),
+    releaseDate: bios_release_date && new Date(bios_release_date).toLocaleDateString(),
     csm: cpu_flags
 });
 

@@ -10,8 +10,8 @@ const CollectionCard = ({ detailLoaded, collectionInformation, entity }) => (<Lo
     items={ [
         { title: 'Insights client', value: collectionInformation.client },
         { title: 'Egg', value: collectionInformation.egg },
-        { title: 'Last check-in', value: entity.updated },
-        { title: 'Registred', value: entity.created }
+        { title: 'Last check-in', value: new Date(entity.updated).toLocaleString() },
+        { title: 'Registred', value: new Date(entity.created).toLocaleString() }
     ] }
 />);
 

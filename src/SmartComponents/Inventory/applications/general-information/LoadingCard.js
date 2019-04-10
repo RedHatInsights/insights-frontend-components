@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import {
-    Card,
-    CardHeader,
+    Stack,
+    StackItem,
     CardBody,
     TextContent,
     Text,
@@ -14,17 +14,42 @@ import {
 } from '@patternfly/react-core';
 import { Skeleton, SkeletonSize } from '../../../../PresentationalComponents/Skeleton';
 
+const Clickable = ({ item: { onClick, value, target }}) => (
+    <Fragment>
+        {
+            value !== 0 ?
+                <a onClick={ event => {
+                    event.preventDefault();
+                    onClick(event, { value, target });
+                } } href={ `${window.location.href}/${target}` }>{ value }</a> :
+                'None'
+        }
+    </Fragment>
+);
+
+Clickable.propTypes = {
+    item: PropTypes.shape({
+        value: PropTypes.string,
+        target: PropTypes.string,
+        onClick: PropTypes.func
+    })
+};
+
+Clickable.defaultProps = {
+    item: {}
+};
+
 const LoadingCard = ({ title, isLoading, items }) => {
     return (
-        <Card>
-            <CardHeader>
+        <Stack gutter="md">
+            <StackItem>
                 <TextContent>
                     <Text component={ TextVariants.h1 }>
                         { title }
                     </Text>
                 </TextContent>
-            </CardHeader>
-            <CardBody>
+            </StackItem>
+            <StackItem isMain>
                 <TextContent>
                     <TextList component={ TextListVariants.dl }>
                         { items.map((item, key) => (
@@ -36,10 +61,7 @@ const LoadingCard = ({ title, isLoading, items }) => {
                                     { isLoading && <Skeleton size={ item.size || SkeletonSize.sm } /> }
                                     { !isLoading && (
                                         item.onClick ?
-                                            <a onClick={ event => {
-                                                event.preventDefault();
-                                                item.onClick(event, item);
-                                            } } href={ `${window.location.href}/${item.target}` }>{ item.value }</a> :
+                                            <Clickable item={ item }/> :
                                             item.value
                                     ) }
                                 </TextListItem>
@@ -47,8 +69,8 @@ const LoadingCard = ({ title, isLoading, items }) => {
                         )) }
                     </TextList>
                 </TextContent>
-            </CardBody>
-        </Card>
+            </StackItem>
+        </Stack>
     );
 };
 
@@ -58,6 +80,7 @@ LoadingCard.propTypes = {
     items: PropTypes.arrayOf(PropTypes.shape({
         title: PropTypes.node,
         value: PropTypes.node,
+        onClick: PropTypes.func,
         size: PropTypes.oneOf(Object.values(SkeletonSize))
     }))
 };
