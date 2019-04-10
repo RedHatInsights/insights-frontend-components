@@ -12,10 +12,14 @@ import routerParams from '../../../../Utilities/RouterParams';
 import { addNotification } from '../../../Notifications';
 import RemediationButton from '../../../Remediations/RemediationButton';
 import { filtersCVSSScore, filtersPublishDate, filtersSeverity, filtersShowAll } from './constants';
+import { fetchSystemCveStatusList } from '../../../../redux/actions/applications';
 
 class VulnerabilitiesCveTableToolbar extends Component {
     state = { isKebabOpen: false, show_all: 'true', publish_date: 'all', cvss_filter: 'all' };
 
+    componentDidMount() {
+        this.props.entity && this.props.fetchStatusList();
+    }
     changeFilterValue = debounce(
         value =>
             this.setState(
@@ -55,11 +59,11 @@ class VulnerabilitiesCveTableToolbar extends Component {
         const newFilter = {
             [key]: this.state[key]
             .split(',')
-            .filter(item => Number(item) !== Number(value))
+            .filter(item => item !== value)
             .join(',')
         };
 
-        if (Array.isArray(newFilter)) {
+        if (newFilter.length !== 0) {
             this.setState({ ...this.state, ...newFilter }, this.apply);
         } else {
             const filter = { ...this.state, [key]: undefined };
@@ -99,7 +103,15 @@ class VulnerabilitiesCveTableToolbar extends Component {
     };
 
     render() {
-        const { showAllCheckbox, downloadReport, totalNumber, showRemediationButton, cves } = this.props;
+        const { showAllCheckbox, downloadReport, totalNumber, showRemediationButton, cves, entity, statusList } = this.props;
+        const filtersStatusList = entity &&
+            statusList &&
+            statusList.payload && {
+            type: 'checkbox',
+            title: 'Status',
+            urlParam: 'status_id',
+            values: statusList.payload.data.map(item => ({ label: item.name, value: String(item.id) }))
+        };
         const selectedCvesCount =
             this.props.showRemediationButton === true ? (this.props.selectedCves && this.props.selectedCves.size) || 0 : undefined;
         return (
@@ -113,9 +125,13 @@ class VulnerabilitiesCveTableToolbar extends Component {
                             addFilter={ this.addFilter }
                             removeFilter={ this.removeFilter }
                             filters={ this.state }
-                            filterCategories={ [ showAllCheckbox && filtersShowAll, filtersCVSSScore, filtersSeverity, filtersPublishDate ].filter(
-                                Boolean
-                            ) }
+                            filterCategories={ [
+                                showAllCheckbox && filtersShowAll,
+                                filtersCVSSScore,
+                                filtersSeverity,
+                                filtersPublishDate,
+                                entity && filtersStatusList
+                            ].filter(Boolean) }
                         />
                     </div>
                     <div>
@@ -168,7 +184,9 @@ VulnerabilitiesCveTableToolbar.propTypes = {
     cves: propTypes.any,
     entity: propTypes.object,
     addNotification: propTypes.func.isRequired,
-    selectedCves: propTypes.any
+    selectedCves: propTypes.any,
+    fetchStatusList: propTypes.func,
+    statusList: propTypes.object
 };
 
 VulnerabilitiesCveTableToolbar.defaultProps = {
@@ -180,8 +198,11 @@ VulnerabilitiesCveTableToolbar.defaultProps = {
 };
 
 export default connect(
-    null,
+    ({ VulnerabilitiesStore }) => ({
+        statusList: VulnerabilitiesStore && VulnerabilitiesStore.statusList
+    }),
     dispatch => ({
-        addNotification: notification => dispatch(addNotification(notification))
+        addNotification: notification => dispatch(addNotification(notification)),
+        fetchStatusList: notification => dispatch(fetchSystemCveStatusList(notification))
     })
 )(routerParams(VulnerabilitiesCveTableToolbar));

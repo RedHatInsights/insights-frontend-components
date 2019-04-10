@@ -13,6 +13,7 @@ export function getCveListBySystem({
     public_to: publicTo,
     severity,
     filter,
+    status_id: statusId,
     data_format: dataFormat,
     sort
 }) {
@@ -25,6 +26,7 @@ export function getCveListBySystem({
         severity && { severity },
         cvssTo && { cvss_to: cvssTo },
         filter && { filter },
+        statusId && { status_id: statusId },
         dataFormat && { data_format: dataFormat },
         sort && { sort }
     ]
