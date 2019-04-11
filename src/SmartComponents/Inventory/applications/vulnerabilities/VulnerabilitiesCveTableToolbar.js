@@ -203,6 +203,6 @@ export default connect(
     }),
     dispatch => ({
         addNotification: notification => dispatch(addNotification(notification)),
-        fetchStatusList: notification => dispatch(fetchSystemCveStatusList(notification))
+        fetchStatusList: () => dispatch(fetchSystemCveStatusList())
     })
 )(routerParams(VulnerabilitiesCveTableToolbar));
