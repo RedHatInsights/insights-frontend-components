@@ -79,12 +79,12 @@ class EntityTable extends React.Component {
                         <EmptyTable>
                             <Bullseye>
                                 <TextContent>
-                                    <Text component={TextVariants.h1}>
+                                    <Text component={ TextVariants.h1 }>
                                         No matching systems found
                                     </Text>
-                                    <Text component={TextVariants.small}>
+                                    <Text component={ TextVariants.small }>
                                         This filter criteria matches no systems. Try changing your filter settings.
-                                </Text>
+                                    </Text>
                                 </TextContent>
                             </Bullseye>
                         </EmptyTable>

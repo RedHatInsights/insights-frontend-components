@@ -63,16 +63,16 @@ class InventoryTable extends Component {
                     perPage={ perPage }
                     pagination={
                         <Pagination
-                            totalItems={total || (items && items.length)}
-                            page={page}
-                            hasItems={Boolean(items)}
-                            onRefresh={onRefresh}
-                            perPage={perPage}
+                            totalItems={ total || (items && items.length) }
+                            page={ page }
+                            hasItems={ Boolean(items) }
+                            onRefresh={ onRefresh }
+                            perPage={ perPage }
                             direction="down"
                         />
                     }
                 >
-                    {children}
+                    { children }
                 </EntityTableToolbar>
                 <InventoryList
                     { ...props }
@@ -86,11 +86,11 @@ class InventoryTable extends Component {
                 />
                 <TableToolbar isFooter>
                     <Pagination
-                        totalItems={total || (items && items.length)}
-                        page={page}
-                        hasItems={Boolean(items)}
-                        onRefresh={onRefresh}
-                        perPage={perPage}
+                        totalItems={ total || (items && items.length) }
+                        page={ page }
+                        hasItems={ Boolean(items) }
+                        onRefresh={ onRefresh }
+                        perPage={ perPage }
                     />
                 </TableToolbar>
             </InventoryContext.Provider>

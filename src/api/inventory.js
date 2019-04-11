@@ -32,7 +32,7 @@ export function getEntities(items, { controller, hasItems, filters, per_page: pe
 
     if (hasItems) {
         return hosts.apiHostGetHostById(items, perPage, page, { cancelToken: controller && controller.token })
-            .then(({ results = [], ...data } = {}) => ({
+        .then(({ results = [], ...data } = {}) => ({
             ...data,
             results: results.map(result => mapData({
                 ...result,

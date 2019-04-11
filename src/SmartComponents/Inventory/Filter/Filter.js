@@ -131,9 +131,9 @@ class ContextFilter extends Component {
                                     }))
                                 } : undefined
                             }
-                            onOptionSelect={this.onFilterByString}
-                            onFilterChange={this.filterEntities}
-                            placeholder={`Find system by ${placeholder}`}
+                            onOptionSelect={ this.onFilterByString }
+                            onFilterChange={ this.filterEntities }
+                            placeholder={ `Find system by ${placeholder}` }
                             buttonTitle=""
                         />
                 }
@@ -150,7 +150,7 @@ const Filter = ({ ...props }) => (
     </InventoryContext.Consumer>
 );
 
-Filter.propTypes = {
+const propTypes = {
     filters: PropTypes.arrayOf(PropTypes.shape({
         title: PropTypes.string,
         value: PropTypes.string,
@@ -169,6 +169,15 @@ Filter.propTypes = {
     })),
     hasItems: PropTypes.bool
 };
+
+ContextFilter.propTypes = {
+    ...propTypes,
+    onRefreshData: PropTypes.func,
+    onFilterSelect: PropTypes.func,
+    columns: PropTypes.oneOfType([ PropTypes.string, PropTypes.number ]),
+    total: PropTypes.oneOfType([ PropTypes.string, PropTypes.number ])
+};
+Filter.propTypes = propTypes;
 Filter.defaultProps = {
     filters: [],
     activeFilters: [],

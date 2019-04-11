@@ -39,6 +39,7 @@ function entitiesLoaded(state, { payload: { results, per_page: perPage, page, co
     if (typeof page === 'undefined') {
         return state;
     }
+
     return {
         ...state,
         loaded: loaded === undefined || loaded,

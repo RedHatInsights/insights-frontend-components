@@ -23,23 +23,23 @@ const EntityTableToolbar = ({
     <TableToolbar results={ total } className="ins-c-inventory__table--toolbar">
         <Split>
             <SplitItem>
-                <Filter {...props}
-                    hasItems={hasItems}
-                    filters={filters}
-                    pathPrefix={pathPrefix}
-                    apiBase={apiBase}
-                    totalItems={total}
+                <Filter { ...props }
+                    hasItems={ hasItems }
+                    filters={ filters }
+                    pathPrefix={ pathPrefix }
+                    apiBase={ apiBase }
+                    totalItems={ total }
                 />
             </SplitItem>
             <SplitItem isMain>
-                {children}
+                { children }
             </SplitItem>
             <SplitItem>
-                    {
-                        loaded ?
-                            pagination :
-                            <Skeleton size={ SkeletonSize.lg } />
-                    }
+                {
+                    loaded ?
+                        pagination :
+                        <Skeleton size={ SkeletonSize.lg } />
+                }
             </SplitItem>
         </Split>
     </TableToolbar>
