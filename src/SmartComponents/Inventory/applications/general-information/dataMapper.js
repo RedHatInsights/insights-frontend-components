@@ -35,25 +35,29 @@ export const diskMapper = (devices = []) => ({
             transforms: [ sortable ]
         },
         {
-            title: 'Options',
-            transforms: [ sortable ]
-        },
-        {
             title: 'Type',
             transforms: [ sortable ]
         }
     ],
     rows: devices.map(({
         device,
+        label,
         mount_point,
         options,
         type
-    }) => [
-        device,
-        mount_point,
-        Object.values(options),
-        type
-    ])
+    }) => ({
+        isOpen: false,
+        child: <div>
+            { options && Object.keys(options).map(oneKey => `${oneKey}=${options[oneKey]}`).join(',  ') }
+        </div>,
+        cells: [
+            device,
+            label,
+            mount_point,
+            type
+        ]
+    })),
+    expandable: true
 });
 
 export const productsMapper = (products = []) => ({

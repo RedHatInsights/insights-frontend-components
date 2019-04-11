@@ -28,8 +28,10 @@ class GeneralInformation extends Component {
     onSort = (_event, index, direction, customRows) => {
         const { rows } = this.state;
         const sorted = (customRows || rows).sort((a, b) => {
-            const aSortBy = (a[index].hasOwnProperty('sortValue') ? a[index].sortValue : a[index]).toLocaleLowerCase();
-            const bSortBy = (b[index].hasOwnProperty('sortValue') ? b[index].sortValue : b[index]).toLocaleLowerCase();
+            const firstRow = a.cells || a;
+            const secondRow = b.cells || b;
+            const aSortBy = (firstRow[index].sortValue || firstRow[index]).toLocaleLowerCase();
+            const bSortBy = (secondRow[index].sortValue || secondRow[index]).toLocaleLowerCase();
             return (aSortBy > bSortBy) - (aSortBy < bSortBy);
         });
         this.setState({
@@ -37,12 +39,13 @@ class GeneralInformation extends Component {
         });
     }
 
-    handleModalToggle = (modalTitle = '', { cells, rows } = {}) => {
-        rows && this.onSort(undefined, 0, SortByDirection.asc, rows);
+    handleModalToggle = (modalTitle = '', { cells, rows, expandable } = {}) => {
+        rows && this.onSort(undefined, expandable ? 1 : 0, SortByDirection.asc, rows);
         this.setState(({ isModalOpen }) => ({
             isModalOpen: !isModalOpen,
             modalTitle,
-            cells
+            cells,
+            expandable
         }));
     };
 
@@ -51,7 +54,7 @@ class GeneralInformation extends Component {
     };
 
     render() {
-        const { isModalOpen, modalTitle, cells, rows } = this.state;
+        const { isModalOpen, modalTitle, cells, rows, expandable } = this.state;
         return (
             <Grid sm={ 6 } md={ 6 } lg={ 6 } gutter={ GutterSize.md }>
                 <GridItem>
@@ -73,18 +76,16 @@ class GeneralInformation extends Component {
                     <CollectionCard handleClick={ this.handleModalToggle } />
                 </GridItem>
                 <Modal
-                    title={ modalTitle }
+                    title={ modalTitle || '' }
                     isOpen={ isModalOpen }
-                    onClose={ this.handleModalToggle }
+                    onClose={ () => this.handleModalToggle() }
                     className="ins-c-inventory__detail--dialog"
                 >
                     <InfoTable
                         cells={ cells }
                         rows={ rows }
+                        expandable={ expandable }
                         onSort={ this.onSort }
-                        sortBy={
-                            { index: 0, direction: SortByDirection.asc }
-                        }
                     />
                 </Modal>
             </Grid>

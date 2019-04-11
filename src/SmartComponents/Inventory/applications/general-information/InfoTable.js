@@ -1,15 +1,18 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { TextContent, Text, TextVariants } from '@patternfly/react-core';
-import { Table, TableHeader, TableBody, TableVariant } from '@patternfly/react-table';
+import { Table, TableHeader, TableBody, TableVariant, SortByDirection } from '@patternfly/react-table';
+import flatMap from 'lodash/flatMap';
 
 class InfoTable extends Component {
     state = {
-        sortBy: {}
+        sortBy: { index: 0, direction: SortByDirection.asc },
+        opened: []
     };
 
     onSort = (event, index, direction) => {
-        this.props.onSort(event, index, direction);
+        const { expandable } = this.props;
+        this.props.onSort(event, expandable ? index - 1 : index, direction);
         this.setState({
             sortBy: {
                 index,
@@ -18,10 +21,30 @@ class InfoTable extends Component {
         });
     }
 
+    onCollapse = (_event, index, isOpen) => {
+        const { opened } = this.state;
+        opened[index] = isOpen;
+        this.setState({
+            opened
+        });
+    }
+
     render() {
-        const { cells, rows, sortBy: sortByProps } = this.props;
-        const { sortBy: sortByState } = this.state;
-        const sortBy = sortByState.hasOwnProperty('index') ? sortByState : sortByProps;
+        const { cells, rows, expandable } = this.props;
+        const { sortBy, opened } = this.state;
+        const collapsibleProps = expandable ? {
+            onCollapse: this.onCollapse
+        } : {};
+        const mappedRows = expandable ? flatMap(rows, ({ child, ...row }, key) => [
+            {
+                ...row,
+                isOpen: opened[key * 2] || false
+            },
+            {
+                cells: [{ title: child }],
+                parent: key * 2
+            }
+        ]) : rows;
         return (
             <Fragment>
                 {
@@ -29,9 +52,13 @@ class InfoTable extends Component {
                         aria-label="Compact Table"
                         variant={ TableVariant.compact }
                         cells={ cells }
-                        rows={ rows }
-                        sortBy={ sortBy }
+                        rows={ mappedRows }
+                        sortBy={ {
+                            ...sortBy,
+                            index: expandable && sortBy.index === 0 ? 1 : sortBy.index
+                        } }
                         onSort={ this.onSort }
+                        { ...collapsibleProps }
                     >
                         <TableHeader />
                         <TableBody />
@@ -53,11 +80,7 @@ class InfoTable extends Component {
 InfoTable.propTypes = {
     rows: PropTypes.array,
     cells: PropTypes.array,
-    onSort: PropTypes.func,
-    sortBy: PropTypes.shape({
-        index: PropTypes.oneOfType([ PropTypes.string, PropTypes.number ]),
-        direction: PropTypes.string
-    })
+    onSort: PropTypes.func
 };
 InfoTable.defaultProps = {
     cells: [],
