@@ -3,7 +3,6 @@ import findIndex from 'lodash/findIndex';
 import propTypes from 'prop-types';
 import React, { Component, Fragment } from 'react';
 import { Pagination } from '../../../../PresentationalComponents/Pagination';
-import { TableVariant } from '../../../../PresentationalComponents/Table';
 import { TableToolbar } from '../../../../PresentationalComponents/TableToolbar';
 import { RowLoader } from '../../../../Utilities/helpers';
 import routerParams from '../../../../Utilities/RouterParams';
@@ -105,7 +104,6 @@ class VulnerabilitiesCveTable extends Component {
                 <Table
                     aria-label={ 'Vulnerability CVE table' }
                     onSelect={ (this.props.isSelectable && this.onSelect) || undefined }
-                    variant={ TableVariant.compact }
                     cells={ header }
                     rows={ cves.isLoading ? loader : rows }
                     sortBy={ this.createSortBy(cves.meta.sort) }
