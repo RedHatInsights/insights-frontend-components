@@ -2,18 +2,22 @@
 
 import React from 'react';
 import {
-    OutlinedCheckSquareIcon,
-    OutlinedSquareIcon,
+    CheckCircleIcon,
+    TimesIcon,
     OutlinedQuestionCircleIcon,
     OutlinedArrowAltCircleUpIcon,
     OutlinedArrowAltCircleDownIcon
 } from '@patternfly/react-icons';
 import { sortable } from '@patternfly/react-table';
-import { SortByDirection } from '@patternfly/react-table';
 
 const statusHelper = {
     DOWN: <OutlinedArrowAltCircleUpIcon className="ins-c-inventory__detail--up" />,
     UP: <OutlinedArrowAltCircleDownIcon className="ins-c-inventory__detail--down" />
+};
+
+const enabledHelper = {
+    true: <CheckCircleIcon className="ins-c-inventory__detail--enabled" />,
+    false: <TimesIcon className="ins-c-inventory__detail--disabled" />
 };
 
 export const diskMapper = (devices = []) => ({
@@ -115,8 +119,8 @@ export const repositoriesMapper = ({ enabled, disabled } = {}) => ({
             title: <a href={ repository.base_url } target="_blank" rel="noopener noreferrer">{ repository.name }</a>,
             sortValue: repository.name
         },
-        { title: repository.enabled ? <OutlinedCheckSquareIcon /> : <OutlinedSquareIcon /> },
-        { title: repository.gpgcheck ? <OutlinedCheckSquareIcon /> : <OutlinedSquareIcon /> }
+        { title: enabledHelper[repository.enabled] },
+        { title: enabledHelper[repository.gpgcheck] }
     ]))
 });
 

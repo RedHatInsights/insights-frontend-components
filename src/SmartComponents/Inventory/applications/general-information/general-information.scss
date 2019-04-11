@@ -15,6 +15,8 @@
 }
 
 .pf-c-modal-box .pf-c-table {
+    white-space:nowrap;
+
     .ins-c-inventory__detail--up {
         fill: var(--pf-global--success-color--100);
     }
@@ -25,6 +27,10 @@
 
     .ins-c-inventory__detail--unknown {
         fill: var(--pf-global--warning-color--100);
+    }
+
+    .ins-c-inventory__detail--enabled {
+        fill: var(--pf-global--success-color--100)
     }
 }
 
