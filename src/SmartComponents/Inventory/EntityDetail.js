@@ -4,6 +4,16 @@ import {
     Title,
     Grid,
     GridItem,
+<<<<<<< HEAD
+=======
+    Dropdown,
+    DropdownPosition,
+    DropdownItem,
+    DropdownToggle,
+    Modal,
+    Button,
+    TextInput,
+>>>>>>> Add dropdown with option to edit display name
     Card,
     CardBody,
     CardHeader,
@@ -21,7 +31,8 @@ import ApplicationDetails from './ApplicationDetails';
 
 class EntityDetails extends Component {
     state = {
-        isOpen: false
+        isOpen: false,
+        isModalOpen: false
     };
 
     getFact = (path) => {
@@ -40,6 +51,22 @@ class EntityDetails extends Component {
     onSelect = () => {
         this.setState({
             isOpen: !this.state.isOpen
+        });
+    };
+
+    onEntityNameChange = (value) => {
+        this.setState({
+            displayName: value
+        });
+    };
+
+    handleModalToggle = (_event, isSubmit) => {
+        if (isSubmit) {
+            console.log('wow');
+        }
+
+        this.setState({
+            isModalOpen: !this.state.isModalOpen
         });
     };
 
@@ -65,6 +92,12 @@ class EntityDetails extends Component {
                                     isOpen={ isOpen }
                                     position={ DropdownPosition.right }
                                     dropdownItems={ [
+                                        <DropdownItem
+                                            key="1"
+                                            component="button"
+                                            onClick={event => this.handleModalToggle(event)}>
+                                            Edit name
+                                        </DropdownItem>,
                                         actions.map((action, key) => (
                                             <DropdownItem
                                                 key={ action.key || key }
@@ -143,7 +176,8 @@ class EntityDetails extends Component {
     }
 
     render() {
-        const { useCard } = this.props;
+        const { useCard, entity } = this.props;
+        const { isModalOpen, displayName } = this.state;
 
         return (
             <div className="ins-entity-detail">
@@ -162,6 +196,27 @@ class EntityDetails extends Component {
                     </Fragment>
                 }
                 <ApplicationDetails />
+                <Modal
+                    title="Edit display name"
+                    className="ins-c-inventory__detail--edit"
+                    isOpen={ isModalOpen }
+                    onClose={ (event) => this.handleModalToggle(event, false) }
+                    actions={ [
+                        <Button key="cancel" variant="secondary" onClick={ (event) => this.handleModalToggle(event, false) }>
+                            Cancel
+                        </Button>,
+                        <Button key="confirm" variant="primary" onClick={ (event) => this.handleModalToggle(event, true) }>
+                            Save
+                        </Button>
+                    ] }
+                >
+                    <TextInput
+                        value={ typeof displayName === 'undefined' ? entity && entity.display_name : displayName }
+                        type="text"
+                        onChange={ this.onEntityNameChange }
+                        aria-label="Host inventory display name"
+                    />
+                </Modal>
             </div>
         );
     }
