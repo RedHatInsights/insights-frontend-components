@@ -59,23 +59,4 @@ export function getEntities(items, { controller, hasItems, filters, per_page: pe
     }));
 }
 
-export function getEntitySystemProfile(item, { base = INVENTORY_API_BASE }) {
-    return insights.chrome.auth.getUser().then(() => {
-        return fetch(
-            `${base}/${item}/system_profile`,
-            {
-                credentials: 'include'
-            }
-        ).then(r => {
-            if (!r.ok) {
-                throw r;
-            }
-
-            return r.json();
-        }).catch(error => {
-            return error.json().then(error => {
-                throw { title: 'Vulnerability Error', ...error };
-            });
-        });
-    });
-}
+export const getEntitySystemProfile = (item) => hosts.apiHostGetHostSystemProfileById([ item ]);
