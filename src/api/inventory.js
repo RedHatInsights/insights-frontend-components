@@ -44,7 +44,7 @@ export function getEntities(items, { controller, hasItems, filters, per_page: pe
     return hosts.apiHostGetHostList(
         undefined,
         undefined,
-        hostnameOrId,
+        hostnameOrId && hostnameOrId.filter,
         undefined,
         perPage,
         page,
