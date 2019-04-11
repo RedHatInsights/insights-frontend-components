@@ -3,16 +3,39 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Filter } from './Filter';
 import { TableToolbar } from '../../PresentationalComponents/TableToolbar';
+import { Split, SplitItem } from '@patternfly/react-core';
 
-const EntityTableToolbar = ({ total, page, onRefresh, perPage, filters, hasItems, pathPrefix, apiBase, ...props }) => (
-    <TableToolbar results={ total }>
-        <Filter { ...props }
-            hasItems={ hasItems }
-            filters={ filters }
-            pathPrefix={ pathPrefix }
-            apiBase={ apiBase }
-            totalItems={ total }
-        />
+const EntityTableToolbar = ({
+    total,
+    page,
+    onRefresh,
+    perPage,
+    filters,
+    hasItems,
+    pathPrefix,
+    apiBase,
+    children,
+    pagination,
+    ...props
+}) => (
+    <TableToolbar results={ total } className="ins-c-inventory__table--toolbar">
+        <Split>
+            <SplitItem>
+                <Filter {...props}
+                    hasItems={hasItems}
+                    filters={filters}
+                    pathPrefix={pathPrefix}
+                    apiBase={apiBase}
+                    totalItems={total}
+                />
+            </SplitItem>
+            <SplitItem isMain>
+                {children}
+            </SplitItem>
+            <SplitItem>
+                {pagination}
+            </SplitItem>
+        </Split>
     </TableToolbar>
 );
 

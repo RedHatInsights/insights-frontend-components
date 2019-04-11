@@ -1,6 +1,10 @@
 @import "~@patternfly/patternfly/utilities/Flex/flex.css";
 @import "~@patternfly/patternfly/utilities/Display/display.css";
 
+.ins-c-table__toolbar.ins-c-inventory__table--toolbar .pf-l-split {
+    width: 100%;
+}
+
 .ins-inventory-filters {
     width: 100%;
 
@@ -54,7 +58,7 @@
 }
 
 .ins-c-entity-table.pf-c-table {
-    margin-bottom: 15px;
+
     .ins-composed-col div:nth-child(2) {
         color: var(--pf-global--link--Color);
         cursor: pointer;

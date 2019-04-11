@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Grid, GridItem, Button, Dropdown, DropdownToggle } from '@patternfly/react-core';
 import { SimpleTableFilter } from '../../../PresentationalComponents/SimpleTableFilter';
 import { connect } from 'react-redux';
 import { filterSelect } from '../../../redux/actions/inventory';
 import { InventoryContext } from '../Inventory';
-import FilterItem from './FilterItem';
 import flatMap from 'lodash/flatMap';
 import debounce from 'lodash/debounce';
 
@@ -115,15 +113,14 @@ class ContextFilter extends Component {
     }
 
     render() {
-        const { columns, total, children, hasItems, activeFilters } = this.props;
-        const { filterByString, isOpen, filters } = this.state;
+        const { columns, total, hasItems, activeFilters } = this.props;
+        const { filterByString } = this.state;
         const filteredColumns = columns && columns.filter(column => !column.isTime).map(this.textualFilter);
         const placeholder = filterByString || (filteredColumns && filteredColumns.length > 0 && filteredColumns[0].title);
         return (
-            <Grid guttter="sm" className="ins-inventory-filters">
+            <React.Fragment>
                 {
                     (!hasItems && (total !== 0 || activeFilters.length !== 0)) &&
-                    <GridItem span={ 4 } className="ins-inventory-text-filter">
                         <SimpleTableFilter
                             options={
                                 filteredColumns && filteredColumns.length > 1 ? {
@@ -134,34 +131,13 @@ class ContextFilter extends Component {
                                     }))
                                 } : undefined
                             }
-                            onOptionSelect={ this.onFilterByString }
-                            onFilterChange={ this.filterEntities }
-                            placeholder={ `Find system by ${placeholder}` }
+                            onOptionSelect={this.onFilterByString}
+                            onFilterChange={this.filterEntities}
+                            placeholder={`Find system by ${placeholder}`}
                             buttonTitle=""
                         />
-                    </GridItem>
                 }
-                {
-                    filters && filters.length > 0 &&
-                    <GridItem span={ 1 } className="ins-inventory-filter">
-                        <Dropdown
-                            isOpen={ isOpen }
-                            dropdownItems={ filters.map((item, key) => (
-                                <FilterItem
-                                    { ...item }
-                                    key={ key }
-                                    data-key={ key }
-                                    onClick={ (event) => this.onFilterClick(event, item.filter, key) }
-                                />
-                            )) }
-                            toggle={ <DropdownToggle onToggle={ this.onToggle }>Filter</DropdownToggle> }
-                        />
-                    </GridItem>
-                }
-                <GridItem span={ hasItems ? 12 : 7 }>
-                    { children }
-                </GridItem>
-            </Grid>
+            </React.Fragment>
         );
     }
 }
