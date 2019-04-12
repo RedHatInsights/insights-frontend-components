@@ -4,16 +4,9 @@ import {
     Title,
     Grid,
     GridItem,
-<<<<<<< HEAD
-=======
-    Dropdown,
-    DropdownPosition,
-    DropdownItem,
-    DropdownToggle,
     Modal,
     Button,
     TextInput,
->>>>>>> Add dropdown with option to edit display name
     Card,
     CardBody,
     CardHeader,
@@ -28,6 +21,7 @@ import { Skeleton, SkeletonSize } from '../../PresentationalComponents/Skeleton'
 import get from 'lodash/get';
 import { connect } from 'react-redux';
 import ApplicationDetails from './ApplicationDetails';
+import { editDisplayName, loadEntity } from '../../redux/actions/inventory';
 
 class EntityDetails extends Component {
     state = {
@@ -59,12 +53,15 @@ class EntityDetails extends Component {
     };
 
     handleModalToggle = (_event, isSubmit) => {
+        const { entity, setDisplayName } = this.props;
+        const { displayName } = this.state;
         if (isSubmit) {
-            console.log('wow');
+            setDisplayName(entity.id, displayName || entity.display_name);
         }
 
         this.setState({
-            isModalOpen: !this.state.isModalOpen
+            isModalOpen: !this.state.isModalOpen,
+            displayName: undefined
         });
     };
 
@@ -93,7 +90,7 @@ class EntityDetails extends Component {
                                         <DropdownItem
                                             key="1"
                                             component="button"
-                                            onClick={event => this.handleModalToggle(event)}>
+                                            onClick={ event => this.handleModalToggle(event) }>
                                             Edit name
                                         </DropdownItem>,
                                         actions.map((action, key) => (
@@ -200,6 +197,7 @@ EntityDetails.propTypes = {
     loaded: PropTypes.bool.isRequired,
     entity: PropTypes.object,
     useCard: PropTypes.bool,
+    setDisplayName: PropTypes.func,
     actions: PropTypes.arrayOf(PropTypes.shape({
         title: PropTypes.node,
         onClick: PropTypes.func,
@@ -210,7 +208,21 @@ EntityDetails.propTypes = {
 EntityDetails.defualtProps = {
     entity: {},
     useCard: false,
-    actions: []
+    actions: [],
+    setDisplayName: () => undefined
 };
 
-export default connect(({ entityDetails }) => ({ ...entityDetails }))(EntityDetails);
+function mapDispatchToProps(dispatch) {
+    return {
+        setDisplayName: (id, displayName) => {
+            const dispatchEvent = editDisplayName(id, displayName);
+            dispatchEvent.payload.then(data => {
+                dispatch(loadEntity(id, {}));
+                return data;
+            });
+            dispatch(dispatchEvent);
+        }
+    };
+}
+
+export default connect(({ entityDetails }) => ({ ...entityDetails }), mapDispatchToProps)(EntityDetails);

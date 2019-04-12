@@ -10,7 +10,7 @@ import {
     ENTITIES_LOADING,
     CLEAR_FILTERS
 } from '../action-types';
-import { getEntities, getEntitySystemProfile } from '../../api/inventory';
+import { getEntities, getEntitySystemProfile, setDisplayName } from '../../api/inventory';
 
 export const loadEntities = (items = [], config) => ({
     type: ACTION_TYPES.LOAD_ENTITIES,
@@ -76,4 +76,18 @@ export const clearFilters = () => ({
 export const systemProfile = (itemId) => ({
     type: ACTION_TYPES.LOAD_SYSTEM_PROFILE,
     payload: getEntitySystemProfile(itemId, {})
+});
+
+export const editDisplayName = (id, displayName) => ({
+    type: ACTION_TYPES.SET_DISPLAY_NAME,
+    payload: setDisplayName(id, displayName),
+    meta: {
+        notifications: {
+            fulfilled: {
+                variant: 'success',
+                title: `Display name for entity with ID ${id} has been changed to ${displayName}`,
+                dismissable: true
+            }
+        }
+    }
 });
