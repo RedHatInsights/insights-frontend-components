@@ -15,7 +15,7 @@
 }
 
 .pf-c-modal-box .pf-c-table {
-    white-space:nowrap;
+    white-space: nowrap;
 
     .ins-c-inventory__detail--up {
         fill: var(--pf-global--success-color--100);
@@ -37,4 +37,10 @@
 
 .ins-c-inventory__detail--dialog {
     @include rem('min-width', 350px);
+
+    .pf-c-table {
+        th, th button, td {
+            padding-left: 0 !important;
+        }
+    }
 }
