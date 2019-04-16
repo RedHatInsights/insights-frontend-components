@@ -1,8 +1,18 @@
 @import '../../../../Utilities/_variables';
 @import '../../../../Utilities/_mixins';
 
-.ins-empty-rule-cards div {
-    text-align: center;
+.ins-empty-rule-cards {
+    div {
+        text-align: center;
+    }
+
+    &:not(.ins-m-error) svg {
+        fill: var(--pf-global--primary-color--100);
+    }
+
+    &.ins-m-error svg {
+        fill: var(--pf-global--danger-color--100);
+    }
 }
 
 .ins-c-rules-card {

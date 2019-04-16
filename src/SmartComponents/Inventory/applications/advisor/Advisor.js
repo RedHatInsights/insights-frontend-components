@@ -7,11 +7,12 @@ import '@patternfly/patternfly/utilities/Flex/flex.css';
 import { List } from 'react-content-loader';
 import ExpandableRulesCard from './ExpandableRulesCard';
 import { Card, CardBody, CardHeader, Level, LevelItem } from '@patternfly/react-core';
-import { CommentSlashIcon, FrownOpenIcon } from '@patternfly/react-icons';
+import { FrownOpenIcon } from '@patternfly/react-icons';
 import { withRouter } from 'react-router-dom';
 import RemediationButton from '../../../Remediations/RemediationButton';
 
 import './advisor.scss';
+import EmptyState from './EmptyState';
 
 const SYSTEM_FETCH_URL = '/api/insights/v1/system/';
 
@@ -127,33 +128,27 @@ class InventoryRuleList extends Component {
                 ) }
                 { inventoryReportFetchStatus === 'fulfilled' && (
                     activeReports.length > 0 ? this.buildRuleCards() :
-                        <Card className="ins-empty-rule-cards">
-                            <CardHeader>
-                                <CommentSlashIcon size='lg'/>
-                            </CardHeader>
-                            <CardBody>
-                                No data available for Insights at the moment.
-                            </CardBody>
-                        </Card>
+                        <EmptyState
+                            className="ins-empty-rule-cards"
+                            title="Get started with Red Hat Insights"
+                            text="With predictive analytics, avoid problems and unplanned
+                            downtime in your Red Hat environment. Red Hat Insights is
+                            included with your Red Hat Enterprise Linux subscription."
+                        />
                 ) }
                 { inventoryReportFetchStatus === 'failed' && this.props.entity && (
-                    <Card className="ins-empty-rule-cards">
-                        <CardHeader>
-                            <FrownOpenIcon size='lg'/>
-                        </CardHeader>
-                        <CardBody>
-                            There was an error fetching rules list for this Entity. Please show your administrator this screen.
-                        </CardBody>
-                    </Card>
+                    <EmptyState
+                        className="ins-empty-rule-cards ins-m-error"
+                        title="Red Hat Insights encountered error"
+                        text="There was an error fetching rules list for this Entity.
+                        Please show your administrator this screen."
+                    />
                 ) }   { inventoryReportFetchStatus === 'failed' && !this.props.entity && (
-                    <Card className="ins-empty-rule-cards">
-                        <CardHeader>
-                            <FrownOpenIcon size='lg'/>
-                        </CardHeader>
-                        <CardBody>
-                            This system can not be found or might no longer be registered to Red Hat Insights.
-                        </CardBody>
-                    </Card>
+                    <EmptyState
+                        className="ins-empty-rule-cards"
+                        title="System not found"
+                        text="This system can not be found or might no longer be registered to Red Hat Insights."
+                    />
                 ) }
             </Fragment>
         );
