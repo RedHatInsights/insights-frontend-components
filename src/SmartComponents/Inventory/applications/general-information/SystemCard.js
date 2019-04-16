@@ -13,7 +13,7 @@ const SystemCard = ({ detailLoaded, entity, properties, handleClick }) => (<Load
         { title: 'Number of CPUs', value: properties.cpuNumber },
         { title: 'Sockets', value: properties.sockets },
         { title: 'Cores per socket', value: properties.coresPerSocket },
-        { title: 'Ram', value: properties.ramSize },
+        { title: 'RAM', value: properties.ramSize },
         {
             title: 'Storage',
             value: properties.storage ? `${properties.storage.length} disks` : 0,

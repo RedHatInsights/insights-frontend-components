@@ -87,12 +87,7 @@ LoadingCard.propTypes = {
 
 LoadingCard.defaultProps = {
     isLoading: true,
-    items: [
-        {
-            title: 'bla',
-            value: 'ff'
-        }
-    ]
+    items: []
 };
 
 export default LoadingCard;

@@ -49,7 +49,7 @@ class InfoTable extends Component {
             <Fragment>
                 {
                     cells.length !== 1 ? <Table
-                        aria-label="Compact Table"
+                        aria-label="General information dialog table"
                         variant={ TableVariant.compact }
                         cells={ cells }
                         rows={ mappedRows }

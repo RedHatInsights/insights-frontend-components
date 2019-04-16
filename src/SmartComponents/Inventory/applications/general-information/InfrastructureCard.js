@@ -34,12 +34,12 @@ const InfrastructureCard = ({ infrastructure, handleClick, detailLoaded }) => (<
             }
         },
         {
-            title: 'Inerfaces/NICs',
+            title: 'Interfaces/NICs',
             value: infrastructure.nics ? `${infrastructure.nics.length} NICs` : 0,
             target: 'interfaces',
             onClick: () => {
                 handleClick(
-                    'Inerfaces/NICs',
+                    'Interfaces/NICs',
                     interfaceMapper(infrastructure.nics)
                 );
             }
