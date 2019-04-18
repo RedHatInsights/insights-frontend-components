@@ -54,7 +54,6 @@ class GeneralInformation extends Component {
     };
 
     render() {
-        console.log('ff');
         const { isModalOpen, modalTitle, cells, rows, expandable } = this.state;
         return (
             <Grid sm={ 12 } md={ 6 } gutter={ GutterSize.md }>
@@ -77,7 +76,7 @@ class GeneralInformation extends Component {
                     <CollectionCard handleClick={ this.handleModalToggle } />
                 </GridItem>
                 <Modal
-                    width={'initial'}
+                    width={ 'initial' }
                     title={ modalTitle || '' }
                     isOpen={ isModalOpen }
                     onClose={ () => this.handleModalToggle() }
