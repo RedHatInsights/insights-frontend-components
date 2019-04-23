@@ -16,14 +16,7 @@ const header = [
     { title: 'Name', key: 'synopsis', transforms: [ sortable, cellWidth(10) ]},
     { title: 'Description', key: 'description', transforms: [ cellWidth(50) ]},
     {
-        title: (
-            <React.Fragment>
-                <Tooltip position="top" content={ <div>{ cvssBaseDescription }</div> }>
-                    <InfoCircleIcon className={ 'table-header-icon' } arial-label={ cvssBaseDescription } aria-hidden="false" />
-                </Tooltip>
-                { 'CVSS base ' }
-            </React.Fragment>
-        ),
+        title: 'CVSS base ',
         key: 'cvss_score',
         transforms: [ sortable, cellWidth(10) ]
     },
