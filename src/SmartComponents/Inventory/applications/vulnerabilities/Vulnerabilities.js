@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { fetchCveListBySystem } from '../../../../redux/actions/applications';
 import VulnerabilitiesCves from './VulnerabilitiesCves';
-import { Card, CardBody, Tooltip } from '@patternfly/react-core';
+import { Card, CardBody, Tooltip, TextContent, TextVariants, Text } from '@patternfly/react-core';
 import { InfoCircleIcon } from '@patternfly/react-icons';
 import { createCveListBySystem } from './DataMapper';
 import { sortable, cellWidth } from '@patternfly/react-table';
@@ -35,16 +35,21 @@ class VulnerabilitiesDetail extends Component {
     render() {
         const { entity } = this.props;
         return (
-            <VulnerabilitiesCves
-                header={ header }
-                fetchResource={ params => fetchCveListBySystem({ ...params, system: entity.id }) }
-                dataMapper={ params => createCveListBySystem({ ...params, systemId: entity.id }) }
-                showAllCheckbox={ false }
-                showRemediationButton={ true }
-                defaultSort="-public_date"
-                entity={ entity }
-                isSelectable={ true }
-            />
+            <React.Fragment>
+                <TextContent>
+                    <Text component={ TextVariants.h2 }>CVEs</Text>
+                </TextContent>
+                <VulnerabilitiesCves
+                    header={ header }
+                    fetchResource={ params => fetchCveListBySystem({ ...params, system: entity.id }) }
+                    dataMapper={ params => createCveListBySystem({ ...params, systemId: entity.id }) }
+                    showAllCheckbox={ false }
+                    showRemediationButton={ true }
+                    defaultSort="-public_date"
+                    entity={ entity }
+                    isSelectable={ true }
+                />
+            </React.Fragment>
         );
     }
 }
