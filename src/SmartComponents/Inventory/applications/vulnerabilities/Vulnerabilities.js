@@ -21,14 +21,14 @@ const header = [
                 <Tooltip position="top" content={ <div>{ cvssBaseDescription }</div> }>
                     <InfoCircleIcon className={ 'table-header-icon' } arial-label={ cvssBaseDescription } aria-hidden="false" />
                 </Tooltip>
-                { 'CVSS Base ' }
+                { 'CVSS base ' }
             </React.Fragment>
         ),
         key: 'cvss_score',
         transforms: [ sortable, cellWidth(10) ]
     },
     { title: 'Status', key: 'status', transforms: [ sortable, cellWidth(10) ]},
-    { title: 'Publish Date', key: 'public_date', transforms: [ sortable, cellWidth(10) ]}
+    { title: 'Publish date', key: 'public_date', transforms: [ sortable, cellWidth(10) ]}
 ];
 
 class VulnerabilitiesDetail extends Component {
