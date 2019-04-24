@@ -114,7 +114,7 @@ class VulnerabilitiesCveTableToolbar extends Component {
         const selectedCvesCount =
             this.props.showRemediationButton === true ? (this.props.selectedCves && this.props.selectedCves.size) || 0 : undefined;
         return (
-            <TableToolbar className="space-between-toolbar-items" results={ totalNumber } selected={ selectedCvesCount }>
+            <TableToolbar className="space-between-toolbar-items">
                 <ToolbarGroup className="vulnerability-toolbar-spacing">
                     <div>
                         <SimpleTableFilter onFilterChange={ value => this.changeFilterValue(value) } buttonTitle={ null } placeholder="Find a CVE…" />

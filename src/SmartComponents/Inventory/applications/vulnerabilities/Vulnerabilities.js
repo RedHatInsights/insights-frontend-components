@@ -12,16 +12,16 @@ import './vulnerabilities.scss';
 const cvssBaseDescription = 'All CVEs use Common Vulnerability Scoring System v3 except where noted.';
 
 const header = [
-    { title: '', key: 'impact', transforms: [ sortable ]},
     { title: 'Name', key: 'synopsis', transforms: [ sortable, cellWidth(10) ]},
-    { title: 'Description', key: 'description', transforms: [ cellWidth(50) ]},
+    { title: 'Description', key: 'description', transforms: [ cellWidth(45) ]},
+    { title: 'Publish date', key: 'public_date', transforms: [ sortable, cellWidth(10) ]},
     {
         title: 'CVSS base ',
         key: 'cvss_score',
         transforms: [ sortable, cellWidth(10) ]
     },
-    { title: 'Status', key: 'status', transforms: [ sortable, cellWidth(10) ]},
-    { title: 'Publish date', key: 'public_date', transforms: [ sortable, cellWidth(10) ]}
+    { title: 'Severity', key: 'impact', transforms: [ sortable, cellWidth(10) ]},
+    { title: 'Status', key: 'status', transforms: [ sortable ]}
 ];
 
 class VulnerabilitiesDetail extends Component {
