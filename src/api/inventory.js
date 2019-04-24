@@ -70,9 +70,7 @@ export function getEntities(items, { controller, hasItems, filters, per_page: pe
 export const getEntitySystemProfile = (item) => hosts.apiHostGetHostSystemProfileById([ item ]);
 
 export function setDisplayName(id, displayName) {
-    return new Promise((resolve) => {
-        setTimeout(function () {
-            resolve({ id, displayName });
-        }, 300);
+    return hosts.apiHostPatchHost(id, {
+        display_name: displayName
     });
 }

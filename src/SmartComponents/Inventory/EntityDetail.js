@@ -80,7 +80,7 @@ class EntityDetails extends Component {
                     }
                 </SplitItem>
                 {
-                    actions && actions.length > 0 && <SplitItem>
+                    <SplitItem>
                         {
                             loaded ?
                                 <Dropdown
@@ -95,15 +95,17 @@ class EntityDetails extends Component {
                                             onClick={ event => this.handleModalToggle(event) }>
                                             Edit name
                                         </DropdownItem>,
-                                        actions.map((action, key) => (
-                                            <DropdownItem
-                                                key={ action.key || key }
-                                                component="button"
-                                                onClick={ (event) => action.onClick(event, action, action.key || key) }
-                                            >
-                                                { action.title }
-                                            </DropdownItem>
-                                        ))
+                                        ...(actions ?
+                                            actions.map((action, key) => (
+                                                <DropdownItem
+                                                    key={ action.key || key }
+                                                    component="button"
+                                                    onClick={ (event) => action.onClick(event, action, action.key || key) }
+                                                >
+                                                    { action.title }
+                                                </DropdownItem>)
+                                            ) : []
+                                        )
                                     ] }
                                 /> :
                                 <Skeleton size={ SkeletonSize.xl } />
@@ -243,7 +245,9 @@ function mapDispatchToProps(dispatch) {
         setDisplayName: (id, displayName) => {
             const dispatchEvent = editDisplayName(id, displayName);
             dispatchEvent.payload.then(data => {
-                dispatch(loadEntity(id, {}));
+                dispatch(loadEntity(id, {
+                    hasItems: true
+                }));
                 return data;
             });
             dispatch(dispatchEvent);
