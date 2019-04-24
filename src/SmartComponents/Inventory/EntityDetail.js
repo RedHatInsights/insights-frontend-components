@@ -29,6 +29,8 @@ class EntityDetails extends Component {
         return get(entity, path, undefined);
     }
 
+    getAnsibleHost = () => this.getFact('ansible_host') || this.getFact('fqdn') || this.getFact('id');
+
     toggleActions = (collapsed) => {
         this.setState({
             isOpen: collapsed
@@ -87,6 +89,30 @@ class EntityDetails extends Component {
         return (
             <Grid className="ins-entity-facts">
                 <GridItem md={ 6 }>
+                    <div>
+                        <span>
+                            Hostname:
+                        </span>
+                        <span>
+                            {
+                                loaded ?
+                                    this.getFact('fqdn') || ' ' :
+                                    <Skeleton size={ SkeletonSize.md } />
+                            }
+                        </span>
+                    </div>
+                    <div>
+                        <span>
+                            Ansible host:
+                        </span>
+                        <span>
+                            {
+                                loaded ?
+                                    this.getAnsibleHost() :
+                                    <Skeleton size={ SkeletonSize.md } />
+                            }
+                        </span>
+                    </div>
                     <div>
                         <span>
                             UUID:
