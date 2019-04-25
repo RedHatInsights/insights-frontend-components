@@ -4,9 +4,6 @@ import {
     Title,
     Grid,
     GridItem,
-    Modal,
-    Button,
-    TextInput,
     Card,
     CardBody,
     CardHeader,
@@ -21,12 +18,14 @@ import { Skeleton, SkeletonSize } from '../../PresentationalComponents/Skeleton'
 import get from 'lodash/get';
 import { connect } from 'react-redux';
 import ApplicationDetails from './ApplicationDetails';
-import { editDisplayName, loadEntity } from '../../redux/actions/inventory';
+import { editDisplayName, editAnsibleHost, loadEntity } from '../../redux/actions/inventory';
+import TextInputModal from './TextInputModal';
 
 class EntityDetails extends Component {
     state = {
         isOpen: false,
-        isModalOpen: false
+        isDisplayNameModalOpen: false,
+        isAnsibleHostModalOpen: false
     };
 
     getFact = (path) => {
@@ -48,24 +47,17 @@ class EntityDetails extends Component {
         });
     };
 
-    onEntityNameChange = (value) => {
-        this.setState({
-            displayName: value
-        });
-    };
+    openModal = modal => () => this.setState({ [`is${modal}ModalOpen`]: true });
 
-    handleModalToggle = (_event, isSubmit) => {
-        const { entity, setDisplayName } = this.props;
-        const { displayName } = this.state;
-        if (isSubmit) {
-            setDisplayName(entity.id, displayName || entity.display_name);
-        }
+    onSubmit = (fn) => (value) => {
+        const { entity } = this.props;
+        fn(entity.id, value);
+        this.onCancel();
+    }
 
-        this.setState({
-            isModalOpen: !this.state.isModalOpen,
-            displayName: undefined
-        });
-    };
+    onCancel = () => {
+        this.setState({ isDisplayNameModalOpen: false, isAnsibleHostModalOpen: false });
+    }
 
     generateTop = () => {
         const { entity, loaded, actions } = this.props;
@@ -92,8 +84,14 @@ class EntityDetails extends Component {
                                         <DropdownItem
                                             key="1"
                                             component="button"
-                                            onClick={ event => this.handleModalToggle(event) }>
+                                            onClick={ this.openModal('DisplayName') }>
                                             Edit name
+                                        </DropdownItem>,
+                                        <DropdownItem
+                                            key="2"
+                                            component="button"
+                                            onClick={ this.openModal('AnsibleHost') }>
+                                            Edit Ansible host
                                         </DropdownItem>,
                                         ...(actions ?
                                             actions.map((action, key) => (
@@ -176,7 +174,7 @@ class EntityDetails extends Component {
 
     render() {
         const { useCard, entity } = this.props;
-        const { isModalOpen, displayName } = this.state;
+        const { isDisplayNameModalOpen, isAnsibleHostModalOpen } = this.state;
 
         return (
             <div className="ins-entity-detail">
@@ -195,27 +193,23 @@ class EntityDetails extends Component {
                     </Fragment>
                 }
                 <ApplicationDetails />
-                <Modal
-                    title="Edit display name"
-                    className="ins-c-inventory__detail--edit"
-                    isOpen={ isModalOpen }
-                    onClose={ (event) => this.handleModalToggle(event, false) }
-                    actions={ [
-                        <Button key="cancel" variant="secondary" onClick={ (event) => this.handleModalToggle(event, false) }>
-                            Cancel
-                        </Button>,
-                        <Button key="confirm" variant="primary" onClick={ (event) => this.handleModalToggle(event, true) }>
-                            Save
-                        </Button>
-                    ] }
-                >
-                    <TextInput
-                        value={ typeof displayName === 'undefined' ? entity && entity.display_name : displayName }
-                        type="text"
-                        onChange={ this.onEntityNameChange }
-                        aria-label="Host inventory display name"
-                    />
-                </Modal>
+
+                <TextInputModal
+                    isOpen={ isDisplayNameModalOpen }
+                    title='Edit name'
+                    value= { entity && entity.display_name }
+                    ariaLabel='Host inventory display name'
+                    onCancel={ this.onCancel }
+                    onSubmit={ this.onSubmit(this.props.setDisplayName) }
+                />
+                <TextInputModal
+                    isOpen={ isAnsibleHostModalOpen }
+                    title='Edit Ansible host'
+                    value= { entity && this.getAnsibleHost() }
+                    ariaLabel='Ansible host'
+                    onCancel={ this.onCancel }
+                    onSubmit={ this.onSubmit(this.props.setAnsibleHost) }
+                />
             </div>
         );
     }
@@ -226,6 +220,7 @@ EntityDetails.propTypes = {
     entity: PropTypes.object,
     useCard: PropTypes.bool,
     setDisplayName: PropTypes.func,
+    setAnsibleHost: PropTypes.func,
     actions: PropTypes.arrayOf(PropTypes.shape({
         title: PropTypes.node,
         onClick: PropTypes.func,
@@ -237,20 +232,27 @@ EntityDetails.defualtProps = {
     entity: {},
     useCard: false,
     actions: [],
-    setDisplayName: () => undefined
+    setDisplayName: () => undefined,
+    setAnsibleHost: () => undefined
 };
 
 function mapDispatchToProps(dispatch) {
+    const reloadWrapper = (id, event) => {
+        event.payload.then(data => {
+            dispatch(loadEntity(id, { hasItems: true }));
+            return data;
+        });
+
+        return event;
+    };
+
     return {
-        setDisplayName: (id, displayName) => {
-            const dispatchEvent = editDisplayName(id, displayName);
-            dispatchEvent.payload.then(data => {
-                dispatch(loadEntity(id, {
-                    hasItems: true
-                }));
-                return data;
-            });
-            dispatch(dispatchEvent);
+        setDisplayName: (id, value) => {
+            dispatch(reloadWrapper(id, editDisplayName(id, value)));
+        },
+
+        setAnsibleHost: (id, value) => {
+            dispatch(reloadWrapper(id, editAnsibleHost(id, value)));
         }
     };
 }

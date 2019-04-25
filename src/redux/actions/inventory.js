@@ -10,7 +10,7 @@ import {
     ENTITIES_LOADING,
     CLEAR_FILTERS
 } from '../action-types';
-import { getEntities, getEntitySystemProfile, setDisplayName } from '../../api/inventory';
+import { getEntities, getEntitySystemProfile, hosts } from '../../api/inventory';
 
 export const loadEntities = (items = [], config) => ({
     type: ACTION_TYPES.LOAD_ENTITIES,
@@ -78,14 +78,28 @@ export const systemProfile = (itemId) => ({
     payload: getEntitySystemProfile(itemId, {})
 });
 
-export const editDisplayName = (id, displayName) => ({
+export const editDisplayName = (id, value) => ({
     type: ACTION_TYPES.SET_DISPLAY_NAME,
-    payload: setDisplayName(id, displayName),
+    payload: hosts.apiHostPatchHost(id, { display_name: value }), // eslint-disable-line camelcase
     meta: {
         notifications: {
             fulfilled: {
                 variant: 'success',
-                title: `Display name for entity with ID ${id} has been changed to ${displayName}`,
+                title: `Display name for entity with ID ${id} has been changed to ${value}`,
+                dismissable: true
+            }
+        }
+    }
+});
+
+export const editAnsibleHost = (id, value) => ({
+    type: ACTION_TYPES.SET_ANSIBLE_HOST,
+    payload: hosts.apiHostPatchHost(id, { ansible_host: value }), // eslint-disable-line camelcase
+    meta: {
+        notifications: {
+            fulfilled: {
+                variant: 'success',
+                title: `Ansible host for entity with ID ${id} has been changed to ${value}`,
                 dismissable: true
             }
         }
