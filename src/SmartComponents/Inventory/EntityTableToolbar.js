@@ -20,7 +20,7 @@ const EntityTableToolbar = ({
     loaded,
     ...props
 }) => (
-    <TableToolbar results={ total } className="ins-c-inventory__table--toolbar">
+    <TableToolbar className="ins-c-inventory__table--toolbar">
         <Split>
             <SplitItem>
                 <Filter { ...props }
@@ -31,7 +31,7 @@ const EntityTableToolbar = ({
                     totalItems={ total }
                 />
             </SplitItem>
-            <SplitItem isMain>
+            <SplitItem isFilled>
                 { children }
             </SplitItem>
             <SplitItem>
