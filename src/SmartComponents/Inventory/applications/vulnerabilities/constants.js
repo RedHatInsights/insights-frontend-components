@@ -89,7 +89,7 @@ export const GenericError = (
         <CardHeader>
             <FrownOpenIcon size="lg" />
         </CardHeader>
-        <CardBody>There was an error loading resourses</CardBody>
+        <CardBody>There was an error getting data. Reload the page and try again</CardBody>
     </Card>
 );
 
