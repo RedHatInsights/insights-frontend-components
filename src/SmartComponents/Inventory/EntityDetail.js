@@ -19,7 +19,6 @@ import get from 'lodash/get';
 import { connect } from 'react-redux';
 import ApplicationDetails from './ApplicationDetails';
 import { editDisplayName, editAnsibleHost, loadEntity } from '../../redux/actions/inventory';
-import TextInputModal from './TextInputModal';
 
 class EntityDetails extends Component {
     state = {
@@ -33,8 +32,6 @@ class EntityDetails extends Component {
         return get(entity, path, undefined);
     }
 
-    getAnsibleHost = () => this.getFact('ansible_host') || this.getFact('fqdn') || this.getFact('id');
-
     toggleActions = (collapsed) => {
         this.setState({
             isOpen: collapsed
@@ -46,18 +43,6 @@ class EntityDetails extends Component {
             isOpen: !this.state.isOpen
         });
     };
-
-    openModal = modal => () => this.setState({ [`is${modal}ModalOpen`]: true });
-
-    onSubmit = (fn) => (value) => {
-        const { entity } = this.props;
-        fn(entity.id, value);
-        this.onCancel();
-    }
-
-    onCancel = () => {
-        this.setState({ isDisplayNameModalOpen: false, isAnsibleHostModalOpen: false });
-    }
 
     generateTop = () => {
         const { entity, loaded, actions } = this.props;
@@ -75,36 +60,21 @@ class EntityDetails extends Component {
                     <SplitItem>
                         {
                             loaded ?
-                                <Dropdown
+                                actions && actions.length > 0 && <Dropdown
                                     onSelect={ this.onSelect }
                                     toggle={ <DropdownToggle onToggle={ this.toggleActions }>Actions</DropdownToggle> }
                                     isOpen={ isOpen }
                                     position={ DropdownPosition.right }
-                                    dropdownItems={ [
-                                        <DropdownItem
-                                            key="1"
-                                            component="button"
-                                            onClick={ this.openModal('DisplayName') }>
-                                            Edit name
-                                        </DropdownItem>,
-                                        <DropdownItem
-                                            key="2"
-                                            component="button"
-                                            onClick={ this.openModal('AnsibleHost') }>
-                                            Edit Ansible host
-                                        </DropdownItem>,
-                                        ...(actions ?
-                                            actions.map((action, key) => (
-                                                <DropdownItem
-                                                    key={ action.key || key }
-                                                    component="button"
-                                                    onClick={ (event) => action.onClick(event, action, action.key || key) }
-                                                >
-                                                    { action.title }
-                                                </DropdownItem>)
-                                            ) : []
-                                        )
-                                    ] }
+                                    dropdownItems={ [ ...(actions ?
+                                        actions.map((action, key) => (
+                                            <DropdownItem
+                                                key={ action.key || key }
+                                                component="button"
+                                                onClick={ (event) => action.onClick(event, action, action.key || key) }
+                                            >
+                                                { action.title }
+                                            </DropdownItem>)
+                                        ) : []) ] }
                                 /> :
                                 <Skeleton size={ SkeletonSize.xl } />
                         }
@@ -119,30 +89,6 @@ class EntityDetails extends Component {
         return (
             <Grid className="ins-entity-facts">
                 <GridItem md={ 6 }>
-                    <div>
-                        <span>
-                            Hostname:
-                        </span>
-                        <span>
-                            {
-                                loaded ?
-                                    this.getFact('fqdn') || ' ' :
-                                    <Skeleton size={ SkeletonSize.md } />
-                            }
-                        </span>
-                    </div>
-                    <div>
-                        <span>
-                            Ansible host:
-                        </span>
-                        <span>
-                            {
-                                loaded ?
-                                    this.getAnsibleHost() :
-                                    <Skeleton size={ SkeletonSize.md } />
-                            }
-                        </span>
-                    </div>
                     <div>
                         <span>
                             UUID:
@@ -173,8 +119,7 @@ class EntityDetails extends Component {
     }
 
     render() {
-        const { useCard, entity } = this.props;
-        const { isDisplayNameModalOpen, isAnsibleHostModalOpen } = this.state;
+        const { useCard } = this.props;
 
         return (
             <div className="ins-entity-detail">
@@ -193,23 +138,6 @@ class EntityDetails extends Component {
                     </Fragment>
                 }
                 <ApplicationDetails />
-
-                <TextInputModal
-                    isOpen={ isDisplayNameModalOpen }
-                    title='Edit name'
-                    value= { entity && entity.display_name }
-                    ariaLabel='Host inventory display name'
-                    onCancel={ this.onCancel }
-                    onSubmit={ this.onSubmit(this.props.setDisplayName) }
-                />
-                <TextInputModal
-                    isOpen={ isAnsibleHostModalOpen }
-                    title='Edit Ansible host'
-                    value= { entity && this.getAnsibleHost() }
-                    ariaLabel='Ansible host'
-                    onCancel={ this.onCancel }
-                    onSubmit={ this.onSubmit(this.props.setAnsibleHost) }
-                />
             </div>
         );
     }

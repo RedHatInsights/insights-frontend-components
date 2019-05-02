@@ -11,7 +11,7 @@ import {
 import './general-information.scss';
 import { systemProfile } from '../../../../redux/actions/inventory';
 import InfoTable from './InfoTable';
-import SubscriptionCard from './SubscriptionCard';
+import OperatingSystemCard from './OperatingSystemCard';
 import SystemCard from './SystemCard';
 import BiosCard from './BiosCard';
 import InfrastructureCard from './InfrastructureCard';
@@ -61,7 +61,7 @@ class GeneralInformation extends Component {
                     <SystemCard handleClick={ this.handleModalToggle } />
                 </GridItem>
                 <GridItem>
-                    <SubscriptionCard handleClick={ this.handleModalToggle } />
+                    <OperatingSystemCard handleClick={ this.handleModalToggle } />
                 </GridItem>
                 <GridItem>
                     <BiosCard handleClick={ this.handleModalToggle } />
