@@ -62,6 +62,7 @@ class SystemCard extends Component {
                             <Fragment>
                                 { entity.display_name }
                                 <a
+                                    className="ins-c-inventory__detail--action"
                                     href={ `${window.location.href}/display_name` }
                                     onClick={ this.onShowDisplayModal }
                                 >
@@ -73,6 +74,7 @@ class SystemCard extends Component {
                             <Fragment>
                                 { this.getAnsibleHost() }
                                 <a
+                                    className="ins-c-inventory__detail--action"
                                     href={ `${window.location.href}/ansible_name` }
                                     onClick={ this.onShowAnsibleModal }
                                 >

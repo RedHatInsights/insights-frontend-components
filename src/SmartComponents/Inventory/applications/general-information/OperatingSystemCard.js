@@ -13,7 +13,7 @@ const OperatingSystemCard = ({ systemInfo, detailLoaded, handleClick }) => (
             { title: 'Release', value: systemInfo.release },
             { title: 'Kernel release', value: systemInfo.kernelRelease },
             { title: 'Architecture', value: systemInfo.architecture },
-            { title: 'Last boot time', value: systemInfo.bootTime },
+            { title: 'Last boot time', value: new Date(systemInfo.bootTime).toLocaleString() },
             {
                 title: 'Kernel modules',
                 value: systemInfo.kernelModules ? `${systemInfo.kernelModules.length} modules` : 0,
