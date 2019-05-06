@@ -1,7 +1,7 @@
-import { Bullseye, Button, EmptyState, EmptyStateBody, EmptyStateIcon, Title } from '@patternfly/react-core';
-import { CubesIcon } from '@patternfly/react-icons';
-import React from 'react';
+import { Bullseye, Button, Card, CardBody, CardHeader, EmptyState, EmptyStateBody, EmptyStateIcon, Title } from '@patternfly/react-core';
+import { CubesIcon, FrownOpenIcon } from '@patternfly/react-icons';
 import moment from 'moment';
+import React from 'react';
 
 // Reports that no CVEs were found after filtering results
 export const FilterNotFoundForCVE = (
@@ -78,21 +78,21 @@ export const NoVulnerabilityData = (
                 No vulnerability data
             </Title>
             <EmptyStateBody>Activate the Insights client for this system to report for vulnerabilities</EmptyStateBody>
-            <Button variant="primary">Learn about the insights client</Button>
+            <Button variant="primary" component="a" href="http://access.redhat.com/products/cloud-management-services-for-rhel#getstarted">
+                Learn about the Insights client
+            </Button>
         </EmptyState>
     </Bullseye>
 );
 
 // Generic error
 export const GenericError = (
-    <Bullseye>
-        <EmptyState>
-            <EmptyStateIcon icon={ CubesIcon } />
-            <Title headingLevel="h5" size="lg">
-                There was an error loading resources
-            </Title>
-        </EmptyState>
-    </Bullseye>
+    <Card className="ins-empty-rule-cards">
+        <CardHeader>
+            <FrownOpenIcon size="lg" />
+        </CardHeader>
+        <CardBody>There was an error getting data. Reload the page and try again</CardBody>
+    </Card>
 );
 
 //CVSS Base score label to value
@@ -112,7 +112,7 @@ export const PublicDateOptions = [
     { value: 'last30', label: 'Last 30 days', from: moment().subtract(30, 'days') },
     { value: 'last90', label: 'Last 90 days', from: moment().subtract(90, 'days') },
     { value: 'lastYear', label: 'Last year', from: moment().subtract(1, 'years') },
-    { value: 'MoreThanYear', label: 'More than 1 year ago',  to: moment().subtract(1, 'years') }
+    { value: 'MoreThanYear', label: 'More than 1 year ago', to: moment().subtract(1, 'years') }
 ];
 
 // Filter categories

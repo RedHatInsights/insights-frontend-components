@@ -3,7 +3,16 @@ import propTypes from 'prop-types';
 import orderBy from 'lodash/orderBy';
 
 import { Table, TableHeader, TableBody, TableVariant, sortable } from '@patternfly/react-table';
+import { CheckIcon } from '@patternfly/react-icons';
 import './IssueTable.scss';
+
+function needsRebootCell (needsReboot) {
+    if (needsReboot) {
+        return <CheckIcon/>;
+    }
+
+    return (' ');
+}
 
 function buildRows(issues, state, getResolution) {
     return issues.map(issue => {
@@ -12,7 +21,10 @@ function buildRows(issues, state, getResolution) {
             cells: [
                 state.issuesById[issue.id].description,
                 resolution.description,
-                resolution.needs_reboot ? 'true' : 'false',
+                {
+                    title: needsRebootCell(resolution.needs_reboot),
+                    value: resolution.needs_reboot
+                },
                 getSystemCount(issue, state),
                 issueType(issue.id)
             ]
@@ -23,7 +35,9 @@ function buildRows(issues, state, getResolution) {
 function issueType (id) {
     switch (id.split(':')[0]) {
         case 'advisor': return 'Insights';
-        case 'compliance': return 'Compliance';
+        case 'ssg':
+        case 'compliance':
+            return 'Compliance';
         case 'vulnerabilities': return 'Vulnerability';
         default: return 'Unknown';
     }
@@ -51,7 +65,14 @@ class IssueTable extends React.Component {
     render () {
         const { sortBy, sortDir } = this.state;
         const rows = buildRows(this.props.issues, this.props.state, this.props.getResolution);
-        const sorted = orderBy(rows, r => r.cells[sortBy], [ this.state.sortDir ]);
+        const sorted = orderBy(rows, r => {
+            const cell = r.cells[sortBy];
+            if (typeof cell === 'object') {
+                return cell.value;
+            }
+
+            return cell;
+        }, [ this.state.sortDir ]);
 
         return (
             <Table
@@ -65,7 +86,7 @@ class IssueTable extends React.Component {
                     }, {
                         title: 'Resolution'
                     }, {
-                        title: 'Reboot Required',
+                        title: 'Reboot required',
                         transforms: [ sortable ]
                     }, {
                         title: 'Systems',

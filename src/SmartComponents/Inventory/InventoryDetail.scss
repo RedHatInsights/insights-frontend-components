@@ -1,19 +1,26 @@
 @import '../../Utilities.scss';
 
+.ins-c-inventory__detail--edit { @include rem('min-width', 500px) }
+
 .ins-inventory-detail.pf-c-page-header.pf-c-page__main-section {
     padding-bottom: 0;
+}
+
+.ins-c-inventory__detail--header {
+    .pf-l-split__item:last-child { @include rem('min-width', 100px); }
 }
 
 .ins-c-inventory-detail__app-tabs ul {
     &:before {
         content: '';
-        border-right: 1px solid var(--pf-global--BorderColor--light-200);
+        border-right: 1px solid var(--pf-c-tabs__item--BorderColor);
     }
 
     &:after {
         content: '';
         width: 100%;
-        border-left: 1px solid var(--pf-global--BorderColor--light-200);
+        margin-top: var(--pf-c-content--li--MarginTop);
+        border-left: 1px solid var(--pf-c-tabs__item--BorderColor);
     }
 
     li button:before {
