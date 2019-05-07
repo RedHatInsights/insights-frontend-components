@@ -15,19 +15,12 @@ import './advisor.scss';
 
 class ExpandableRulesCard extends React.Component {
     state = {
-        expanded: true,
-        kbaDetail: {}
+        expanded: true
     };
 
     componentDidUpdate (prevProps) {
         if (this.props.isExpanded !== prevProps.isExpanded) {
             this.setState({ expanded: this.props.isExpanded });
-        }
-
-        if (this.props.kbaDetails !== prevProps.kbaDetails) {
-            this.setState({
-                kbaDetail: this.props.kbaDetails.filter(article => article.id === this.props.report.rule.node_id)[0]
-            });
         }
     }
 
@@ -51,9 +44,11 @@ class ExpandableRulesCard extends React.Component {
             const compiledDot = definitions ? doT.template(template, DOT_SETTINGS)(definitions) : template;
             const compiledMd = marked(sanitizeHtml(compiledDot, sanitizeOptions));
 
-            return <div dangerouslySetInnerHTML={ { __html: compiledMd
-            .replace(/<ul>/gim, `<ul class="pf-c-list">`)
-            .replace(/<\/a>/gim, ` ${externalLinkIcon}</a>`) } } />;
+            return <div dangerouslySetInnerHTML={ {
+                __html: compiledMd
+                .replace(/<ul>/gim, `<ul class="pf-c-list">`)
+                .replace(/<\/a>/gim, ` ${externalLinkIcon}</a>`)
+            } }/>;
         } catch (error) {
             console.warn(error, definitions, template); // eslint-disable-line no-console
             return <React.Fragment> Ouch. We were unable to correctly render this text, instead please enjoy the raw data.
@@ -65,7 +60,7 @@ class ExpandableRulesCard extends React.Component {
     render () {
         const { report } = this.props;
         const rule = report.rule || report;
-        const { expanded, kbaDetail } = this.state;
+        const { expanded } = this.state;
         let rulesCardClasses = classNames(
             'ins-c-inventory-advisor__card',
             'ins-c-rules-card'
@@ -114,13 +109,15 @@ class ExpandableRulesCard extends React.Component {
                                 </CardBody>
                             </Card>
                         </StackItem>
-                        { kbaDetail && kbaDetail.view_uri && <StackItem>
+                        { report.rule.node_id && <StackItem>
                             <Card className='ins-m-card__flat'>
                                 <CardHeader>
                                     <LightbulbIcon/><strong>Related Knowledgebase articles: </strong>
                                 </CardHeader>
                                 <CardBody>
-                                    <a href={ `${kbaDetail.view_uri}` } rel="noopener">`${ kbaDetail.publishedTitle } <ExternalLinkAltIcon />`</a>
+                                    <a rel="noopener noreferrer" target="_blank" href={ `https://access.redhat.com/node/${report.rule.node_id}` }>
+                                        Knowledgebase Article <ExternalLinkAltIcon size='sm'/>
+                                    </a>
                                 </CardBody>
                             </Card>
                         </StackItem> }
@@ -129,15 +126,15 @@ class ExpandableRulesCard extends React.Component {
                             <List>
                                 <ListItem>
                                     { `To learn how to upgrade packages, see ` }<a href="https://access.redhat.com/solutions/9934" rel="noopener">
-                                         What is yum and how do I use it? <ExternalLinkAltIcon />
+                                    What is yum and how do I use it? <ExternalLinkAltIcon/>
                                     </a>{ `.` }
                                 </ListItem>
                                 <ListItem>{ `The Customer Portal page for the ` }
-                                    <a href="https://access.redhat.com/security/" rel="noopener">Red Hat Security Team <ExternalLinkAltIcon /></a>
+                                    <a href="https://access.redhat.com/security/" rel="noopener">Red Hat Security Team <ExternalLinkAltIcon/></a>
                                     { ` contains more information about policies, procedures, and alerts for Red Hat Products.` }
                                 </ListItem>
                                 <ListItem>{ `The Security Team also maintains a frequently updated blog at ` }
-                                    <a href="https://securityblog.redhat.com" rel="noopener">securityblog.redhat.com <ExternalLinkAltIcon /></a>.
+                                    <a href="https://securityblog.redhat.com" rel="noopener">securityblog.redhat.com <ExternalLinkAltIcon/></a>.
                                 </ListItem>
                             </List>
                         </div>
@@ -152,12 +149,10 @@ export default ExpandableRulesCard;
 
 ExpandableRulesCard.defaultProps = {
     report: {},
-    isExpanded: true,
-    kbaDetails: []
+    isExpanded: true
 };
 
 ExpandableRulesCard.propTypes = {
     report: propTypes.object,
-    isExpanded: propTypes.bool,
-    kbaDetails: propTypes.array
+    isExpanded: propTypes.bool
 };

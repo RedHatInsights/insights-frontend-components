@@ -21,7 +21,6 @@ class InventoryRuleList extends Component {
         inventoryReportFetchStatus: 'pending',
         inventoryReport: {},
         activeReports: [],
-        kbaDetails: [],
         remediation: false
     };
 
@@ -51,25 +50,11 @@ class InventoryRuleList extends Component {
                 inventoryReportFetchStatus: 'fulfilled',
                 remediation: this.processRemediation(entity.id, data)
             });
-            const kbaIds = data.map(report => report.rule.node_id).join(` OR `);
-            this.fetchKbaDetails(kbaIds);
         } catch (error) {
             this.setState({
                 inventoryReportFetchStatus: 'failed'
             });
             console.warn(error, 'Entity rules fetch failed.');
-        }
-    }
-
-    async fetchKbaDetails (kbaIds) {
-        try {
-            const data = await fetch(`https://access.redhat.com/rs/search?q=id:(${kbaIds})&fl=view_uri,id,publishedTitle`, { credentials: 'include' })
-            .then(data => data.json());
-            this.setState({
-                kbaDetails: data.response.docs
-            });
-        } catch (error) {
-            console.warn(error, 'KBA detail fetch failed.');
         }
     }
 
@@ -79,14 +64,14 @@ class InventoryRuleList extends Component {
         const activeReport = reports.splice(activeRuleIndex, 1);
 
         return activeRuleIndex !== -1 ? [ activeReport[0], ...reports ] : activeReports;
-    }
+    };
 
     expandAll (expanded) {
         this.setState({ expanded: !expanded });
     }
 
     buildRuleCards = () => {
-        const { activeReports, expanded, kbaDetails, remediation } = this.state;
+        const { activeReports, expanded, remediation } = this.state;
 
         return (
             <Fragment>
@@ -103,12 +88,12 @@ class InventoryRuleList extends Component {
                         <RemediationButton
                             isDisabled={ !remediation }
                             dataProvider={ () => remediation }
-                            onRemediationCreated={ result => this.props.addNotification(result.getNotification()) } />
+                            onRemediationCreated={ result => this.props.addNotification(result.getNotification()) }/>
                     </LevelItem>
                 </Level>
                 {
                     activeReports && activeReports.map((report, key) =>
-                        <ExpandableRulesCard key={ key } report={ report } isExpanded={ expanded } kbaDetails={ kbaDetails }/>
+                        <ExpandableRulesCard key={ key } report={ report } isExpanded={ expanded }/>
                     ) }
             </Fragment>
         );
@@ -145,13 +130,13 @@ class InventoryRuleList extends Component {
                             There was an error fetching rules list for this Entity. Please show your administrator this screen.
                         </CardBody>
                     </Card>
-                ) }   { inventoryReportFetchStatus === 'failed' && !this.props.entity && (
+                ) } { inventoryReportFetchStatus === 'failed' && !this.props.entity && (
                     <Card className="ins-empty-rule-cards">
                         <CardHeader>
                             <FrownOpenIcon size='lg'/>
                         </CardHeader>
                         <CardBody>
-                            This system can not be found or might no longer be registered to Red Hat Insights.
+                        This system can not be found or might no longer be registered to Red Hat Insights.
                         </CardBody>
                     </Card>
                 ) }
