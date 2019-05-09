@@ -147,7 +147,10 @@ SystemDetails.defaultProps = {
         params: {}
     },
     client: new ApolloClient({
-        link: new HttpLink({ uri: COMPLIANCE_API_ROOT + '/graphql' }),
+        link: new HttpLink({
+            uri: COMPLIANCE_API_ROOT + '/graphql',
+            credentials: 'include'
+        }),
         cache: new InMemoryCache()
     })
 };
