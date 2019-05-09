@@ -17,7 +17,7 @@ import './ExistingOrNew.scss';
 
 function ExistingOrNewStep(props) {
 
-    const { name, isNewSwitch, existingRemediations, selectedRemediationId } = props.state;
+    const { name, nameValid, isNewSwitch, existingRemediations, selectedRemediationId } = props.state;
 
     return (
         <React.Fragment>
@@ -74,6 +74,8 @@ function ExistingOrNewStep(props) {
                                 <FormGroup
                                     fieldId="remediation-name"
                                     helperText="Playbook name"
+                                    helperTextInvalid="Playbook name has to contain alphanumeric characters"
+                                    isValid={ nameValid }
                                 >
                                     <TextInput
                                         type="text"
@@ -81,7 +83,8 @@ function ExistingOrNewStep(props) {
                                         onChange={ props.onNameChange }
                                         aria-label="Name your Playbook"
                                         autoFocus
-                                        isDisabled= { !isNewSwitch }
+                                        isDisabled={ !isNewSwitch }
+                                        isValid={ nameValid }
                                     />
                                 </FormGroup>
                             </GridItem>

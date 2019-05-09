@@ -16,6 +16,8 @@ import ErrorStep from './steps/ErrorStep';
 
 import './RemediationWizard.scss';
 
+const nameRegex = /^$|^.*[\w\d]+.*$/;
+
 let mountedInstance = false;
 
 export function getMountedInstance () {
@@ -65,6 +67,7 @@ class RemediationWizard extends Component {
 
             isNewSwitch: true,
             name: '',
+            nameValid: true,
             existingRemediations: false,
             selectedRemediationId: false,
             selectedRemediation: false,
@@ -215,7 +218,8 @@ class RemediationWizard extends Component {
      * State manipulation
      */
     onNameChange = name => this.setState({
-        name
+        name,
+        nameValid: nameRegex.test(name)
     });
 
     onIsNewSwitch = isNewSwitch => this.setState({
@@ -309,7 +313,7 @@ class RemediationWizard extends Component {
         return (
             <Wizard
                 isLarge = { true }
-                isValidated={ this.state.valid }
+                isValidated={ this.state.valid && (this.state.nameValid || !this.state.isNewSwitch) }
                 title="Remediate with Ansible"
                 className='ins-c-remediation-modal'
                 onClose = { this.closeWizard }
