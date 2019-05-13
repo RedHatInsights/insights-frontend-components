@@ -141,7 +141,7 @@ class ExpandableRulesCard extends React.Component {
                                 </CardHeader>
                                 <CardBody>
                                     { rule.more_info && this.templateProcessor(rule.more_info) }
-                                    <List>
+                                    <List style={ { fontSize: 'inherit' } }>
                                         <ListItem>
                                             { `To learn how to upgrade packages, see ` }<a href="https://access.redhat.com/solutions/9934"
                                                 rel="noopener">
