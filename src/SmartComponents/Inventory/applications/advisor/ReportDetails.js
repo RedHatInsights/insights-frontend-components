@@ -1,48 +1,15 @@
 import React from 'react';
 import propTypes from 'prop-types';
 import classNames from 'classnames';
-import {
-    BullseyeIcon,
-    ChevronDownIcon,
-    ChevronRightIcon,
-    ExternalLinkAltIcon,
-    InfoCircleIcon,
-    LightbulbIcon,
-    ThumbsUpIcon
-} from '@patternfly/react-icons';
-import { Card, CardBody, CardHeader, List, ListItem, Split, SplitItem, Stack, StackItem } from '@patternfly/react-core';
+import { BullseyeIcon, ExternalLinkAltIcon, InfoCircleIcon, LightbulbIcon, ThumbsUpIcon } from '@patternfly/react-icons';
+import { Card, CardBody, CardHeader, List, ListItem, Stack, StackItem } from '@patternfly/react-core';
 import doT from 'dot';
 import sanitizeHtml from 'sanitize-html';
 import marked from 'marked';
-
-import { Ansible } from '../../../../PresentationalComponents/Ansible';
-import { Battery } from '../../../../PresentationalComponents/Battery';
-import { Section } from '../../../../PresentationalComponents/Section';
 import '../../../../PresentationalComponents/Section/section.scss';
 import './advisor.scss';
 
-class ExpandableRulesCard extends React.Component {
-    state = {
-        expanded: true,
-        kbaDetail: {}
-    };
-
-    componentDidUpdate (prevProps) {
-        if (this.props.isExpanded !== prevProps.isExpanded) {
-            this.setState({ expanded: this.props.isExpanded });
-        }
-
-        if (this.props.kbaDetails !== prevProps.kbaDetails) {
-            this.setState({
-                kbaDetail: this.props.kbaDetails.filter(article => article.id === this.props.report.rule.node_id)[0]
-            });
-        }
-    }
-
-    toggleExpanded = () => {
-        this.setState({ expanded: !this.state.expanded });
-    };
-
+class ReportDetails extends React.Component {
     templateProcessor = (template, definitions) => {
         const DOT_SETTINGS = { ...doT.templateSettings, varname: [ 'pydata' ], strip: false };
         const sanitizeOptions = {
@@ -73,40 +40,21 @@ class ExpandableRulesCard extends React.Component {
     };
 
     render () {
-        const { report } = this.props;
+        const { report, kbaDetail } = this.props;
         const rule = report.rule || report;
-        const { expanded, kbaDetail } = this.state;
         let rulesCardClasses = classNames(
             'ins-c-inventory-advisor__card',
             'ins-c-rules-card'
         );
         return (
-            <Card className={ rulesCardClasses } widget-type='InsightsRulesCard'>
-                <CardHeader>
-                    <Split onClick={ this.toggleExpanded }>
-                        <SplitItem>
-                            { !expanded && <ChevronRightIcon/> } { expanded && <ChevronDownIcon/> }
-                        </SplitItem>
-                        <SplitItem> { rule.category.name } &gt; </SplitItem>
-                        <SplitItem isFilled> { rule.description } </SplitItem>
-                        <SplitItem>
-                            <Ansible unsupported={ !report.resolution.has_playbook }/>
-                        </SplitItem>
-                    </Split>
-                    <Section type='icon-group__with-major'>
-                        <Battery label='Impact' severity={ rule.impact.impact }/>
-                        <Battery label='Likelihood' severity={ rule.likelihood }/>
-                        <Battery label='Total Risk' severity={ rule.total_risk }/>
-                        <Battery label='Risk Of Change' severity={ report.resolution.resolution_risk.risk }/>
-                    </Section>
-                </CardHeader>
-                { expanded && <CardBody>
-                    <Stack gutter='md'>
+            <Card style={ { boxShadow: 'none' } }>
+                <CardBody>
+                    <Stack className={ rulesCardClasses } widget-type='InsightsRulesCard' gutter='md'>
                         <StackItem>
                             <Card className='ins-m-card__flat'>
                                 <CardHeader>
                                     <BullseyeIcon/>
-                                    <strong>Detected issues</strong>
+                                    <strong> Detected issues</strong>
                                 </CardHeader>
                                 <CardBody>
                                     { rule.reason && this.templateProcessor(rule.reason, report.details) }
@@ -117,7 +65,7 @@ class ExpandableRulesCard extends React.Component {
                             <Card className='ins-m-card__flat'>
                                 <CardHeader>
                                     <ThumbsUpIcon/>
-                                    <strong>Steps to resolve</strong>
+                                    <strong> Steps to resolve</strong>
                                 </CardHeader>
                                 <CardBody>
                                     { report.resolution && this.templateProcessor(report.resolution.resolution, report.details) }
@@ -127,7 +75,7 @@ class ExpandableRulesCard extends React.Component {
                         { kbaDetail && kbaDetail.view_uri && <StackItem>
                             <Card className='ins-m-card__flat'>
                                 <CardHeader>
-                                    <LightbulbIcon/><strong>Related Knowledgebase article: </strong>
+                                    <LightbulbIcon/><strong> Related Knowledgebase article: </strong>
                                 </CardHeader>
                                 <CardBody>
                                     <a href={ `${kbaDetail.view_uri}` } rel="noopener">{ kbaDetail.publishedTitle } <ExternalLinkAltIcon/></a>
@@ -137,7 +85,7 @@ class ExpandableRulesCard extends React.Component {
                         <StackItem>
                             <Card className='ins-m-card__flat'>
                                 <CardHeader>
-                                    <InfoCircleIcon/><strong>Additional info:</strong>
+                                    <InfoCircleIcon/><strong> Additional info:</strong>
                                 </CardHeader>
                                 <CardBody>
                                     { rule.more_info && this.templateProcessor(rule.more_info) }
@@ -162,22 +110,20 @@ class ExpandableRulesCard extends React.Component {
                             </Card>
                         </StackItem>
                     </Stack>
-                </CardBody> }
+                </CardBody>
             </Card>
         );
     }
 }
 
-export default ExpandableRulesCard;
+export default ReportDetails;
 
-ExpandableRulesCard.defaultProps = {
+ReportDetails.defaultProps = {
     report: {},
-    isExpanded: true,
-    kbaDetails: []
+    kbaDetail: ''
 };
 
-ExpandableRulesCard.propTypes = {
+ReportDetails.propTypes = {
     report: propTypes.object,
-    isExpanded: propTypes.bool,
-    kbaDetails: propTypes.array
+    kbaDetail: propTypes.object
 };
