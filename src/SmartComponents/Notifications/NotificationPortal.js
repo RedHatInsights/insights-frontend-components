@@ -20,7 +20,7 @@ Portal.propTypes = {
         id: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
         variant: PropTypes.string.isRequired,
-        description: PropTypes.string,
+        description: PropTypes.node,
         dismissable: PropTypes.bool
     })),
     removeNotification: PropTypes.func.isRequired
