@@ -2,7 +2,7 @@
 [![npm version](https://badge.fury.io/js/%40red-hat-insights%2Finsights-frontend-components.svg)](https://badge.fury.io/js/%40red-hat-insights%2Finsights-frontend-components)
 [![codecov](https://codecov.io/gh/RedHatInsights/insights-frontend-components/branch/master/graph/badge.svg)](https://codecov.io/gh/RedHatInsights/insights-frontend-components)
 
-# insights-frontend-components
+# **This repository is archived and moved to a new one [RedHatInsights/frontend-components](https://github.com/RedHatInsights/frontend-components)**
 
 Red Hat Insights Components for applications in a React.js environment
 
